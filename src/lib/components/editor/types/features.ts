@@ -1,4 +1,4 @@
-import { StrNumBool, Value, ValueType } from "./index";
+import { Value, ValueType } from "./index";
 
 export type Feature =
   | Automation
@@ -14,12 +14,13 @@ export type Features = {
   [key: string]: Feature;
 };
 
-interface FeatureBase<T extends StrNumBool | PaymentTypes> extends Value<T> {
+type FeatureBase = {
   description: string;
-  type: keyof typeof Type;
   expression: string;
   serverExpression: string;
-}
+} & StandardValueTypes;
+
+type StandardValueTypes = Value<boolean> | Value<number> | Value<string>;
 
 export enum Type {
   AUTOMATION = "AUTOMATION",
@@ -39,27 +40,23 @@ export enum AutomationType {
   TASK_AUTOMATION = "TASK_AUTOMATION",
 }
 
-interface Automation extends FeatureBase<StrNumBool> {
+type Automation = {
   type: Type.AUTOMATION;
-  automationType: AutomationType;
-}
+  automationType: keyof typeof AutomationType;
+} & FeatureBase;
 
-interface Domain extends FeatureBase<StrNumBool> {
+type Domain = FeatureBase & {
   type: Type.DOMAIN;
-}
+};
 
-interface Payment extends FeatureBase<PaymentType[]> {
-  type: Type.PAYMENT;
-}
-
-interface Guarantee extends FeatureBase<StrNumBool> {
+type Guarantee = FeatureBase & {
   type: Type.GUARANTEE;
   docUrl: string;
-}
+};
 
-interface Information extends FeatureBase<StrNumBool> {
+type Information = FeatureBase & {
   type: Type.INFORMATION;
-}
+};
 
 export enum IntegrationType {
   API = "API",
@@ -70,16 +67,16 @@ export enum IntegrationType {
   WEB_SAAS = "WEB_SAAS",
 }
 
-interface Integration extends FeatureBase<StrNumBool> {
+type Integration = FeatureBase & {
   type: Type.INTEGRATION;
-  integrationType: IntegrationType;
-}
+  integrationType: keyof typeof IntegrationType;
+};
 
-interface Management extends FeatureBase<StrNumBool> {
+type Management = FeatureBase & {
   type: Type.MANAGEMENT;
-}
+};
 
-export type PaymentTypes = PaymentType[];
+export type PaymentTypes = [keyof typeof PaymentType];
 
 export enum PaymentType {
   ACH = "ACH",
@@ -90,6 +87,13 @@ export enum PaymentType {
   OTHER = "OTHER",
 }
 
-interface Support extends FeatureBase<StrNumBool> {
+type Payment = Value<PaymentTypes> & {
+  description: string;
+  type: Type.PAYMENT;
+  expression: string;
+  serverExpression: string;
+};
+
+type Support = FeatureBase & {
   type: Type.SUPPORT;
-}
+};
