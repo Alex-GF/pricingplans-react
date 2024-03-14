@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { Value, ValueType } from "./index";
+=======
+import { StrNumBool, Value, ValueType } from "./index";
+>>>>>>> 77185c663975e1c317d1182f3bf5f785017d3813
 
 export type Feature =
   | Automation
@@ -40,6 +44,7 @@ export enum AutomationType {
   TASK_AUTOMATION = "TASK_AUTOMATION",
 }
 
+<<<<<<< HEAD
 type Automation = {
   type: Type.AUTOMATION;
   automationType: keyof typeof AutomationType;
@@ -57,6 +62,29 @@ type Guarantee = FeatureBase & {
 type Information = FeatureBase & {
   type: Type.INFORMATION;
 };
+=======
+interface Automation extends FeatureBase<StrNumBool> {
+  type: Type.AUTOMATION;
+  automationType: AutomationType;
+}
+
+interface Domain extends FeatureBase<StrNumBool> {
+  type: Type.DOMAIN;
+}
+
+interface Payment extends FeatureBase<PaymentType[]> {
+  type: Type.PAYMENT;
+}
+
+interface Guarantee extends FeatureBase<StrNumBool> {
+  type: Type.GUARANTEE;
+  docUrl: string;
+}
+
+interface Information extends FeatureBase<StrNumBool> {
+  type: Type.INFORMATION;
+}
+>>>>>>> 77185c663975e1c317d1182f3bf5f785017d3813
 
 export enum IntegrationType {
   API = "API",
@@ -67,6 +95,7 @@ export enum IntegrationType {
   WEB_SAAS = "WEB_SAAS",
 }
 
+<<<<<<< HEAD
 type Integration = FeatureBase & {
   type: Type.INTEGRATION;
   integrationType: keyof typeof IntegrationType;
@@ -77,6 +106,18 @@ type Management = FeatureBase & {
 };
 
 export type PaymentTypes = [keyof typeof PaymentType];
+=======
+interface Integration extends FeatureBase<StrNumBool> {
+  type: Type.INTEGRATION;
+  integrationType: IntegrationType;
+}
+
+interface Management extends FeatureBase<StrNumBool> {
+  type: Type.MANAGEMENT;
+}
+
+export type PaymentTypes = PaymentType[];
+>>>>>>> 77185c663975e1c317d1182f3bf5f785017d3813
 
 export enum PaymentType {
   ACH = "ACH",
@@ -87,6 +128,7 @@ export enum PaymentType {
   OTHER = "OTHER",
 }
 
+<<<<<<< HEAD
 type Payment = Value<PaymentTypes> & {
   description: string;
   type: Type.PAYMENT;
@@ -97,3 +139,8 @@ type Payment = Value<PaymentTypes> & {
 type Support = FeatureBase & {
   type: Type.SUPPORT;
 };
+=======
+interface Support extends FeatureBase<StrNumBool> {
+  type: Type.SUPPORT;
+}
+>>>>>>> 77185c663975e1c317d1182f3bf5f785017d3813
