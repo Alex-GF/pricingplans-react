@@ -34,7 +34,7 @@ interface UsageLimit extends Value<StrNumBool> {
   description: string;
   type: UsageLimitType;
   unit: string;
-  linkedFeatures: [keyof Features];
+  linkedFeatures: string[];
   expression: string;
   serverExpression?: string;
 }
@@ -55,7 +55,8 @@ interface Plan {
   monthlyPrice: number;
   annualPrice: number;
   unit: string;
-  features: Features;
+  features: FeatureOverwrite | null;
+  usageLimits: ValueOverwrite | null;
 }
 
 type AddOns = {
@@ -68,12 +69,22 @@ interface AddOn {
   monthlyPrice: null;
   annualPrice: null;
   unit: string;
-  features: {
-    [key: string]: {
-      value: StrNumBool | PaymentTypes;
-    };
-  };
+  features: FeatureOverwrite | null;
+  usageLimits: ValueOverwrite | null;
+  usageLimitsExtensions: ValueOverwrite | null;
 }
+
+type FeatureOverwrite = {
+  [key: string]: {
+    value: StrNumBool | PaymentTypes;
+  };
+};
+
+type ValueOverwrite = {
+  [key: string]: {
+    value: StrNumBool;
+  };
+};
 
 export type StrNumBool = string | number | boolean;
 

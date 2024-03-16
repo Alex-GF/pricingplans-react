@@ -16,7 +16,70 @@ import {
   AutomationType,
   IntegrationType,
 } from "../types/features";
-import { ValueType } from "../types/index";
+import { PricingManager, ValueType } from "../types/index";
+
+const pricingManager: PricingManager = {
+  saasName: "This is a test",
+  day: 1,
+  month: 1,
+  year: 2024,
+  currency: "USD",
+  hasAnnualPayment: false,
+  features: {
+    maxPets: {
+      description: "Max pets limit",
+      valueType: ValueType.BOOLEAN,
+      defaultValue: false,
+      type: Type.DOMAIN,
+      expression: "planContext['maxPets']",
+      serverExpression: "",
+    },
+  },
+  usageLimits: null,
+  plans: {
+    basic: {
+      description: "Basic",
+      monthlyPrice: 20,
+      annualPrice: 10,
+      unit: "user/month",
+      features: null,
+      usageLimits: null,
+    },
+  },
+  addOns: null,
+};
+
+function json2PricingManager(json: string) {
+  if (json.trim().length === 0) {
+    throw new Error(
+      "You have provided an empty string. Parsing cannot be done."
+    );
+  }
+
+  const pricingManager = JSON.parse(json);
+
+  if (!pricingManager || Object.keys(pricingManager).length === 0) {
+    throw new Error(
+      "You have provided an empty object. Parsing cannot be done."
+    );
+  }
+
+  if (!pricingManager.saasName) {
+    throw new Error("Saas name was not specified.");
+  }
+
+  if (typeof pricingManager.saasName !== "string") {
+    throw new Error(
+      "Invalid value type for saasName. You have to provide a empty string."
+    );
+  }
+
+  if (pricingManager.saasName.length === 0) {
+    throw new Error("Saas name is empty.");
+  }
+}
+
+function pricingManager2Json(pricingManager: PricingManager) {}
 
 function parseFeatures(features: Features) {
   return Object.entries(features).map(([name, attributes]) =>
