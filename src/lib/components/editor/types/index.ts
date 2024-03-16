@@ -30,7 +30,7 @@ type UsageLimits = {
   [key: string]: UsageLimit;
 };
 
-interface UsageLimit extends Value<StrNumBool> {
+export interface UsageLimit extends Value<StrNumBool> {
   description: string;
   type: UsageLimitType;
   unit: string;

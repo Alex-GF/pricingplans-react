@@ -1,4 +1,4 @@
-import { Value, ValueType } from "./index";
+import { Value } from "./index";
 
 export type Feature =
   | Automation
