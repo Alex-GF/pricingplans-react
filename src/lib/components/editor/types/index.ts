@@ -39,7 +39,7 @@ export interface UsageLimit extends Value<StrNumBool> {
   serverExpression?: string;
 }
 
-enum UsageLimitType {
+export enum UsageLimitType {
   NON_RENEWABLE = "NON_RENEWABLE",
   RENEWABLE = "RENEWABLE",
   RESPONSE_DRIVEN = "RESPONSE_DRIVEN",
