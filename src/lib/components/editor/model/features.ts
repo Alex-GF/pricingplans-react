@@ -235,7 +235,7 @@ export abstract class StandardFeature {
 }
 
 export class AutomationFeature extends StandardFeature {
-  #automationType: AutomationType;
+  private _automationType: AutomationType;
 
   constructor(
     name: string,
@@ -255,15 +255,15 @@ export class AutomationFeature extends StandardFeature {
       Type.AUTOMATION,
       value
     );
-    this.#automationType = automationType;
+    this._automationType = automationType;
   }
 
   get automationType() {
-    return this.#automationType;
+    return this._automationType;
   }
 
   set automationType(automationType: AutomationType) {
-    this.#automationType = automationType;
+    this.automationType = automationType;
   }
 }
 
