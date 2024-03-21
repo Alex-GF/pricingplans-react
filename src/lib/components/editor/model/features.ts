@@ -1,4 +1,4 @@
-import { StrNumBool, Value, ValueType } from "../types/index";
+import { FeatureOverwrite, StrNumBool, Value, ValueType } from "../types/index";
 
 export type Feature =
   | Automation
@@ -23,21 +23,21 @@ type FeatureBase = {
 type StandardValueTypes = Value<boolean> | Value<number> | Value<string>;
 
 export enum Type {
-  AUTOMATION = "AUTOMATION",
-  DOMAIN = "DOMAIN",
-  GUARANTEE = "GUARANTEE",
-  INFORMATION = "INFORMATION",
-  INTEGRATION = "INTEGRATION",
-  MANAGEMENT = "MANAGEMENT",
-  PAYMENT = "PAYMENT",
-  SUPPORT = "SUPPORT",
+  AUTOMATION,
+  DOMAIN,
+  GUARANTEE,
+  INFORMATION,
+  INTEGRATION,
+  MANAGEMENT,
+  PAYMENT,
+  SUPPORT,
 }
 
 export enum AutomationType {
-  BOT = "BOT",
-  FILTERING = "FILTERING",
-  TRACKING = "TRACKING",
-  TASK_AUTOMATION = "TASK_AUTOMATION",
+  BOT,
+  FILTERING,
+  TRACKING,
+  TASK_AUTOMATION,
 }
 
 type AutomationTypes = keyof typeof AutomationType;
@@ -61,12 +61,12 @@ type Information = FeatureBase & {
 };
 
 export enum IntegrationType {
-  API = "API",
-  EXTENSION = "EXTENSION",
-  EXTERNAL_DEVICE = "EXTERNAL_DEVICE",
-  IDENTITY_PROVIDER = "IDENTITY_PROVIDER",
-  MARKETPLACE = "MARKETPLACE",
-  WEB_SAAS = "WEB_SAAS",
+  API,
+  EXTENSION,
+  EXTERNAL_DEVICE,
+  IDENTITY_PROVIDER,
+  MARKETPLACE,
+  WEB_SAAS,
 }
 
 type Integration = FeatureBase & {
