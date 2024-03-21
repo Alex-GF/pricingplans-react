@@ -3,15 +3,13 @@ import {
   AutomationType,
   DomainFeature,
   StandardFeature,
-} from "../model/features";
-import { StandardPlan } from "../model/plans";
-import { NonRenewable } from "../model/usagelimits";
-import { Type } from "../model/features";
-import { ValueType } from "../types/index";
-import PricingManagerParser, {
-  PricingManager,
-  PricingManagerBase,
-} from "../model/pricingmanager";
+} from "../../model/features";
+import { StandardPlan } from "../../model/plans";
+import { NonRenewable } from "../../model/usagelimits";
+import { Type } from "../../model/features";
+import { ValueType } from "../../types/index";
+import { PricingManager, PricingManagerBase } from "../../model/pricingmanager";
+import PricingManagerParser from "../../parsers/pricingManager";
 
 test.skip("Should parse a pricing manager and return a pricing manage object", () => {
   const pricingManager: PricingManager = {

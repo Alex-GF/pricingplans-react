@@ -259,13 +259,3 @@ export class ResponseDriven extends StandardUsageLimit {
     );
   }
 }
-
-export default class UsageLimitParser {
-  private rawUsageLimits: UsageLimits;
-  private parsedUsageLimits: Map<string, StandardUsageLimit>;
-
-  constructor(usageLimits: UsageLimits) {
-    this.rawUsageLimits = usageLimits;
-    this.parsedUsageLimits = new Map([]);
-  }
-}
