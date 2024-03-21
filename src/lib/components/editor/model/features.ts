@@ -1,10 +1,104 @@
-import { StrNumBool, ValueType } from "../types/index";
-import {
-  AutomationType,
-  IntegrationType,
-  PaymentTypes,
-  Type,
-} from "../types/features";
+import { StrNumBool, Value, ValueType } from "../types/index";
+
+export type Feature =
+  | Automation
+  | Domain
+  | Guarantee
+  | Information
+  | Integration
+  | Management
+  | Payment
+  | Support;
+
+export type Features = {
+  [key: string]: Feature;
+};
+
+type FeatureBase = {
+  description: string;
+  expression: string;
+  serverExpression: string;
+} & StandardValueTypes;
+
+type StandardValueTypes = Value<boolean> | Value<number> | Value<string>;
+
+export enum Type {
+  AUTOMATION = "AUTOMATION",
+  DOMAIN = "DOMAIN",
+  GUARANTEE = "GUARANTEE",
+  INFORMATION = "INFORMATION",
+  INTEGRATION = "INTEGRATION",
+  MANAGEMENT = "MANAGEMENT",
+  PAYMENT = "PAYMENT",
+  SUPPORT = "SUPPORT",
+}
+
+export enum AutomationType {
+  BOT = "BOT",
+  FILTERING = "FILTERING",
+  TRACKING = "TRACKING",
+  TASK_AUTOMATION = "TASK_AUTOMATION",
+}
+
+type AutomationTypes = keyof typeof AutomationType;
+
+type Automation = {
+  type: Type.AUTOMATION;
+  automationType: AutomationTypes;
+} & FeatureBase;
+
+type Domain = FeatureBase & {
+  type: Type.DOMAIN;
+};
+
+type Guarantee = FeatureBase & {
+  type: Type.GUARANTEE;
+  docUrl: string;
+};
+
+type Information = FeatureBase & {
+  type: Type.INFORMATION;
+};
+
+export enum IntegrationType {
+  API = "API",
+  EXTENSION = "EXTENSION",
+  EXTERNAL_DEVICE = "EXTERNAL_DEVICE",
+  IDENTITY_PROVIDER = "IDENTITY_PROVIDER",
+  MARKETPLACE = "MARKETPLACE",
+  WEB_SAAS = "WEB_SAAS",
+}
+
+type Integration = FeatureBase & {
+  type: Type.INTEGRATION;
+  integrationType: keyof typeof IntegrationType;
+};
+
+type Management = FeatureBase & {
+  type: Type.MANAGEMENT;
+};
+
+export type PaymentTypeKeys = keyof typeof PaymentType;
+export type PaymentTypes = PaymentTypeKeys[];
+export enum PaymentType {
+  ACH,
+  CARD,
+  GATEWAY,
+  INVOICE,
+  WIRE_TRANSFER,
+  OTHER,
+}
+
+type Payment = Value<PaymentTypes> & {
+  description: string;
+  type: Type.PAYMENT;
+  expression: string;
+  serverExpression: string;
+};
+
+type Support = FeatureBase & {
+  type: Type.SUPPORT;
+};
 
 export type AllFeatures =
   | AutomationFeature
@@ -16,7 +110,7 @@ export type AllFeatures =
   | PaymentFeature
   | SupportFeature;
 
-abstract class StandardFeature {
+export abstract class StandardFeature {
   #name: string;
   #description: string;
   #valueType: ValueType;
@@ -335,5 +429,99 @@ export class SupportFeature extends StandardFeature {
       Type.SUPPORT,
       value
     );
+  }
+}
+
+export default class FeatureParser {
+  private rawFeatures: Features;
+  private parsedFeatures: Map<string, AllFeatures>;
+
+  constructor(features: Features) {
+    this.rawFeatures = features;
+    this.parsedFeatures = new Map([]);
+  }
+
+  get features(): Map<string, AllFeatures> {
+    this._parse();
+
+    return this.parsedFeatures;
+  }
+
+  private _parse(): void {
+    Object.entries(this.rawFeatures).forEach(([name, feature]) =>
+      this.parsedFeatures.set(name, this._parseFeature(name, feature))
+    );
+  }
+
+  private _parseFeature(name: string, feature: Feature): AllFeatures {
+    switch (feature.type) {
+      case Type.AUTOMATION:
+        return new AutomationFeature(
+          name,
+          feature.description,
+          feature.expression,
+          feature.serverExpression,
+          AutomationType[feature.automationType],
+          feature.defaultValue
+        );
+      case Type.DOMAIN:
+        return new DomainFeature(
+          name,
+          feature.description,
+          feature.expression,
+          feature.serverExpression,
+          feature.defaultValue
+        );
+      case Type.GUARANTEE:
+        return new GuaranteeFeature(
+          name,
+          feature.description,
+          feature.expression,
+          feature.serverExpression,
+          feature.docUrl,
+          feature.defaultValue
+        );
+      case Type.INFORMATION:
+        return new InformationFeature(
+          name,
+          feature.description,
+          feature.expression,
+          feature.serverExpression,
+          feature.defaultValue
+        );
+      case Type.INTEGRATION:
+        return new IntegrationFeature(
+          name,
+          feature.description,
+          feature.expression,
+          feature.serverExpression,
+          IntegrationType[feature.integrationType],
+          feature.defaultValue
+        );
+      case Type.MANAGEMENT:
+        return new ManagementFeature(
+          name,
+          feature.description,
+          feature.expression,
+          feature.description,
+          feature.defaultValue
+        );
+      case Type.PAYMENT:
+        return new PaymentFeature(
+          name,
+          feature.description,
+          feature.expression,
+          feature.description,
+          feature.defaultValue
+        );
+      case Type.SUPPORT:
+        return new SupportFeature(
+          name,
+          feature.description,
+          feature.expression,
+          feature.serverExpression,
+          feature.defaultValue
+        );
+    }
   }
 }

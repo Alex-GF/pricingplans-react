@@ -1,8 +1,27 @@
-import { UsageLimit, UsageLimitType } from "../types/index";
-import { StrNumBool } from "../types/index";
+import { StrNumBool, Value } from "../types/index";
 import { ValueType } from "../types/index";
 
-export abstract class StandarUsageLimit implements UsageLimit {
+export type UsageLimits = {
+  [key: string]: UsageLimit;
+};
+
+export interface UsageLimit extends Value<StrNumBool> {
+  description: string;
+  type: keyof typeof UsageLimitType;
+  unit: string;
+  linkedFeatures: string[];
+  expression: string;
+  serverExpression: string;
+}
+
+export enum UsageLimitType {
+  NON_RENEWABLE = "NON_RENEWABLE",
+  RENEWABLE = "RENEWABLE",
+  RESPONSE_DRIVEN = "RESPONSE_DRIVEN",
+  TIME_DRIVEN = "TIME_DRIVEN",
+}
+
+export abstract class StandardUsageLimit implements UsageLimit {
   private _name: string;
   private _description: string;
   private _unit: string;
@@ -70,10 +89,6 @@ export abstract class StandarUsageLimit implements UsageLimit {
 
   get linkedFeatures() {
     return this._linkedFeatures;
-  }
-
-  set linkedFeatures(linkedFeatures: string[]) {
-    this._linkedFeatures = linkedFeatures;
   }
 
   get valueType() {
@@ -148,7 +163,7 @@ export abstract class StandarUsageLimit implements UsageLimit {
   }
 }
 
-export class Renewable extends StandarUsageLimit {
+export class Renewable extends StandardUsageLimit {
   constructor(
     name: string,
     description: string,
@@ -172,7 +187,7 @@ export class Renewable extends StandarUsageLimit {
     );
   }
 }
-export class NonRenewable extends StandarUsageLimit {
+export class NonRenewable extends StandardUsageLimit {
   constructor(
     name: string,
     description: string,
@@ -196,7 +211,7 @@ export class NonRenewable extends StandarUsageLimit {
     );
   }
 }
-export class TimeDriven extends StandarUsageLimit {
+export class TimeDriven extends StandardUsageLimit {
   constructor(
     name: string,
     description: string,
@@ -220,7 +235,7 @@ export class TimeDriven extends StandarUsageLimit {
     );
   }
 }
-export class ResponseDriven extends StandarUsageLimit {
+export class ResponseDriven extends StandardUsageLimit {
   constructor(
     name: string,
     description: string,
@@ -242,5 +257,15 @@ export class ResponseDriven extends StandarUsageLimit {
       UsageLimitType.RESPONSE_DRIVEN,
       value
     );
+  }
+}
+
+export default class UsageLimitParser {
+  private rawUsageLimits: UsageLimits;
+  private parsedUsageLimits: Map<string, StandardUsageLimit>;
+
+  constructor(usageLimits: UsageLimits) {
+    this.rawUsageLimits = usageLimits;
+    this.parsedUsageLimits = new Map([]);
   }
 }
