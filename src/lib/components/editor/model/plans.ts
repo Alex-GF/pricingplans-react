@@ -39,7 +39,7 @@ export class StandardPlan {
     public annualPrice: number,
     public unit: string,
     public features: Map<string, MapFeatureValue> | null,
-    public usageLimits: Map<string, { value: StrNumBool }> | null
+    public usageLimits: Map<string, MapStandardValue> | null
   ) {}
 
   serialize(): Plan {
