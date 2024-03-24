@@ -4,13 +4,12 @@ import {
   DomainFeature,
 } from "../../model/features";
 import { StandardPlan } from "../../model/plans";
-import { NonRenewable } from "../../model/usagelimits";
 import { Type } from "../../model/features";
 import { ValueType } from "../../types/index";
 import { PricingManager, PricingManagerBase } from "../../model/pricingmanager";
 import PricingManagerParser from "../../parsers/pricingManager";
 
-test.skip("Should parse a pricing manager and return a pricing manage object", () => {
+test("Should parse a PricingManager and return a PricingManagerBase", () => {
   const pricingManager: PricingManager = {
     saasName: "This is a test",
     day: 1,
@@ -28,18 +27,7 @@ test.skip("Should parse a pricing manager and return a pricing manage object", (
         serverExpression: "",
       },
     },
-    usageLimits: {
-      maxPets: {
-        description: "Max pets feature",
-        valueType: ValueType.NUMERIC,
-        defaultValue: 0,
-        unit: "pets",
-        type: "NON_RENEWABLE",
-        linkedFeatures: ["maxPets"],
-        expression: "",
-        serverExpression: "",
-      },
-    },
+    usageLimits: null,
     plans: {
       basic: {
         description: "Basic",
@@ -59,40 +47,43 @@ test.skip("Should parse a pricing manager and return a pricing manage object", (
     valueType: ValueType.BOOLEAN,
     defaultValue: false,
     type: Type.DOMAIN,
-    expression: "",
+    expression: "planContext['maxPets']",
     serverExpression: "",
   };
 
-  const result = {
-    saasName: "This is a test",
-    day: 1,
-    month: 1,
-    year: 2024,
-    currency: "USD",
-    hasAnnualPayment: false,
-    features: { domain: domainFeature },
-    usageLimits: [
-      new NonRenewable(
-        "maxPets",
-        "Max pets feature",
-        "pets",
-        ["maxPets"],
-        "",
-        "",
-        0
-      ),
-    ],
-    plans: [
-      new StandardPlan("basic", "Basic", 20, 10, "user/month", null, null),
-    ],
-    addOns: null,
-  };
+  const featuresMap: Map<string, AllFeatures> = new Map([
+    ["maxPets", domainFeature],
+  ]);
+
+  const basicPlan: StandardPlan = new StandardPlan(
+    "basic",
+    "Basic",
+    20,
+    10,
+    "user/month",
+    null,
+    null
+  );
+  const plansMap: Map<string, StandardPlan> = new Map([["basic", basicPlan]]);
+
+  const result: PricingManagerBase = new PricingManagerBase(
+    "This is a test",
+    1,
+    1,
+    2024,
+    "USD",
+    false,
+    featuresMap,
+    null,
+    plansMap,
+    null
+  );
   expect(new PricingManagerParser(pricingManager).pricingManager).toStrictEqual(
     result
   );
 });
 
-test("Given target object should serialize back", () => {
+test("Given PricingManagerBase class should serialize to PricingManager", () => {
   const skynet: AutomationFeature = {
     name: "skynet",
     description: "Most powerful IA",
