@@ -1,8 +1,7 @@
 import {
+  AllFeatures,
   AutomationFeature,
-  AutomationType,
   DomainFeature,
-  StandardFeature,
 } from "../../model/features";
 import { StandardPlan } from "../../model/plans";
 import { NonRenewable } from "../../model/usagelimits";
@@ -54,6 +53,16 @@ test.skip("Should parse a pricing manager and return a pricing manage object", (
     addOns: null,
   };
 
+  const domainFeature: DomainFeature = {
+    name: "maxPets",
+    description: "Max pets limit",
+    valueType: ValueType.BOOLEAN,
+    defaultValue: false,
+    type: Type.DOMAIN,
+    expression: "",
+    serverExpression: "",
+  };
+
   const result = {
     saasName: "This is a test",
     day: 1,
@@ -61,15 +70,7 @@ test.skip("Should parse a pricing manager and return a pricing manage object", (
     year: 2024,
     currency: "USD",
     hasAnnualPayment: false,
-    features: [
-      new DomainFeature(
-        "maxPets",
-        "Max Pets limit",
-        "planContext['maxPets']",
-        "",
-        false
-      ),
-    ],
+    features: { domain: domainFeature },
     usageLimits: [
       new NonRenewable(
         "maxPets",
@@ -92,19 +93,17 @@ test.skip("Should parse a pricing manager and return a pricing manage object", (
 });
 
 test("Given target object should serialize back", () => {
-  const features: Map<string, StandardFeature> = new Map([
-    [
-      "foo",
-      new AutomationFeature(
-        "skynet",
-        "Most powerful IA",
-        "planContext['skynet']",
-        "",
-        AutomationType.BOT,
-        false
-      ),
-    ],
-  ]);
+  const skynet: AutomationFeature = {
+    name: "skynet",
+    description: "Most powerful IA",
+    valueType: ValueType.BOOLEAN,
+    defaultValue: false,
+    type: Type.AUTOMATION,
+    automationType: "BOT",
+    expression: "planContext['skynet']",
+    serverExpression: "",
+  };
+  const features: Map<string, AllFeatures> = new Map([["skynet", skynet]]);
 
   const plans: Map<string, StandardPlan> = new Map([
     [
@@ -134,7 +133,7 @@ test("Given target object should serialize back", () => {
     currency: "USD",
     hasAnnualPayment: false,
     features: {
-      skinet: {
+      skynet: {
         description: "Most powerful IA",
         valueType: ValueType.BOOLEAN,
         defaultValue: false,

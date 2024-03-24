@@ -1,8 +1,9 @@
 import { ValueType } from "../types/index";
-import { Features, StandardFeature, Type } from "./features";
+import { AllFeatures, Features, Type } from "./features";
 import { StandardUsageLimit, UsageLimits } from "./usagelimits";
 import { Plans, StandardPlan } from "./plans";
 import { StandardAddOn, AddOns } from "./addons";
+import FeatureSerializer from "../serializers/features";
 
 export type PricingManager = {
   saasName: string;
@@ -25,7 +26,7 @@ export class PricingManagerBase {
     public year: number,
     public currency: string,
     public hasAnnualPayment: boolean,
-    public features: Map<string, StandardFeature>,
+    public features: Map<string, AllFeatures>,
     public usageLimits: Map<string, StandardUsageLimit> | null,
     public plans: Map<string, StandardPlan> | null,
     public addOns: Map<string, StandardAddOn> | null
@@ -54,17 +55,7 @@ export class PricingManagerBase {
   }
 
   private _serializeFeatures(): Features {
-    return {
-      foo: {
-        description: "",
-        valueType: ValueType.BOOLEAN,
-        defaultValue: false,
-        type: Type.AUTOMATION,
-        automationType: "BOT",
-        expression: "",
-        serverExpression: "",
-      },
-    };
+    return new FeatureSerializer(this.features).features;
   }
 
   private _serializePlans(): Plans | null {

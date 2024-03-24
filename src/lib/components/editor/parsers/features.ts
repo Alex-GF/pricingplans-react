@@ -1,19 +1,4 @@
-import {
-  AllFeatures,
-  AutomationFeature,
-  AutomationType,
-  DomainFeature,
-  Feature,
-  Features,
-  GuaranteeFeature,
-  InformationFeature,
-  IntegrationFeature,
-  IntegrationType,
-  ManagementFeature,
-  PaymentFeature,
-  SupportFeature,
-  Type,
-} from "../model/features";
+import { AllFeatures, Feature, Features, Type } from "../model/features";
 
 export default class FeatureParser {
   private rawFeatures: Features;
@@ -39,72 +24,88 @@ export default class FeatureParser {
   private _parseFeature(name: string, feature: Feature): AllFeatures {
     switch (feature.type) {
       case Type.AUTOMATION:
-        return new AutomationFeature(
+        return {
           name,
-          feature.description,
-          feature.expression,
-          feature.serverExpression,
-          AutomationType[feature.automationType],
-          feature.defaultValue
-        );
+          description: feature.description,
+          valueType: feature.valueType,
+          defaultValue: feature.defaultValue,
+          type: feature.type,
+          automationType: feature.automationType,
+          serverExpression: feature.serverExpression,
+          expression: feature.expression,
+        };
       case Type.DOMAIN:
-        return new DomainFeature(
+        return {
           name,
-          feature.description,
-          feature.expression,
-          feature.serverExpression,
-          feature.defaultValue
-        );
+          description: feature.description,
+          valueType: feature.valueType,
+          defaultValue: feature.defaultValue,
+          type: feature.type,
+          serverExpression: feature.serverExpression,
+          expression: feature.expression,
+        };
       case Type.GUARANTEE:
-        return new GuaranteeFeature(
+        return {
           name,
-          feature.description,
-          feature.expression,
-          feature.serverExpression,
-          feature.docUrl,
-          feature.defaultValue
-        );
+          description: feature.description,
+          valueType: feature.valueType,
+          defaultValue: feature.defaultValue,
+          type: feature.type,
+          docUrl: feature.docUrl,
+          serverExpression: feature.serverExpression,
+          expression: feature.expression,
+        };
       case Type.INFORMATION:
-        return new InformationFeature(
+        return {
           name,
-          feature.description,
-          feature.expression,
-          feature.serverExpression,
-          feature.defaultValue
-        );
+          description: feature.description,
+          valueType: feature.valueType,
+          defaultValue: feature.defaultValue,
+          type: feature.type,
+          serverExpression: feature.serverExpression,
+          expression: feature.expression,
+        };
       case Type.INTEGRATION:
-        return new IntegrationFeature(
+        return {
           name,
-          feature.description,
-          feature.expression,
-          feature.serverExpression,
-          IntegrationType[feature.integrationType],
-          feature.defaultValue
-        );
+          description: feature.description,
+          valueType: feature.valueType,
+          defaultValue: feature.defaultValue,
+          type: feature.type,
+          integrationType: feature.integrationType,
+          serverExpression: feature.serverExpression,
+          expression: feature.expression,
+        };
       case Type.MANAGEMENT:
-        return new ManagementFeature(
+        return {
           name,
-          feature.description,
-          feature.expression,
-          feature.description,
-          feature.defaultValue
-        );
+          description: feature.description,
+          valueType: feature.valueType,
+          defaultValue: feature.defaultValue,
+          type: feature.type,
+          serverExpression: feature.serverExpression,
+          expression: feature.expression,
+        };
       case Type.PAYMENT:
-        return new PaymentFeature(
+        return {
           name,
-          feature.description,
-          feature.expression,
-          feature.description,
-          feature.defaultValue
-        );
+          description: feature.description,
+          valueType: feature.valueType,
+          defaultValue: feature.defaultValue,
+          type: feature.type,
+          serverExpression: feature.serverExpression,
+          expression: feature.expression,
+        };
       case Type.SUPPORT:
-        return new SupportFeature(
+        return {
           name,
-          feature.description,
-          feature.expression,
-          feature.serverExpression,
-          feature.defaultValue
-        );
+          description: feature.description,
+          valueType: feature.valueType,
+          defaultValue: feature.defaultValue,
+          type: feature.type,
+          serverExpression: feature.serverExpression,
+          expression: feature.expression,
+        };
     }
   }
 }
