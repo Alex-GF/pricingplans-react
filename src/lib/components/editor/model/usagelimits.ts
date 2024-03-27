@@ -1,13 +1,19 @@
 import { StrNumBool, Value } from "../types/index";
-import { ValueType } from "../types/index";
 
 export type UsageLimits = {
   [key: string]: UsageLimit;
 };
 
-export interface UsageLimit extends Value<StrNumBool> {
+export type UsageLimit = Renewable | NonRenewable | ResponseDriven | TimeDriven;
+
+type UsageLimitProperties = Omit<UsageLimitBaseProperties, "name">;
+
+type UsageLimitTypes = keyof typeof UsageLimitType;
+
+export interface UsageLimitBaseProperties extends Value<StrNumBool> {
+  name: string;
   description: string;
-  type: keyof typeof UsageLimitType;
+  type: UsageLimitTypes;
   unit: string;
   linkedFeatures: string[];
   expression: string;
@@ -15,247 +21,69 @@ export interface UsageLimit extends Value<StrNumBool> {
 }
 
 export enum UsageLimitType {
-  NON_RENEWABLE = "NON_RENEWABLE",
-  RENEWABLE = "RENEWABLE",
-  RESPONSE_DRIVEN = "RESPONSE_DRIVEN",
-  TIME_DRIVEN = "TIME_DRIVEN",
+  NON_RENEWABLE,
+  RENEWABLE,
+  RESPONSE_DRIVEN,
+  TIME_DRIVEN,
 }
 
-export abstract class StandardUsageLimit implements UsageLimit {
-  private _name: string;
-  private _description: string;
-  private _unit: string;
-  private _linkedFeatures: string[];
-  private _valueType: ValueType;
-  private _defaultValue: StrNumBool;
-  private _value: StrNumBool | null;
-  private _expression: string;
-  private _serverExpression: string;
-  private _type: UsageLimitType;
-
-  constructor(
-    name: string,
-    description: string,
-    unit: string,
-    linkedFeatures: string[],
-    expression: string,
-    serverExpression: string,
-    defaultValue: StrNumBool,
-    type: UsageLimitType,
-    value?: StrNumBool
-  ) {
-    this._validateName(name.trim());
-    this._name = name;
-    this._description = description;
-    this._unit = unit;
-    this._linkedFeatures = linkedFeatures;
-    this._valueType = this._computeValueType(defaultValue);
-    this._expression = expression;
-    this._serverExpression = serverExpression;
-    this._defaultValue = defaultValue;
-    if (value) {
-      this._value = value;
-    } else {
-      this._value = null;
-    }
-    this._type = type;
-  }
-
-  get name() {
-    return this._name;
-  }
-
-  set name(name: string) {
-    const cleanName = name.trim();
-    this._validateName(cleanName);
-    this._name = name;
-  }
-
-  get description() {
-    return this._description;
-  }
-
-  set description(description: string) {
-    this._description = description;
-  }
-
-  get unit() {
-    return this._unit;
-  }
-
-  set unit(unit: string) {
-    this._unit = unit;
-  }
-
-  get linkedFeatures() {
-    return this._linkedFeatures;
-  }
-
-  get valueType() {
-    return this._valueType;
-  }
-
-  private _validateName(name: string) {
-    if (name === "") {
-      throw new Error("The feature name must not be empty");
-    }
-
-    if (name.length < 3) {
-      throw new Error("The feature name must have at least 3 characters");
-    }
-
-    if (name.length > 50) {
-      throw new Error("The feature name must have at most 50 characters");
-    }
-  }
-
-  get defaultValue() {
-    return this._defaultValue;
-  }
-
-  set defaultValue(defaultValue: StrNumBool) {
-    this._valueType = this._computeValueType(defaultValue);
-    this._defaultValue = defaultValue;
-    this._value = null;
-  }
-
-  get value() {
-    return this._value;
-  }
-
-  set value(value: StrNumBool | null) {
-    this._value = value;
-  }
-
-  get expression() {
-    return this._expression;
-  }
-
-  set expression(expression: string) {
-    this._expression = expression;
-  }
-
-  get serverExpression() {
-    return this._serverExpression;
-  }
-
-  set serverExpression(serverExpression: string) {
-    this._serverExpression = serverExpression;
-  }
-
-  get type() {
-    return this._type;
-  }
-
-  toString() {
-    return `Name: ${this._name} Type: ${this._type}`;
-  }
-
-  private _computeValueType(defaultValue: StrNumBool): ValueType {
-    switch (typeof defaultValue) {
-      case "boolean":
-        return ValueType.BOOLEAN;
-      case "number":
-        return ValueType.NUMERIC;
-      default:
-        return ValueType.TEXT;
-    }
-  }
+export interface Renewable extends UsageLimitProperties {
+  type: Extract<UsageLimitTypes, "RENEWABLE">;
 }
 
-export class Renewable extends StandardUsageLimit {
-  constructor(
-    name: string,
-    description: string,
-    unit: string,
-    linkedFeatures: string[],
-    expression: string,
-    serverExpression: string,
-    defaultValue: StrNumBool,
-    value?: StrNumBool | undefined
-  ) {
-    super(
-      name,
-      description,
-      unit,
-      linkedFeatures,
-      expression,
-      serverExpression,
-      defaultValue,
-      UsageLimitType.RENEWABLE,
-      value
-    );
-  }
+export interface NonRenewable extends UsageLimitProperties {
+  type: Extract<UsageLimitTypes, "NON_RENEWABLE">;
 }
-export class NonRenewable extends StandardUsageLimit {
-  constructor(
-    name: string,
-    description: string,
-    unit: string,
-    linkedFeatures: string[],
-    expression: string,
-    serverExpression: string,
-    defaultValue: StrNumBool,
-    value?: StrNumBool | undefined
-  ) {
-    super(
-      name,
-      description,
-      unit,
-      linkedFeatures,
-      expression,
-      serverExpression,
-      defaultValue,
-      UsageLimitType.NON_RENEWABLE,
-      value
-    );
-  }
+
+export interface TimeDriven extends UsageLimitProperties {
+  type: Extract<UsageLimitTypes, "TIME_DRIVEN">;
 }
-export class TimeDriven extends StandardUsageLimit {
-  constructor(
-    name: string,
-    description: string,
-    unit: string,
-    linkedFeatures: string[],
-    expression: string,
-    serverExpression: string,
-    defaultValue: StrNumBool,
-    value?: StrNumBool | undefined
-  ) {
-    super(
-      name,
-      description,
-      unit,
-      linkedFeatures,
-      expression,
-      serverExpression,
-      defaultValue,
-      UsageLimitType.TIME_DRIVEN,
-      value
-    );
-  }
+
+export interface ResponseDriven extends UsageLimitProperties {
+  type: Extract<UsageLimitTypes, "RESPONSE_DRIVEN">;
 }
-export class ResponseDriven extends StandardUsageLimit {
-  constructor(
-    name: string,
-    description: string,
-    unit: string,
-    linkedFeatures: string[],
-    expression: string,
-    serverExpression: string,
-    defaultValue: StrNumBool,
-    value?: StrNumBool | undefined
-  ) {
-    super(
-      name,
-      description,
-      unit,
-      linkedFeatures,
-      expression,
-      serverExpression,
-      defaultValue,
-      UsageLimitType.RESPONSE_DRIVEN,
-      value
-    );
+
+export type UsageLimitBase =
+  | RenewableUL
+  | NonRenewableUL
+  | TimeDrivenUL
+  | ResponseDrivenUL;
+
+export interface RenewableUL extends UsageLimitBaseProperties {
+  type: Extract<UsageLimitTypes, "RENEWABLE">;
+}
+
+export interface NonRenewableUL extends UsageLimitBaseProperties {
+  type: Extract<UsageLimitTypes, "NON_RENEWABLE">;
+}
+
+export interface TimeDrivenUL extends UsageLimitBaseProperties {
+  type: Extract<UsageLimitTypes, "TIME_DRIVEN">;
+}
+
+export interface ResponseDrivenUL extends UsageLimitBaseProperties {
+  type: Extract<UsageLimitTypes, "RESPONSE_DRIVEN">;
+}
+
+export function serialize(usageLimit: UsageLimitBase): UsageLimit {
+  const commonProperties = {
+    description: usageLimit.description,
+    valueType: usageLimit.valueType,
+    defaultValue: usageLimit.defaultValue,
+    unit: usageLimit.unit,
+    type: usageLimit.type,
+    linkedFeatures: usageLimit.linkedFeatures,
+    expression: usageLimit.expression,
+    serverExpression: usageLimit.serverExpression,
+  };
+  switch (usageLimit.type) {
+    case "NON_RENEWABLE":
+      return { ...commonProperties, type: "NON_RENEWABLE" };
+    case "RENEWABLE":
+      return { ...commonProperties, type: "RENEWABLE" };
+    case "RESPONSE_DRIVEN":
+      return { ...commonProperties, type: "RESPONSE_DRIVEN" };
+    case "TIME_DRIVEN":
+      return { ...commonProperties, type: "TIME_DRIVEN" };
   }
 }

@@ -1,6 +1,5 @@
-import { ValueType } from "../types/index";
-import { AllFeatures, Features, Type } from "./features";
-import { StandardUsageLimit, UsageLimits } from "./usagelimits";
+import { AllFeatures, Features } from "./features";
+import { UsageLimitBase, UsageLimits, serialize } from "./usagelimits";
 import { Plans, StandardPlan } from "./plans";
 import { StandardAddOn, AddOns } from "./addons";
 import FeatureSerializer from "../serializers/features";
@@ -27,7 +26,7 @@ export class PricingManagerBase {
     public currency: string,
     public hasAnnualPayment: boolean,
     public features: Map<string, AllFeatures>,
-    public usageLimits: Map<string, StandardUsageLimit> | null,
+    public usageLimits: Map<string, UsageLimitBase> | null,
     public plans: Map<string, StandardPlan> | null,
     public addOns: Map<string, StandardAddOn> | null
   ) {
@@ -49,7 +48,7 @@ export class PricingManagerBase {
       features: this._serializeFeatures(),
 
       plans: this._serializePlans(),
-      usageLimits: null,
+      usageLimits: this._serializeUsageLimits(),
       addOns: null,
     };
   }
@@ -70,5 +69,19 @@ export class PricingManagerBase {
     }
 
     return Object.fromEntries(plans);
+  }
+
+  private _serializeUsageLimits(): UsageLimits | null {
+    if (this.usageLimits === null) {
+      return null;
+    }
+
+    const usageLimits = [];
+
+    for (const [usageLimitName, usageLimit] of this.usageLimits) {
+      usageLimits.push([usageLimitName, serialize(usageLimit)]);
+    }
+
+    return Object.fromEntries(usageLimits);
   }
 }

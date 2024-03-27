@@ -1,4 +1,5 @@
 import { PaymentTypes } from "../model/features";
+import { MapStandardValue } from "../model/plans";
 
 export type FeatureOverwrite = {
   [key: string]: {
@@ -7,9 +8,7 @@ export type FeatureOverwrite = {
 };
 
 export type ValueOverwrite = {
-  [key: string]: {
-    value: StrNumBool;
-  };
+  [key: string]: MapStandardValue;
 };
 
 export type StrNumBool = string | number | boolean;

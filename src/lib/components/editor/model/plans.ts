@@ -54,28 +54,28 @@ export class StandardPlan {
   }
 
   private _serializeFeatures(): FeatureOverwrite | null {
-    const features = [];
+    const features: [string, MapFeatureValue][] = [];
 
-    if (!this.features) {
+    if (this.features === null) {
       return null;
     }
 
     for (const [key, value] of this.features.entries()) {
-      features.push([key, value.value]);
+      features.push([key, value]);
     }
 
     return Object.fromEntries(features);
   }
 
   private _serializeUsageLimits(): ValueOverwrite | null {
-    const usageLimits = [];
+    const usageLimits: [string, MapStandardValue][] = [];
 
-    if (!this.features) {
+    if (this.usageLimits === null) {
       return null;
     }
 
-    for (const [key, value] of this.features.entries()) {
-      usageLimits.push([key, value.value]);
+    for (const [key, value] of this.usageLimits.entries()) {
+      usageLimits.push([key, value]);
     }
 
     return Object.fromEntries(usageLimits);
