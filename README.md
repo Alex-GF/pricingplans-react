@@ -1,5 +1,7 @@
 # Pricing4React
 
+![Static Badge](https://img.shields.io/badge/Version-v1.2.4-blue)
+
 The aim of this package is to provide some simple and easy to use components for react that allows UI feature toggling driven by pricing features. Also take a look to the package [Pricing4Java](https://github.com/isa-group/Pricing4Java), which allows fast and easy implementation of backend logic to be used by this package.
 
 ## Installation
