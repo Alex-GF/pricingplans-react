@@ -11,7 +11,7 @@ import {
   Payment,
   Support,
   Type,
-} from "../model/features";
+} from "../types/features";
 
 export default class FeatureSerializer {
   private _features: Features;

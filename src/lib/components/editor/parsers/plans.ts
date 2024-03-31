@@ -1,23 +1,14 @@
-import {
-  MapFeatureValue,
-  MapStandardValue,
-  Plans,
-  Plan,
-  StandardPlan,
-} from "../model/plans";
+import { MapFeatureValue, MapStandardValue, Plans, Plan } from "../types/plans";
 import { FeatureOverwrite, ValueOverwrite } from "../types/index";
+import { StandardPlan } from "../model/plans";
 
 export default class PlansParser {
-  private rawPlans: Plans;
-
-  constructor(plans: Plans) {
-    this.rawPlans = plans;
-  }
+  constructor(private plans: Plans) {}
 
   public parse(): Map<string, StandardPlan> {
     const parsedPlans = new Map<string, StandardPlan>([]);
 
-    Object.entries(this.rawPlans).forEach(([name, plan]) =>
+    Object.entries(this.plans).forEach(([name, plan]) =>
       parsedPlans.set(name, this._parsePlan(name, plan))
     );
 

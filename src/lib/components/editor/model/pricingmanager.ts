@@ -1,21 +1,12 @@
-import { AllFeatures, Features } from "./features";
-import { UsageLimitBase, UsageLimits, serialize } from "./usagelimits";
-import { Plans, StandardPlan } from "./plans";
-import { StandardAddOn, AddOns, AddOn } from "./addons";
+import { AllFeatures, Features } from "../types/features";
 import FeatureSerializer from "../serializers/features";
-
-export type PricingManager = {
-  saasName: string;
-  day: number;
-  month: number;
-  year: number;
-  currency: string;
-  hasAnnualPayment: boolean;
-  features: Features;
-  usageLimits: UsageLimits | null;
-  plans: Plans | null;
-  addOns: AddOns | null;
-};
+import { Plans } from "../types/plans";
+import { StandardPlan } from "./plans";
+import { AddOn, AddOns } from "../types/addOns";
+import { StandardAddOn } from "./addons";
+import { PricingManager } from "../types/index";
+import { UsageLimitBase, UsageLimits } from "../types/usageLimits";
+import { serialize } from "./usagelimits";
 
 export class PricingManagerBase {
   constructor(

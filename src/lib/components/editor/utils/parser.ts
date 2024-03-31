@@ -15,7 +15,7 @@ import FeatureParser, {
   IntegrationType,
 } from "../model/features";
 import PlansParser, { StandardPlan } from "../model/plans";
-import { PricingManager } from "../model/pricingmanager";
+import { PricingManager } from "../model/pricingManager";
 import {
   NonRenewable,
   Renewable,

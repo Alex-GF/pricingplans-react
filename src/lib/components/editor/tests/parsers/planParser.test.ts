@@ -1,7 +1,8 @@
-import { PaymentTypes } from "../../model/features";
-import { MapFeatureValue, Plans, StandardPlan } from "../../model/plans";
+import { PaymentTypes } from "../../types/features";
+import { StandardPlan } from "../../model/plans";
 import { StrNumBool } from "../../types/index";
 import PlansParser from "../../parsers/plans";
+import { MapFeatureValue, Plans } from "../../types/plans";
 
 test("[PlansParser] Given a single plan should return an object with a single plan", () => {
   const plans: Plans = {

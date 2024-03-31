@@ -1,4 +1,4 @@
-import { UsageLimitBase, UsageLimits } from "../model/usagelimits";
+import { UsageLimitBase, UsageLimits } from "../types/usageLimits";
 
 export default class UsageLimitParser {
   constructor(private usageLimits: UsageLimits) {}

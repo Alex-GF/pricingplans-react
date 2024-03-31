@@ -1,6 +1,5 @@
-import { Type } from "../../model/features";
-import { PricingManager } from "../../model/pricingmanager";
-import { ValueType } from "../../types/index";
+import { Type } from "../../types/features";
+import { PricingManager, ValueType } from "../../types/index";
 
 export const petClinic: PricingManager = {
   saasName: "This is a test",

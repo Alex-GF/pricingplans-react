@@ -1,5 +1,20 @@
-import { PaymentTypes } from "../model/features";
-import { MapStandardValue } from "../model/plans";
+import { Features, PaymentTypes } from "../types/features";
+import { AddOns } from "./addOns";
+import { MapStandardValue, Plans } from "./plans";
+import { UsageLimits } from "./usageLimits";
+
+export type PricingManager = {
+  saasName: string;
+  day: number;
+  month: number;
+  year: number;
+  currency: string;
+  hasAnnualPayment: boolean;
+  features: Features;
+  usageLimits: UsageLimits | null;
+  plans: Plans | null;
+  addOns: AddOns | null;
+};
 
 export type FeatureOverwrite = {
   [key: string]: {

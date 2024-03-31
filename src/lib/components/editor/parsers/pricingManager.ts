@@ -1,18 +1,17 @@
-import { PricingManager, PricingManagerBase } from "../model/pricingmanager";
+import { PricingManagerBase } from "../model/pricingManager";
+import { PricingManager } from "../types/index";
 import AddOnsParser from "./addons";
 import FeatureParser from "./features";
 import PlansParser from "./plans";
 import UsageLimitParser from "./usageLimits";
 
 export default class PricingManagerParser {
-  private rawPricingManager: PricingManager;
   private featureParser: FeatureParser;
   private usageLimitParser: UsageLimitParser | null;
   private planParser: PlansParser | null;
   private addOnsParser: AddOnsParser | null;
 
-  constructor(pricingManager: PricingManager) {
-    this.rawPricingManager = pricingManager;
+  constructor(private pricingManager: PricingManager) {
     this.featureParser = new FeatureParser(pricingManager.features);
     this.usageLimitParser = null;
     this.planParser = null;
@@ -33,12 +32,12 @@ export default class PricingManagerParser {
 
   parse(): PricingManagerBase {
     return new PricingManagerBase(
-      this.rawPricingManager.saasName,
-      this.rawPricingManager.day,
-      this.rawPricingManager.month,
-      this.rawPricingManager.year,
-      this.rawPricingManager.currency,
-      this.rawPricingManager.hasAnnualPayment,
+      this.pricingManager.saasName,
+      this.pricingManager.day,
+      this.pricingManager.month,
+      this.pricingManager.year,
+      this.pricingManager.currency,
+      this.pricingManager.hasAnnualPayment,
       this.featureParser.parse(),
       this.usageLimitParser !== null ? this.usageLimitParser.parse() : null,
       this.planParser ? this.planParser.parse() : null,

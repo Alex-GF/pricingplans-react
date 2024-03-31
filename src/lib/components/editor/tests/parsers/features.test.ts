@@ -10,7 +10,7 @@ import {
   PaymentFeature,
   SupportFeature,
   Type,
-} from "../../model/features";
+} from "../../types/features";
 import FeatureParser from "../../parsers/features";
 import { ValueType } from "../../types/index";
 

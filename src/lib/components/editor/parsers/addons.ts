@@ -1,6 +1,7 @@
-import { AddOn, AddOns, StandardAddOn } from "../model/addons";
-import { MapFeatureValue, MapStandardValue } from "../model/plans";
+import { StandardAddOn } from "../model/addons";
+import { MapFeatureValue, MapStandardValue } from "../types/plans";
 import { FeatureOverwrite, ValueOverwrite } from "../types/index";
+import { AddOn, AddOns } from "../types/addOns";
 
 export default class AddOnsParser {
   constructor(private addOns: AddOns) {}

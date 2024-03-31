@@ -1,4 +1,4 @@
-import { FeatureOverwrite, StrNumBool, Value, ValueType } from "../types/index";
+import { StrNumBool, ValueType } from "../types/index";
 
 export enum Type {
   AUTOMATION,
