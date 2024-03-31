@@ -1,23 +1,14 @@
 import { UsageLimitBase, UsageLimits } from "../model/usagelimits";
 
 export default class UsageLimitParser {
-  private _rawUsageLimits: UsageLimits;
-  private _parsedUsageLimits: Map<string, UsageLimitBase>;
+  constructor(private usageLimits: UsageLimits) {}
 
-  constructor(usageLimits: UsageLimits) {
-    this._rawUsageLimits = usageLimits;
-    this._parsedUsageLimits = new Map([]);
-  }
-
-  get usageLimits(): Map<string, UsageLimitBase> {
-    this._parse();
-    return this._parsedUsageLimits;
-  }
-
-  private _parse(): void {
-    Object.entries(this._rawUsageLimits).forEach(([name, usageLimit]) => {
+  public parse(): Map<string, UsageLimitBase> {
+    const parsedUsageLimits = new Map<string, UsageLimitBase>([]);
+    Object.entries(this.usageLimits).forEach(([name, usageLimit]) => {
       const ul: UsageLimitBase = { ...usageLimit, name: name };
-      this._parsedUsageLimits.set(name, ul);
+      parsedUsageLimits.set(name, ul);
     });
+    return parsedUsageLimits;
   }
 }

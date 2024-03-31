@@ -10,7 +10,7 @@ import { PricingManager, PricingManagerBase } from "../../model/pricingmanager";
 import PricingManagerParser from "../../parsers/pricingManager";
 import { petClinic } from "./pricings";
 
-test("Should parse a PricingManager and return a PricingManagerBase", () => {
+test("After parsing Petclinic it should return a perfect serialized copy of Petclinic", () => {
   const pricingManagerBase = new PricingManagerParser(petClinic).parse();
   const serializedPricingManager = pricingManagerBase.serialize();
 

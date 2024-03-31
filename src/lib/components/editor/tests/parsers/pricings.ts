@@ -57,5 +57,28 @@ export const petClinic: PricingManager = {
       },
     },
   },
-  addOns: null,
+  addOns: {
+    extra: {
+      availableFor: ["pro"],
+      price: null,
+      unit: "user/month",
+      annualPrice: 20,
+      monthlyPrice: 10,
+      features: {
+        maxPets: {
+          value: true,
+        },
+      },
+      usageLimits: {
+        maxPets: {
+          value: 1000,
+        },
+      },
+      usageLimitsExtensions: {
+        maxPets: {
+          value: 1000,
+        },
+      },
+    },
+  },
 };

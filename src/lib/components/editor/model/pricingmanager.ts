@@ -1,7 +1,7 @@
 import { AllFeatures, Features } from "./features";
 import { UsageLimitBase, UsageLimits, serialize } from "./usagelimits";
 import { Plans, StandardPlan } from "./plans";
-import { StandardAddOn, AddOns } from "./addons";
+import { StandardAddOn, AddOns, AddOn } from "./addons";
 import FeatureSerializer from "../serializers/features";
 
 export type PricingManager = {
@@ -46,10 +46,9 @@ export class PricingManagerBase {
       currency: this.currency,
       hasAnnualPayment: this.hasAnnualPayment,
       features: this._serializeFeatures(),
-
       plans: this._serializePlans(),
       usageLimits: this._serializeUsageLimits(),
-      addOns: null,
+      addOns: this._serializeAddOns(),
     };
   }
 
@@ -83,5 +82,19 @@ export class PricingManagerBase {
     }
 
     return Object.fromEntries(usageLimits);
+  }
+
+  private _serializeAddOns(): AddOns | null {
+    if (this.addOns === null) {
+      return null;
+    }
+
+    const addOnsTuple: [string, AddOn][] = [];
+
+    for (const [addOnName, addOn] of this.addOns) {
+      addOnsTuple.push([addOnName, addOn.serialize()]);
+    }
+
+    return Object.fromEntries(addOnsTuple);
   }
 }

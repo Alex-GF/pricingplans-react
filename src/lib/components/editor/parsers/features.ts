@@ -2,23 +2,17 @@ import { AllFeatures, Feature, Features, Type } from "../model/features";
 
 export default class FeatureParser {
   private rawFeatures: Features;
-  private parsedFeatures: Map<string, AllFeatures>;
 
   constructor(features: Features) {
     this.rawFeatures = features;
-    this.parsedFeatures = new Map([]);
   }
 
-  get features(): Map<string, AllFeatures> {
-    this._parse();
-
-    return this.parsedFeatures;
-  }
-
-  private _parse(): void {
+  public parse(): Map<string, AllFeatures> {
+    const parsedFeatures = new Map<string, AllFeatures>([]);
     Object.entries(this.rawFeatures).forEach(([name, feature]) =>
-      this.parsedFeatures.set(name, this._parseFeature(name, feature))
+      parsedFeatures.set(name, this._parseFeature(name, feature))
     );
+    return parsedFeatures;
   }
 
   private _parseFeature(name: string, feature: Feature): AllFeatures {

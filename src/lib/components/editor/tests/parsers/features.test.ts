@@ -92,7 +92,7 @@ test("Given all kinds of features should parse them to objects", () => {
     },
   };
 
-  const actualFeatures = new FeatureParser(rawFeatures).features;
+  const actualFeatures = new FeatureParser(rawFeatures).parse();
 
   const automationFeature: AutomationFeature = {
     name: "automation",

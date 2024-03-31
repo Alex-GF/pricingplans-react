@@ -27,7 +27,7 @@ test("[PlansParser] Given a single plan should return an object with a single pl
     new StandardPlan("basic", "Basic", 20, 10, "user/month", features, null)
   );
 
-  expect(new PlansParser(plans).plans).toStrictEqual(map);
+  expect(new PlansParser(plans).parse()).toStrictEqual(map);
 });
 
 test("[PlanPlans Parser] Given plans should parse to a map of plans", () => {
@@ -113,7 +113,7 @@ test("[PlanPlans Parser] Given plans should parse to a map of plans", () => {
     )
   );
 
-  expect(new PlansParser(plans).plans).toStrictEqual(plansMap);
+  expect(new PlansParser(plans).parse()).toStrictEqual(plansMap);
 });
 
 test("[PlansParser] Given payment types should return list of payment types", () => {
@@ -140,5 +140,5 @@ test("[PlansParser] Given payment types should return list of payment types", ()
     new StandardPlan("basic", "Basic", 20, 10, "user/month", features, null)
   );
 
-  expect(new PlansParser(plans).plans).toStrictEqual(map);
+  expect(new PlansParser(plans).parse()).toStrictEqual(map);
 });

@@ -9,23 +9,19 @@ import { FeatureOverwrite, ValueOverwrite } from "../types/index";
 
 export default class PlansParser {
   private rawPlans: Plans;
-  private parsedPlans: Map<string, StandardPlan>;
 
   constructor(plans: Plans) {
     this.rawPlans = plans;
-    this.parsedPlans = new Map([]);
   }
 
-  get plans() {
-    this._parse();
+  public parse(): Map<string, StandardPlan> {
+    const parsedPlans = new Map<string, StandardPlan>([]);
 
-    return this.parsedPlans;
-  }
-
-  private _parse(): void {
     Object.entries(this.rawPlans).forEach(([name, plan]) =>
-      this.parsedPlans.set(name, this._parsePlan(name, plan))
+      parsedPlans.set(name, this._parsePlan(name, plan))
     );
+
+    return parsedPlans;
   }
 
   private _parsePlan(name: string, plan: Plan): StandardPlan {
