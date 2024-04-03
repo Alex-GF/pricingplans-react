@@ -3,17 +3,17 @@ import { Attribute, AttributeType } from "../../types";
 import { DefaultValue } from "./DefaultValue";
 import { Button } from "../../components/Button";
 
-interface AttributeFormProps {
+interface FeatureFormProps {
   initialData: Attribute;
   onValidation: (name: string) => boolean;
   onSubmit: (attribute: Attribute) => void;
 }
 
-export function AttributeForm({
+export function FeatureForm({
   initialData,
   onSubmit,
   onValidation,
-}: AttributeFormProps) {
+}: FeatureFormProps) {
   const [attribute, setAttribute] = useState(initialData);
   const [errors, setErrors] = useState({
     nameIsEmpty: false,

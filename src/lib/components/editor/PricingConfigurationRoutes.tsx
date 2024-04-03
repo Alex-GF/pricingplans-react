@@ -1,7 +1,7 @@
 import { Routes, Route, Outlet } from "react-router-dom";
 import { RawPricingContext } from "./types";
 import { PricingPlansEditor } from "./PricingPlansEditor";
-import { AttributesPage } from "./pages/Attributes";
+import { FeaturesPage } from "./pages/Attributes";
 import { UserContextPage } from "./pages/UserContext";
 import { EvaluationPage } from "./pages/EvaluationContext";
 import { Plan, Plans } from "./pages/Plans";
@@ -46,7 +46,7 @@ export function PricingConfigurationRoutes({
         }
       >
         <Route path="/" element={<h1>Pricingplans-react</h1>} />
-        <Route path="attributes" element={<AttributesPage />} />
+        <Route path="attributes" element={<FeaturesPage />} />
         <Route
           path="user-context"
           element={

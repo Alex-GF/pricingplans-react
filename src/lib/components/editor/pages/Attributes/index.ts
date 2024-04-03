@@ -1,1 +1,1 @@
-export { AttributesPage } from "./AttributesPage";
+export { FeaturesPage } from "./FeaturesPage";
