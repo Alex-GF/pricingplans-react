@@ -1,4 +1,4 @@
-import { StrNumBool, ValueType } from "../types/index";
+import { ValueType } from "../types/index";
 
 export enum Type {
   AUTOMATION,
@@ -25,17 +25,28 @@ export type Features = {
   [key: string]: Feature;
 };
 
-type FeatureSkipName<T extends StrNumBool | PaymentTypes> = Omit<
-  FeatureBase<T>,
-  "name"
->;
+type FeatureSkipName = Omit<FeatureBase, "name">;
 
-type FeatureBase<T extends StrNumBool | PaymentTypes> = {
+export type FeatureRestriction =
+  | {
+      type: Exclude<Type, Type.PAYMENT>;
+      valueType: ValueType.BOOLEAN;
+      defaultValue: boolean;
+    }
+  | {
+      type: Exclude<Type, Type.PAYMENT>;
+      valueType: ValueType.NUMERIC;
+      defaultValue: number;
+    }
+  | {
+      type: Exclude<Type, Type.PAYMENT>;
+      valueType: ValueType.TEXT;
+      defaultValue: string;
+    };
+
+type FeatureBase = {
   name: string;
   description: string;
-  valueType: T extends StrNumBool ? ValueType : ValueType.TEXT;
-  defaultValue: T extends StrNumBool ? T : PaymentTypes;
-  type: T extends StrNumBool ? Exclude<Type, Type.PAYMENT> : Type.PAYMENT;
   expression: string;
   serverExpression: string;
 };
@@ -49,23 +60,27 @@ export enum AutomationType {
 
 type AutomationTypes = keyof typeof AutomationType;
 
-export interface Automation extends FeatureSkipName<StrNumBool> {
-  type: Type.AUTOMATION;
-  automationType: AutomationTypes;
-}
+export type Automation = FeatureSkipName &
+  FeatureRestriction & {
+    type: Type.AUTOMATION;
+    automationType: AutomationTypes;
+  };
 
-export interface Domain extends FeatureSkipName<StrNumBool> {
-  type: Type.DOMAIN;
-}
+export type Domain = FeatureSkipName &
+  FeatureRestriction & {
+    type: Type.DOMAIN;
+  };
 
-export interface Guarantee extends FeatureSkipName<StrNumBool> {
-  type: Type.GUARANTEE;
-  docUrl: string;
-}
+export type Guarantee = FeatureSkipName &
+  FeatureRestriction & {
+    type: Type.GUARANTEE;
+    docUrl: string;
+  };
 
-export interface Information extends FeatureSkipName<StrNumBool> {
-  type: Type.INFORMATION;
-}
+export type Information = FeatureSkipName &
+  FeatureRestriction & {
+    type: Type.INFORMATION;
+  };
 
 export enum IntegrationType {
   API,
@@ -78,14 +93,16 @@ export enum IntegrationType {
 
 type IntegrationTypes = keyof typeof IntegrationType;
 
-export interface Integration extends FeatureSkipName<StrNumBool> {
-  type: Type.INTEGRATION;
-  integrationType: IntegrationTypes;
-}
+export type Integration = FeatureSkipName &
+  FeatureRestriction & {
+    type: Type.INTEGRATION;
+    integrationType: IntegrationTypes;
+  };
 
-export interface Management extends FeatureSkipName<StrNumBool> {
-  type: Type.MANAGEMENT;
-}
+export type Management = FeatureSkipName &
+  FeatureRestriction & {
+    type: Type.MANAGEMENT;
+  };
 
 export type PaymentTypeKeys = keyof typeof PaymentType;
 export type PaymentTypes = PaymentTypeKeys[];
@@ -98,44 +115,60 @@ export enum PaymentType {
   OTHER,
 }
 
-export interface Payment extends FeatureSkipName<PaymentTypes> {}
+export type Payment = FeatureSkipName & {
+  type: Type.PAYMENT;
+  valueType: ValueType.TEXT;
+  defaultValue: PaymentTypes;
+};
 
-export interface Support extends FeatureSkipName<StrNumBool> {
-  type: Type.SUPPORT;
-}
+export type Support = FeatureSkipName &
+  FeatureRestriction & {
+    type: Type.SUPPORT;
+  };
 
-export interface AutomationFeature extends FeatureBase<StrNumBool> {
-  type: Type.AUTOMATION;
-  automationType: AutomationTypes;
-}
+export type AutomationFeature = FeatureBase &
+  FeatureRestriction & {
+    type: Type.AUTOMATION;
+    automationType: AutomationTypes;
+  };
 
-export interface DomainFeature extends FeatureBase<StrNumBool> {
-  type: Type.DOMAIN;
-}
+export type DomainFeature = FeatureBase &
+  FeatureRestriction & {
+    type: Type.DOMAIN;
+  };
 
-export interface GuaranteeFeature extends FeatureBase<StrNumBool> {
-  type: Type.GUARANTEE;
-  docUrl: string;
-}
+export type GuaranteeFeature = FeatureBase &
+  FeatureRestriction & {
+    type: Type.GUARANTEE;
+    docUrl: string;
+  };
 
-export interface InformationFeature extends FeatureBase<StrNumBool> {
-  type: Type.INFORMATION;
-}
+export type InformationFeature = FeatureBase &
+  FeatureRestriction & {
+    type: Type.INFORMATION;
+  };
 
-export interface IntegrationFeature extends FeatureBase<StrNumBool> {
-  type: Type.INTEGRATION;
-  integrationType: IntegrationTypes;
-}
+export type IntegrationFeature = FeatureBase &
+  FeatureRestriction & {
+    type: Type.INTEGRATION;
+    integrationType: IntegrationTypes;
+  };
 
-export interface ManagementFeature extends FeatureBase<StrNumBool> {
-  type: Type.MANAGEMENT;
-}
+export type ManagementFeature = FeatureBase &
+  FeatureRestriction & {
+    type: Type.MANAGEMENT;
+  };
 
-export interface PaymentFeature extends FeatureBase<PaymentTypes> {}
+export type PaymentFeature = FeatureBase & {
+  type: Type.PAYMENT;
+  valueType: ValueType.TEXT;
+  defaultValue: PaymentTypes;
+};
 
-export interface SupportFeature extends FeatureBase<StrNumBool> {
-  type: Type.SUPPORT;
-}
+export type SupportFeature = FeatureBase &
+  FeatureRestriction & {
+    type: Type.SUPPORT;
+  };
 
 export type AllFeatures =
   | AutomationFeature

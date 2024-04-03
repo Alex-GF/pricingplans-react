@@ -1,8 +1,10 @@
+import { ValueType } from "../types/index";
 import {
   AllFeatures,
   Automation,
   Domain,
   Feature,
+  FeatureRestriction,
   Features,
   Guarantee,
   Information,
@@ -33,6 +35,26 @@ export default class FeatureSerializer {
     }
   }
 
+  private _serializeValueType(feature: FeatureRestriction) {
+    switch (feature.valueType) {
+      case ValueType.BOOLEAN:
+        return {
+          valueType: feature.valueType,
+          defaultValue: feature.defaultValue,
+        };
+      case ValueType.NUMERIC:
+        return {
+          valueType: feature.valueType,
+          defaultValue: feature.defaultValue,
+        };
+      case ValueType.TEXT:
+        return {
+          valueType: feature.valueType,
+          defaultValue: feature.defaultValue,
+        };
+    }
+  }
+
   private _serializeFeature(feature: AllFeatures): Feature {
     const commonFeatures = {
       description: feature.description,
@@ -44,8 +66,7 @@ export default class FeatureSerializer {
       case Type.AUTOMATION: {
         const automation: Automation = {
           ...commonFeatures,
-          valueType: feature.valueType,
-          defaultValue: feature.defaultValue,
+          ...this._serializeValueType(feature),
           type: feature.type,
           automationType: feature.automationType,
         };
@@ -55,8 +76,7 @@ export default class FeatureSerializer {
       case Type.DOMAIN: {
         const domain: Domain = {
           ...commonFeatures,
-          valueType: feature.valueType,
-          defaultValue: feature.defaultValue,
+          ...this._serializeValueType(feature),
           type: feature.type,
         };
         return domain;
@@ -65,8 +85,7 @@ export default class FeatureSerializer {
       case Type.GUARANTEE: {
         const guarantee: Guarantee = {
           ...commonFeatures,
-          valueType: feature.valueType,
-          defaultValue: feature.defaultValue,
+          ...this._serializeValueType(feature),
           type: feature.type,
           docUrl: feature.docUrl,
         };
@@ -75,8 +94,7 @@ export default class FeatureSerializer {
       case Type.INFORMATION: {
         const information: Information = {
           ...commonFeatures,
-          valueType: feature.valueType,
-          defaultValue: feature.defaultValue,
+          ...this._serializeValueType(feature),
           type: feature.type,
         };
         return information;
@@ -84,8 +102,7 @@ export default class FeatureSerializer {
       case Type.INTEGRATION: {
         const integration: Integration = {
           ...commonFeatures,
-          valueType: feature.valueType,
-          defaultValue: feature.defaultValue,
+          ...this._serializeValueType(feature),
           type: feature.type,
           integrationType: feature.integrationType,
         };
@@ -94,8 +111,7 @@ export default class FeatureSerializer {
       case Type.MANAGEMENT: {
         const management: Management = {
           ...commonFeatures,
-          valueType: feature.valueType,
-          defaultValue: feature.defaultValue,
+          ...this._serializeValueType(feature),
           type: feature.type,
         };
         return management;
@@ -110,10 +126,12 @@ export default class FeatureSerializer {
         return payment;
       }
       case Type.SUPPORT: {
+        if (feature.valueType === ValueType.BOOLEAN) {
+          feature.defaultValue;
+        }
         const support: Support = {
           ...commonFeatures,
-          valueType: feature.valueType,
-          defaultValue: feature.defaultValue,
+          ...this._serializeValueType(feature),
           type: feature.type,
         };
         return support;

@@ -1,4 +1,11 @@
-import { AllFeatures, Feature, Features, Type } from "../types/features";
+import { ValueType } from "../types/index";
+import {
+  AllFeatures,
+  Feature,
+  FeatureRestriction,
+  Features,
+  Type,
+} from "../types/features";
 
 export default class FeatureParser {
   constructor(private features: Features) {}
@@ -11,14 +18,34 @@ export default class FeatureParser {
     return parsedFeatures;
   }
 
+  private _valueTypeParse(a: FeatureRestriction) {
+    switch (a.valueType) {
+      case ValueType.BOOLEAN:
+        return {
+          valueType: a.valueType,
+          defaultValue: a.defaultValue,
+        };
+      case ValueType.NUMERIC:
+        return {
+          valueType: a.valueType,
+          defaultValue: a.defaultValue,
+        };
+
+      case ValueType.TEXT:
+        return {
+          valueType: a.valueType,
+          defaultValue: a.defaultValue,
+        };
+    }
+  }
+
   private _parseFeature(name: string, feature: Feature): AllFeatures {
     switch (feature.type) {
       case Type.AUTOMATION:
         return {
           name,
           description: feature.description,
-          valueType: feature.valueType,
-          defaultValue: feature.defaultValue,
+          ...this._valueTypeParse(feature),
           type: feature.type,
           automationType: feature.automationType,
           serverExpression: feature.serverExpression,
@@ -28,8 +55,7 @@ export default class FeatureParser {
         return {
           name,
           description: feature.description,
-          valueType: feature.valueType,
-          defaultValue: feature.defaultValue,
+          ...this._valueTypeParse(feature),
           type: feature.type,
           serverExpression: feature.serverExpression,
           expression: feature.expression,
@@ -38,8 +64,7 @@ export default class FeatureParser {
         return {
           name,
           description: feature.description,
-          valueType: feature.valueType,
-          defaultValue: feature.defaultValue,
+          ...this._valueTypeParse(feature),
           type: feature.type,
           docUrl: feature.docUrl,
           serverExpression: feature.serverExpression,
@@ -49,8 +74,7 @@ export default class FeatureParser {
         return {
           name,
           description: feature.description,
-          valueType: feature.valueType,
-          defaultValue: feature.defaultValue,
+          ...this._valueTypeParse(feature),
           type: feature.type,
           serverExpression: feature.serverExpression,
           expression: feature.expression,
@@ -59,8 +83,7 @@ export default class FeatureParser {
         return {
           name,
           description: feature.description,
-          valueType: feature.valueType,
-          defaultValue: feature.defaultValue,
+          ...this._valueTypeParse(feature),
           type: feature.type,
           integrationType: feature.integrationType,
           serverExpression: feature.serverExpression,
@@ -70,8 +93,7 @@ export default class FeatureParser {
         return {
           name,
           description: feature.description,
-          valueType: feature.valueType,
-          defaultValue: feature.defaultValue,
+          ...this._valueTypeParse(feature),
           type: feature.type,
           serverExpression: feature.serverExpression,
           expression: feature.expression,
@@ -90,8 +112,7 @@ export default class FeatureParser {
         return {
           name,
           description: feature.description,
-          valueType: feature.valueType,
-          defaultValue: feature.defaultValue,
+          ...this._valueTypeParse(feature),
           type: feature.type,
           serverExpression: feature.serverExpression,
           expression: feature.expression,
