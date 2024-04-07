@@ -6,6 +6,7 @@ import {
   Features,
   Type,
 } from "../types/features";
+import { MapFeatureValue } from "../types/plans";
 
 export default class FeatureParser {
   constructor(private features: Features) {}
@@ -16,6 +17,18 @@ export default class FeatureParser {
       parsedFeatures.set(name, this._parseFeature(name, feature))
     );
     return parsedFeatures;
+  }
+
+  public parseToReactState(): AllFeatures[] {
+    return Array.from(this.parse().values());
+  }
+
+  public featuresToPlanFeatures(): Map<string, MapFeatureValue> {
+    const planFeatures: [string, MapFeatureValue][] = [];
+    for (const [featureName, feature] of this.parse()) {
+      planFeatures.push([featureName, { value: feature.defaultValue }]);
+    }
+    return new Map(planFeatures);
   }
 
   private _valueTypeParse(a: FeatureRestriction) {

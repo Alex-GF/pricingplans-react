@@ -1,4 +1,5 @@
-import { FeatureOverwrite, StrNumBool, ValueOverwrite } from ".";
+import { FeatureOverwrite, StrNumBool, ValueOverwrite, ValueType } from ".";
+import { StandardPlan } from "../model/plans";
 import { PaymentTypes } from "./features";
 
 export type Plans = {
@@ -20,4 +21,18 @@ export interface MapFeatureValue {
 
 export interface MapStandardValue {
   value: StrNumBool;
+}
+
+export type PlansState = PlanState[] | null;
+
+export type PlanState = Omit<Plan, "features" | "usageLimits"> & {
+  name: string;
+  features: PlanFeaturesState;
+};
+
+export type PlanFeaturesState = PlanFeatureState[];
+
+export interface PlanFeatureState {
+  name: string;
+  value: StrNumBool | PaymentTypes;
 }

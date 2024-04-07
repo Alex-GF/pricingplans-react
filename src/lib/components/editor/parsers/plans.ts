@@ -1,11 +1,23 @@
-import { MapFeatureValue, MapStandardValue, Plans, Plan } from "../types/plans";
+import {
+  MapFeatureValue,
+  MapStandardValue,
+  Plans,
+  Plan,
+  PlanState,
+  PlanFeaturesState,
+  PlansState,
+} from "../types/plans";
 import { FeatureOverwrite, ValueOverwrite } from "../types/index";
 import { StandardPlan } from "../model/plans";
 
 export default class PlansParser {
-  constructor(private plans: Plans) {}
+  constructor(private plans: Plans | null) {}
 
-  public parse(): Map<string, StandardPlan> {
+  public parse(): Map<string, StandardPlan> | null {
+    if (!this.plans) {
+      return null;
+    }
+
     const parsedPlans = new Map<string, StandardPlan>([]);
 
     Object.entries(this.plans).forEach(([name, plan]) =>
@@ -13,6 +25,49 @@ export default class PlansParser {
     );
 
     return parsedPlans;
+  }
+
+  private _mergeFeatures(
+    globalFeatures: Map<string, MapFeatureValue>,
+    planFeatures: Map<string, MapFeatureValue> | null
+  ): Map<string, MapFeatureValue> {
+    if (!planFeatures) {
+      return new Map([...globalFeatures]);
+    }
+    return new Map([...globalFeatures, ...planFeatures]);
+  }
+
+  private _planFeaturesToPlanFeaturesState(
+    features: Map<string, MapFeatureValue>
+  ): PlanFeaturesState {
+    const plansFeaturesState: PlanFeaturesState = [];
+    for (const [featureName, feature] of features) {
+      plansFeaturesState.push({ name: featureName, value: feature.value });
+    }
+    return plansFeaturesState;
+  }
+
+  public parseToReactState(
+    originalFeatures: Map<string, MapFeatureValue>
+  ): PlansState {
+    const plansMap = this.parse();
+    if (!plansMap) {
+      return null;
+    }
+
+    const planState: PlanState[] = [];
+    for (const [_, plan] of plansMap) {
+      const mergedFeatures = this._mergeFeatures(
+        originalFeatures,
+        plan.features
+      );
+      const planFeatures =
+        this._planFeaturesToPlanFeaturesState(mergedFeatures);
+      const { usageLimits, features, ...rest } = plan;
+      planState.push({ ...rest, features: planFeatures });
+    }
+
+    return planState;
   }
 
   private _parsePlan(name: string, plan: Plan): StandardPlan {

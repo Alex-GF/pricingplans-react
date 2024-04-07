@@ -3,15 +3,15 @@ import { Outlet } from "react-router-dom";
 import { EditorContextProvider } from "./context/EditorContextProvider";
 import { Toggle } from "./components/Toggle";
 import { NavBar } from "./components/NavBar";
-import { RawPricingContext } from "./types";
 import "./Form.css";
 import "./PricingPlansEditor.css";
+import { PricingManager } from "./types/index";
 
 interface PricingPlansEditorProps {
-  pricingContext: RawPricingContext;
+  pricingContext: PricingManager;
   returnTo: string;
   theme?: string;
-  onSave: (pricingContext: RawPricingContext) => void;
+  onSave: (pricingContext: PricingManager) => void;
 }
 
 export function PricingPlansEditor({

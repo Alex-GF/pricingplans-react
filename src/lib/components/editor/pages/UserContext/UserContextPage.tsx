@@ -1,11 +1,13 @@
 import { Dispatch, SetStateAction, useContext, useState } from "react";
-import { Command, UserContextAttribute } from "../../types";
+import { Command, UserContextAttribute } from "../../parsers/expression";
 import { Button } from "../../components/Button";
 import { Table } from "../../components/Table";
 import { Modal } from "../../components/Modal";
 import { UserContextForm } from "./UserContextForm";
-import { Pencil, Plus, Trash } from "../../components/Icons";
+import { Plus } from "../../components/Icons";
 import { EditorContext } from "../../context/EditorContextProvider";
+import { UserAttributeList } from "./UserFeatureList";
+import { ValueType } from "../../types/index";
 
 interface UserContextPageProps {
   title: string;
@@ -69,13 +71,13 @@ function ModalContent({
   const { userContextAttributes, setUserContextAttributes } =
     useContext(EditorContext);
   const emptyUserAttribute: UserContextAttribute = {
-    id: "",
-    type: "TEXT",
+    name: "",
+    valueType: ValueType.TEXT,
   };
 
   const hasSelectedUserAttribute = userAtributePosition !== null;
   const userContextNameRender = hasSelectedUserAttribute
-    ? userContextAttributes[userAtributePosition].id
+    ? userContextAttributes[userAtributePosition].name
     : "";
 
   const closeModal = () => setVisible(false);
@@ -135,52 +137,4 @@ function ModalContent({
         </>
       );
   }
-}
-
-interface UserAttributeListProps {
-  setCommand: Dispatch<SetStateAction<Command>>;
-  setSelected: Dispatch<SetStateAction<null | number>>;
-  setVisible: Dispatch<SetStateAction<boolean>>;
-}
-
-function UserAttributeList({
-  setCommand,
-  setSelected,
-  setVisible,
-}: UserAttributeListProps) {
-  const { userContextAttributes } = useContext(EditorContext);
-
-  return (
-    <>
-      {userContextAttributes.map((attribute, index) => (
-        <tr key={attribute.id}>
-          <td>{attribute.id}</td>
-          <td className={`pp-table-type__${attribute.type}`}>
-            {attribute.type}
-          </td>
-          <td className="pp-table-actions">
-            <Button
-              onClick={() => {
-                setCommand("edit");
-                setSelected(index);
-                setVisible(true);
-              }}
-            >
-              <Pencil />
-            </Button>
-
-            <Button
-              onClick={() => {
-                setCommand("delete");
-                setSelected(index);
-                setVisible(true);
-              }}
-            >
-              <Trash />
-            </Button>
-          </td>
-        </tr>
-      ))}
-    </>
-  );
 }

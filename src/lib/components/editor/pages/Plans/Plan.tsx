@@ -1,27 +1,13 @@
-import {
-  ChangeEvent,
-  Dispatch,
-  FormEvent,
-  SetStateAction,
-  useContext,
-  useState,
-} from "react";
+import { ChangeEvent, FormEvent, useContext, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Features, Plan, Plans } from "../../types";
 import { Button } from "../../components/Button";
 import { EditorContext } from "../../context/EditorContextProvider";
 import { ArrowLeft } from "../../components/Icons";
-import { computeType } from "../../utils";
+import { FeatureList } from "./FeatureList";
+import { PlanState } from "../../types/plans";
 
 interface PlanLocation {
   index: number;
-}
-
-interface PlanState {
-  name: string;
-  description: string;
-  price: string;
-  currency: string;
 }
 
 export function Plan() {
@@ -31,51 +17,51 @@ export function Plan() {
   const navigate = useNavigate();
   const goBack = () => navigate("..");
 
-  const { attributes, plans, setPlans } = useContext(EditorContext);
+  const { plans, setPlans } = useContext(EditorContext);
 
-  const initialFeatures = isPlanIncluded
-    ? plans[index].features
-    : attributes.map((attribute) => ({
-        name: attribute.id,
-        type: computeType(attribute.defaultValue),
-        value: attribute.defaultValue,
-      }));
-
-  const initialPlan = isPlanIncluded
-    ? {
-        name: plans[state.index].name,
-        description: plans[state.index].description,
-        price: plans[state.index].price.toString(),
-        currency: plans[state.index].currency,
-      }
-    : {
-        name: "",
-        description: "",
-        price: "",
-        currency: "",
-      };
+  const initialPlan =
+    isPlanIncluded && plans
+      ? plans[index]
+      : {
+          name: "",
+          description: "",
+          unit: "user/month",
+          annualPrice: 0,
+          monthlyPrice: 0,
+          features: [],
+        };
 
   const [plan, setPlan] = useState<PlanState>(initialPlan);
-  const [features, setFeatures] = useState<Features>(initialFeatures);
 
   const isPlanNameEmpty = plan.name === "";
   const isPlanNameCompound = plan.name.trim().split(" ").length > 1;
   const priceRegex = /^\d+.?\d{0,2}?$/;
-  const isValidPrice = priceRegex.test(plan.price);
+  const isValidPrice = priceRegex.test(plan.annualPrice.toString());
 
-  const addPlan = () =>
-    setPlans([...plans, { ...plan, price: Number(plan.price), features }]);
+  const addPlan = () => {
+    if (!plans) {
+      return;
+    }
+    setPlans([...plans, { ...plan, annualPrice: plan.annualPrice }]);
+  };
 
   const editPlan = (planPosition: number) => {
-    const newPlans: Plans = plans.map((oldPlan, index) =>
+    if (!plans) {
+      return;
+    }
+
+    const newPlans = plans.map((oldPlan, index) =>
       index === planPosition
-        ? { ...plan, price: Number(plan.price), features }
+        ? { ...plan, annualPrice: Number(plan.annualPrice) }
         : oldPlan
     );
     setPlans(newPlans);
   };
 
   const deletePlan = () => {
+    if (!plans) {
+      return;
+    }
     setPlans(plans.filter((_, index) => index !== state.index));
     goBack();
   };
@@ -99,7 +85,7 @@ export function Plan() {
         <Button onClick={goBack}>
           <ArrowLeft />
         </Button>
-        <h1>{isPlanIncluded ? plans[index].name : "New Plan"}</h1>
+        <h1>{isPlanIncluded && plans ? plans[index].name : "New Plan"}</h1>
       </header>
       <form className="pp-form" onSubmit={handleSubmit}>
         <div className="pp-form__group">
@@ -146,23 +132,12 @@ export function Plan() {
             name="price"
             type="number"
             className="pp-form__field"
-            value={plan.price}
+            value={plan.annualPrice}
             onChange={handleChange}
           />
         </div>
-        <div className="pp-form__group">
-          <label htmlFor="currency" className="pp-form__label">
-            Currency
-          </label>
-          <input
-            id="currency"
-            name="currency"
-            className="pp-form__field"
-            value={plan.currency}
-            onChange={handleChange}
-          />
-        </div>
-        <FeatureList features={features} setFeatures={setFeatures} />
+
+        <FeatureList />
         <footer className="pp-plan-actions">
           {isPlanIncluded && (
             <Button
@@ -180,93 +155,5 @@ export function Plan() {
         </footer>
       </form>
     </article>
-  );
-}
-
-interface FeatureListProps {
-  features: Features;
-  setFeatures: Dispatch<SetStateAction<Features>>;
-}
-
-function FeatureList({ features, setFeatures }: FeatureListProps) {
-  const handleTextChange = (e: ChangeEvent<HTMLInputElement>) =>
-    setFeatures(
-      features.map((feature) =>
-        feature.name === e.target.name
-          ? { ...feature, value: e.target.value }
-          : feature
-      )
-    );
-
-  const handleNumberChange = (e: ChangeEvent<HTMLInputElement>) =>
-    setFeatures(
-      features.map((feature) =>
-        feature.name === e.target.name
-          ? { ...feature, value: e.currentTarget.valueAsNumber }
-          : feature
-      )
-    );
-  const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.checked);
-    setFeatures(
-      features.map((feature) =>
-        feature.name === e.target.name
-          ? { ...feature, value: e.target.checked }
-          : feature
-      )
-    );
-  };
-
-  return (
-    <>
-      {features.map((feature) => {
-        switch (feature.type) {
-          case "TEXT": {
-            return (
-              <div key={feature.name} className="pp-form__group">
-                <label className="pp-form__label">{feature.name}</label>
-                <input
-                  className="pp-form__field"
-                  type="text"
-                  id={feature.name}
-                  name={feature.name}
-                  value={feature.value.toString()}
-                  onChange={handleTextChange}
-                />
-              </div>
-            );
-          }
-          case "NUMERIC": {
-            return (
-              <div key={feature.name} className="pp-form__group">
-                <label className="pp-form__label">{feature.name}</label>
-                <input
-                  className="pp-form__field"
-                  type="number"
-                  id={feature.name}
-                  name={feature.name}
-                  value={feature.value.toString()}
-                  onChange={handleNumberChange}
-                />
-              </div>
-            );
-          }
-          case "CONDITION": {
-            return (
-              <div key={feature.name}>
-                <label>{feature.name}</label>
-                <input
-                  type="checkbox"
-                  id={feature.name}
-                  name={feature.name}
-                  checked={feature.value as boolean}
-                  onChange={handleCheckboxChange}
-                />
-              </div>
-            );
-          }
-        }
-      })}
-    </>
   );
 }

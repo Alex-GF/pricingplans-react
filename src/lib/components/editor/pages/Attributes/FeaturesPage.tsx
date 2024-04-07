@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { Attribute, Command } from "../../types";
+import { Command } from "../../parsers/expression";
 import { Button } from "../../components/Button";
 import { Table } from "../../components/Table";
 import { Modal } from "../../components/Modal";
@@ -8,18 +8,21 @@ import { Plus } from "../../components/Icons";
 import { EditorContext } from "../../context/EditorContextProvider";
 import "./FeaturesPage.css";
 import { FeatureList } from "./FeatureList";
+import { AllFeatures, Type } from "../../types/features";
+import { ValueType } from "../../types/index";
 
-const emptyAttribute: Attribute = {
-  id: "",
+const emptyAttribute: AllFeatures = {
+  name: "",
   description: "",
-  type: "TEXT",
-  defaultValue: "",
+  valueType: ValueType.BOOLEAN,
+  defaultValue: false,
+  type: Type.DOMAIN,
   expression: "",
+  serverExpression: "",
 };
 
 export function FeaturesPage() {
-  const { plans, setPlans, attributes, setAttributes } =
-    useContext(EditorContext);
+  const { attributes, setAttributes } = useContext(EditorContext);
 
   const [visible, setvisible] = useState(false);
   const [command, setCommand] = useState("add" as Command);
@@ -28,31 +31,13 @@ export function FeaturesPage() {
 
   const closeModal = () => setvisible(false);
 
-  const addPlanAttributes = (attribute: Attribute) => {
-    const updatedPlans = plans.map((plan) => {
-      return {
-        ...plan,
-        features: [
-          ...plan.features,
-          {
-            name: attribute.id,
-            type: attribute.type,
-            value: attribute.defaultValue,
-          },
-        ],
-      };
-    });
-    setPlans(updatedPlans);
-  };
-
-  const addAttribute = (attribute: Attribute) => {
+  const addAttribute = (attribute: AllFeatures) => {
     setAttributes([...attributes, attribute]);
-    addPlanAttributes(attribute);
     closeModal();
   };
 
   const isAttributeDuplicatedWhenAdding = (name: string) =>
-    attributes.filter((attribute) => attribute.id === name).length !== 0;
+    attributes.filter((attribute) => attribute.name === name).length !== 0;
 
   return (
     <article className="pp-content__main">

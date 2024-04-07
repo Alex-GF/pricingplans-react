@@ -1,16 +1,16 @@
 import { Routes, Route, Outlet } from "react-router-dom";
-import { RawPricingContext } from "./types";
 import { PricingPlansEditor } from "./PricingPlansEditor";
 import { FeaturesPage } from "./pages/Attributes";
 import { UserContextPage } from "./pages/UserContext";
 import { EvaluationPage } from "./pages/EvaluationContext";
 import { Plan, Plans } from "./pages/Plans";
+import { PricingManager } from "./types/index";
 
 interface PricingConfigurationRoutesProps {
-  pricingContext: RawPricingContext;
+  pricingContext: PricingManager;
   returnTo: string;
   theme?: string;
-  onSave: (pricingContext: RawPricingContext) => void;
+  onSave: (pricingContext: PricingManager) => void;
 }
 
 export function PricingConfigurationRoutes({

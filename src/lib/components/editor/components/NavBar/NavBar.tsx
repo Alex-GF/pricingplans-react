@@ -2,18 +2,16 @@ import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { Button } from "../Button";
 import { EditorContext } from "../../context/EditorContextProvider";
-import { RawPricingContext } from "../../types";
-import { buildRawPricingContext } from "../../utils";
 import "./NavBar.css";
+import { PricingManager } from "../../types";
 
 interface NavBarProps {
   hidden: boolean;
-  onSave: (pricingContext: RawPricingContext) => void;
+  onSave: (pricingContext: PricingManager) => void;
 }
 
 export function NavBar({ hidden, onSave }: NavBarProps) {
-  const { attributes, plans, returnTo } = useContext(EditorContext);
-  const rawPricingContext = buildRawPricingContext(attributes, plans);
+  const { returnTo } = useContext(EditorContext);
 
   const computeNavLinkStatus = ({
     isActive,
@@ -66,7 +64,7 @@ export function NavBar({ hidden, onSave }: NavBarProps) {
           </NavLink>
         </li>
       </ul>
-      <Button className="pp-btn" onClick={() => onSave(rawPricingContext)}>
+      <Button className="pp-btn" onClick={() => console.log("Click Save")}>
         Save
       </Button>
     </nav>

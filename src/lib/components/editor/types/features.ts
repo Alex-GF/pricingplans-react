@@ -179,3 +179,5 @@ export type AllFeatures =
   | ManagementFeature
   | PaymentFeature
   | SupportFeature;
+
+export type FeatureState = AllFeatures[];

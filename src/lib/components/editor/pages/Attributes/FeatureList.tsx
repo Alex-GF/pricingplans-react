@@ -1,10 +1,11 @@
 import { Dispatch, SetStateAction, useContext, useState } from "react";
-import { Attribute, Command, Feat } from "../../types";
+import { Command } from "../../parsers/expression";
 import { EditorContext } from "../../context/EditorContextProvider";
 import { Button } from "../../components/Button";
 import { Pencil, Trash } from "../../components/Icons";
 import { Modal } from "../../components/Modal";
 import { FeatureForm } from "./FeatureForm";
+import { AllFeatures, PaymentTypes, Type } from "../../types/features";
 
 interface FeatureListProps {
   command: Command;
@@ -19,8 +20,7 @@ export function FeatureList({
   command,
   setCommand,
 }: FeatureListProps) {
-  const { attributes, setAttributes, plans, setPlans } =
-    useContext(EditorContext);
+  const { attributes, setAttributes } = useContext(EditorContext);
   const [position, setPosition] = useState(-1);
 
   const displayDefaulValueText = (defaultValue: string | number | boolean) => {
@@ -28,86 +28,49 @@ export function FeatureList({
       case "string":
       case "number":
         return defaultValue;
-      case "boolean": {
+      case "boolean":
         return defaultValue ? "YES" : "NO";
-      }
     }
   };
 
   const duplicatedAttributeWhenEditing = (name: string) =>
     attributes.filter(
-      (attribute, index) => index !== position && attribute.id === name
+      (attribute, index) => index !== position && attribute.name === name
     ).length !== 0;
 
   const deleteAttribute = (name: string) => {
-    setAttributes(attributes.filter((attribute) => attribute.id !== name));
-    setPlans(
-      plans.map((plan) => {
-        const newFeatures = plan.features.filter(
-          (feature) => feature.name !== name
-        );
-        return { ...plan, features: newFeatures };
-      })
+    const newFeatures = attributes.filter(
+      (attribute) => attribute.name !== name
     );
+    setAttributes(newFeatures);
+
     setVisible(false);
   };
 
-  const computeNextFeature = (
-    previousFeature: Feat,
-    newFeature: Feat
-  ): Feat => {
-    if (
-      previousFeature.name !== newFeature.name &&
-      previousFeature.type === newFeature.type
-    ) {
-      return { ...previousFeature, name: newFeature.name };
-    }
-
-    if (previousFeature.type !== newFeature.type) {
-      return newFeature;
-    }
-    return previousFeature;
-  };
-
-  const editPlanAttributes = (attribute: Attribute) => {
-    const newFeature: Feat = {
-      name: attribute.id,
-      type: attribute.type,
-      value: attribute.defaultValue,
-    };
-    const updatedPlans = plans.map((plan) => {
-      const oldAttribute = attributes[position];
-      return {
-        ...plan,
-        features: plan.features.map((feature) =>
-          feature.name === oldAttribute.id
-            ? computeNextFeature(feature, newFeature)
-            : feature
-        ),
-      };
-    });
-    setPlans(updatedPlans);
-  };
-
-  const handleEditAttribute = (newAttribute: Attribute) => {
+  const handleEditAttribute = (newAttribute: AllFeatures) => {
     setAttributes((attributes) =>
       attributes.map((previousAttribute, index) => {
         return index === position ? newAttribute : previousAttribute;
       })
     );
-    editPlanAttributes(newAttribute);
     setVisible(false);
   };
 
   return (
     <>
       {attributes.map((attribute, index) => (
-        <tr key={attribute.id}>
-          <td>{attribute.id}</td>
-          <td className={`pp-table-type__${attribute.type}`}>
+        <tr key={attribute.name}>
+          <td>{attribute.name}</td>
+          <td className={`pp-table-type__${attribute.valueType}`}>
             {attribute.type}
           </td>
-          <td>{displayDefaulValueText(attribute.defaultValue)}</td>
+          <td>
+            {attribute.type === Type.PAYMENT && (
+              <PaymentTypes paymentTypes={attribute.defaultValue} />
+            )}
+            {attribute.type !== Type.PAYMENT &&
+              displayDefaulValueText(attribute.valueType)}
+          </td>
           <td className="pp-table-actions">
             <Button
               onClick={() => {
@@ -146,13 +109,13 @@ export function FeatureList({
                 isModalVisible && command === "delete" && position === index
               }
             >
-              <h2>Do you want to delete {attribute.id}?</h2>
+              <h2>Do you want to delete {attribute.name}?</h2>
               <Button className="pp-btn" onClick={() => setVisible(false)}>
                 NO
               </Button>
               <Button
                 className="pp-btn"
-                onClick={() => deleteAttribute(attribute.id)}
+                onClick={() => deleteAttribute(attribute.name)}
               >
                 YES
               </Button>
@@ -161,5 +124,19 @@ export function FeatureList({
         </tr>
       ))}
     </>
+  );
+}
+
+interface PaymentTypesProps {
+  paymentTypes: PaymentTypes;
+}
+
+function PaymentTypes({ paymentTypes }: PaymentTypesProps) {
+  return (
+    <ul>
+      {paymentTypes.map((paymentype) => (
+        <li key={paymentype}>{paymentype}</li>
+      ))}
+    </ul>
   );
 }

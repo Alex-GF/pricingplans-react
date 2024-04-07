@@ -1,6 +1,7 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import { AttributeType, UserContextAttribute } from "../../types";
+import { ValueType } from "../../types";
 import { Button } from "../../components/Button";
+import { UserContextAttribute } from "../../parsers/expression";
 
 interface UserContextFormProps {
   initialData: UserContextAttribute;
@@ -20,13 +21,13 @@ export function UserContextForm({
   };
 
   const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setUserAttribute({ ...userAttribute, id: e.target.value });
+    setUserAttribute({ ...userAttribute, name: e.target.value });
   };
 
   const handleTypeChange = (e: ChangeEvent<HTMLSelectElement>) =>
     setUserAttribute({
       ...userAttribute,
-      type: e.target.value as AttributeType,
+      valueType: e.target.value as ValueType,
     });
 
   return (
@@ -35,14 +36,14 @@ export function UserContextForm({
       <input
         id="name"
         name="name"
-        value={userAttribute.id}
+        value={userAttribute.name}
         onChange={handleNameChange}
       />
       <label htmlFor="type">Type</label>
       <select
         id="type"
         name="type"
-        value={userAttribute.type}
+        value={userAttribute.valueType}
         onChange={handleTypeChange}
       >
         <option value="NUMERIC">NUMERIC</option>

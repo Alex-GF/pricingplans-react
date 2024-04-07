@@ -6,12 +6,17 @@ import {
   useState,
 } from "react";
 import { Button } from "../../components/Button";
-import { Attribute, Operators } from "../../types";
-import { computeEvaluation, parseExpression } from "../../utils";
+import {
+  Operators,
+  computeEvaluation,
+  parseExpression,
+} from "../../parsers/expression";
 import { EditorContext } from "../../context/EditorContextProvider";
+import { AllFeatures } from "../../types/features";
+import { ValueType } from "../../types";
 
 interface ConditionEvaluationFormProps {
-  attribute: Attribute;
+  attribute: AllFeatures;
   onSubmit: (name: string, expression: string) => void;
   setVisible: Dispatch<SetStateAction<boolean>>;
 }
@@ -29,7 +34,7 @@ export function ConditionEvaluationForm({
   });
   const { userContextAttributes } = useContext(EditorContext);
   const conditionAttributes = userContextAttributes.filter(
-    (attribute) => attribute.type === "CONDITION"
+    (attribute) => attribute.valueType === ValueType.BOOLEAN
   );
 
   console.log(parsedExpression);
@@ -37,7 +42,7 @@ export function ConditionEvaluationForm({
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    const leftOperand = `planContext['${attribute.id}']`;
+    const leftOperand = `planContext['${attribute.name}']`;
     const rightOperand = `userContext['${expression.userContextValue}']`;
 
     const exp = computeEvaluation(
@@ -45,7 +50,7 @@ export function ConditionEvaluationForm({
       expression.operator as Operators,
       rightOperand
     );
-    onSubmit(attribute.id, exp);
+    onSubmit(attribute.name, exp);
     setVisible(false);
   };
 
@@ -53,7 +58,7 @@ export function ConditionEvaluationForm({
     <form className="pp-form" onSubmit={handleSubmit}>
       <div className="pp-field">
         <label id="name">Name</label>
-        <input id="name" value={attribute.id} readOnly />
+        <input id="name" value={attribute.name} readOnly />
       </div>
       <div>
         <label id="operator">Operator</label>
@@ -86,8 +91,8 @@ export function ConditionEvaluationForm({
         >
           <option value="">None</option>
           {conditionAttributes.map((attribute) => (
-            <option key={attribute.id} value={attribute.id}>
-              {attribute.id}
+            <option key={attribute.name} value={attribute.name}>
+              {attribute.name}
             </option>
           ))}
         </select>
