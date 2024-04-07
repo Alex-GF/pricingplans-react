@@ -1,2 +1,2 @@
 export { PricingConfigurationRoutes } from "./PricingConfigurationRoutes";
-export type * from "./types";
+export type { PricingManager } from "./types";

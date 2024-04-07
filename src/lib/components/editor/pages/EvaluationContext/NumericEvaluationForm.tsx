@@ -6,12 +6,17 @@ import {
   useState,
 } from "react";
 import { Button } from "../../components/Button";
-import { Attribute, Operators } from "../../types";
-import { computeEvaluation, parseExpression } from "../../utils";
 import { EditorContext } from "../../context/EditorContextProvider";
+import { AllFeatures } from "../../types/features";
+import {
+  Operators,
+  computeEvaluation,
+  parseExpression,
+} from "../../parsers/expression";
+import { ValueType } from "../../types";
 
 interface NumericEvaluationFormProps {
-  attribute: Attribute;
+  attribute: AllFeatures;
   onSubmit: (name: string, expression: string) => void;
   setVisible: Dispatch<SetStateAction<boolean>>;
 }
@@ -24,7 +29,7 @@ export function NumericEvaluationForm({
   const { userContextAttributes } = useContext(EditorContext);
   const expression = parseExpression(attribute.expression);
   const numericAttributes = userContextAttributes.filter(
-    (attribute) => attribute.type == "NUMERIC"
+    (attribute) => attribute.valueType == ValueType.NUMERIC
   );
 
   const [form, setForm] = useState({
@@ -35,7 +40,7 @@ export function NumericEvaluationForm({
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    const leftOperand = `planContext['${attribute.id}']`;
+    const leftOperand = `planContext['${attribute.name}']`;
     const rightOperand = `userContext['${form.valueToCompare}']`;
 
     const expression = computeEvaluation(
@@ -43,7 +48,7 @@ export function NumericEvaluationForm({
       form.operator as Operators,
       rightOperand
     );
-    onSubmit(attribute.id, expression);
+    onSubmit(attribute.name, expression);
     setVisible(false);
   };
 
@@ -51,7 +56,7 @@ export function NumericEvaluationForm({
     <form className="pp-form" onSubmit={handleSubmit}>
       <div className="pp-field">
         <label id="name">Name</label>
-        <input id="name" value={attribute.id} readOnly />
+        <input id="name" value={attribute.name} readOnly />
       </div>
       <div>
         <label id="operator">Operator</label>
@@ -81,8 +86,8 @@ export function NumericEvaluationForm({
         >
           <option value="">Choose an option</option>
           {numericAttributes.map((attribute) => (
-            <option key={attribute.id} value={attribute.id}>
-              {attribute.id}
+            <option key={attribute.name} value={attribute.name}>
+              {attribute.name}
             </option>
           ))}
         </select>

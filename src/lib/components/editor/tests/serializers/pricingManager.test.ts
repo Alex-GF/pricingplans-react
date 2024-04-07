@@ -1,7 +1,7 @@
 import { AllFeatures, AutomationFeature, Type } from "../../types/features";
 import { StandardPlan } from "../../model/plans";
 import { PricingManager, ValueType } from "../../types/index";
-import { PricingManagerBase } from "../../model/pricingManager";
+import { PricingManagerBase } from "../../model/pricingmanager";
 
 describe("PricingMagerBase Suite Test", () => {
   test("Given PricingManagerBase class should serialize to PricingManager", () => {

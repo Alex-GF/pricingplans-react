@@ -5,6 +5,7 @@ import copy from "rollup-plugin-copy";
 import commonjs from "@rollup/plugin-commonjs";
 import watchAssets from "rollup-plugin-watch-assets";
 import terser from "@rollup/plugin-terser";
+import replace from "@rollup/plugin-replace";
 
 //Postcss Plugins
 import cssnano from "cssnano";
@@ -34,6 +35,7 @@ export default [
         ],
       }),
       watchAssets({ assets: ["src"] }),
+      replace({ "process.env.NODE_ENV": '"production"' }),
     ],
     external: [
       "axios",
