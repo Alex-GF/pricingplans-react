@@ -106,36 +106,68 @@ The usage of the operators is as follows:
 
 ```javascript
 <Feature>
-    <On expression={and(feature("feature1"), feature("feature2"))}>
-        <p>Feature 1 and feature 2 are enabled</p>
-    </On>
-    ...
+  <On expression={and(feature("feature1"), feature("feature2"))}>
+    <p>Feature 1 and feature 2 are enabled</p>
+  </On>
+  ...
 </Feature>
 ```
 
 ```javascript
 <Feature>
-    <On expression={or(feature("feature1"), feature("feature2"))}>
-        <p>Feature 1 or feature 2 are enabled</p>
-    </On>
-    ...
+  <On expression={or(feature("feature1"), feature("feature2"))}>
+    <p>Feature 1 or feature 2 are enabled</p>
+  </On>
+  ...
 </Feature>
 ```
 
 ```javascript
 <Feature>
-    <On expression={iff(feature("feature1"), feature("feature2"))}>
-        <p>Feature 1 has the same evaluation as feature 2</p>
-    </On>
-    ...
+  <On expression={iff(feature("feature1"), feature("feature2"))}>
+    <p>Feature 1 has the same evaluation as feature 2</p>
+  </On>
+  ...
 </Feature>
 ```
 
 ```javascript
 <Feature>
-    <On expression={implies(feature("feature1"), feature("feature2"))}>
-        <p>Because Feature 1 is enabled, feature 2 must be</p>
-    </On>
-    ...
+  <On expression={implies(feature("feature1"), feature("feature2"))}>
+    <p>Because Feature 1 is enabled, feature 2 must be</p>
+  </On>
+  ...
 </Feature>
+```
+
+## Development setup
+
+First step: Inside the application you want to embed the Pricing Editor
+
+```sh
+cd react-app/node_modules/react
+npm link
+```
+
+Second step: Inside our library link
+
+```sh
+cd pricingplans-react
+npm link react
+```
+
+Third step: Inside our library
+
+```sh
+cd pricingplans-react
+npm link
+```
+
+First step: Inside the application you want to embed the Pricing Editor
+
+Fouth step: Inside the react application
+
+```sh
+cd react-app
+npm link pricingplans-react
 ```

@@ -29,9 +29,9 @@ export type ValueOverwrite = {
 export type StrNumBool = string | number | boolean;
 
 export enum ValueType {
-  TEXT = "TEXT",
-  BOOLEAN = "BOOLEAN",
-  NUMERIC = "NUMERIC",
+  TEXT,
+  BOOLEAN,
+  NUMERIC,
 }
 
 export interface Value<T extends StrNumBool | PaymentTypes> {
