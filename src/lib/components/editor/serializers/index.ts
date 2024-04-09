@@ -1,5 +1,7 @@
-import { MapFeatureValue, MapStandardValue } from "../types/plans";
-import { FeatureOverwrite, ValueOverwrite } from "../types/index";
+import { MapFeatureValue, MapStandardValue } from "../types";
+import { FeatureOverwrite, ValueOverwrite } from "../types";
+
+export * from "./features";
 
 export function serializePlanFeatures(
   features: Map<string, MapFeatureValue> | null

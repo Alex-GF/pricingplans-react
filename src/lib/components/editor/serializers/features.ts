@@ -37,17 +37,17 @@ export default class FeatureSerializer {
 
   private _serializeValueType(feature: FeatureRestriction) {
     switch (feature.valueType) {
-      case ValueType.BOOLEAN:
+      case ValueType.Boolean:
         return {
           valueType: feature.valueType,
           defaultValue: feature.defaultValue,
         };
-      case ValueType.NUMERIC:
+      case ValueType.Numeric:
         return {
           valueType: feature.valueType,
           defaultValue: feature.defaultValue,
         };
-      case ValueType.TEXT:
+      case ValueType.Text:
         return {
           valueType: feature.valueType,
           defaultValue: feature.defaultValue,
@@ -63,7 +63,7 @@ export default class FeatureSerializer {
     };
 
     switch (feature.type) {
-      case Type.AUTOMATION: {
+      case Type.Automation: {
         const automation: Automation = {
           ...commonFeatures,
           ...this._serializeValueType(feature),
@@ -73,7 +73,7 @@ export default class FeatureSerializer {
         return automation;
       }
 
-      case Type.DOMAIN: {
+      case Type.Domain: {
         const domain: Domain = {
           ...commonFeatures,
           ...this._serializeValueType(feature),
@@ -82,7 +82,7 @@ export default class FeatureSerializer {
         return domain;
       }
 
-      case Type.GUARANTEE: {
+      case Type.Guarantee: {
         const guarantee: Guarantee = {
           ...commonFeatures,
           ...this._serializeValueType(feature),
@@ -91,7 +91,7 @@ export default class FeatureSerializer {
         };
         return guarantee;
       }
-      case Type.INFORMATION: {
+      case Type.Information: {
         const information: Information = {
           ...commonFeatures,
           ...this._serializeValueType(feature),
@@ -99,7 +99,7 @@ export default class FeatureSerializer {
         };
         return information;
       }
-      case Type.INTEGRATION: {
+      case Type.Integration: {
         const integration: Integration = {
           ...commonFeatures,
           ...this._serializeValueType(feature),
@@ -108,7 +108,7 @@ export default class FeatureSerializer {
         };
         return integration;
       }
-      case Type.MANAGEMENT: {
+      case Type.Management: {
         const management: Management = {
           ...commonFeatures,
           ...this._serializeValueType(feature),
@@ -116,7 +116,7 @@ export default class FeatureSerializer {
         };
         return management;
       }
-      case Type.PAYMENT: {
+      case Type.Payment: {
         const payment: Payment = {
           ...commonFeatures,
           valueType: feature.valueType,
@@ -125,8 +125,8 @@ export default class FeatureSerializer {
         };
         return payment;
       }
-      case Type.SUPPORT: {
-        if (feature.valueType === ValueType.BOOLEAN) {
+      case Type.Support: {
+        if (feature.valueType === ValueType.Boolean) {
           feature.defaultValue;
         }
         const support: Support = {

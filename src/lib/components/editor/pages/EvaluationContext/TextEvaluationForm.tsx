@@ -35,7 +35,7 @@ export function TextEvaluationForm({
   });
   const { userContextAttributes } = useContext(EditorContext);
   const textAttributes = userContextAttributes.filter(
-    (attribute) => attribute.valueType === ValueType.TEXT
+    (attribute) => attribute.valueType === ValueType.Text
   );
   const [custom, setCustom] = useState(false);
 

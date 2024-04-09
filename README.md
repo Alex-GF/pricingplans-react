@@ -50,47 +50,48 @@ As we said, you don't have to worry about the recreation of the JWT, since [pric
 
 ## Usage
 
-The package provides a single component that contains the whole logic: 
+The package provides a single component that contains the whole logic:
 
 - `Feature`: This component allows to show or hide its children depending on the evaluation of a pricing feature. Depending on the context, it can have up to four children:
-    - `On`: This component will be shown if the feature is evaluated to `true`. It has the prop `expression`, which reads from the JWT the evaluation of the feature. You can use the `feature` function to locate features by their key. **REQUIRED**
-    - `Default`: This component will render its children if the evaluation of the feature performed in `On` component is `false`.
-    - `Loading`: This component will render its children while the evaluation of the feature is being performed.
-    - `ErrorFallback`: This component will render its children if an error occurs while the evaluation of the feature is being performed.
 
-    The evaluation of a feature that has the key `myFeature` would be:
+  - `On`: This component will be shown if the feature is evaluated to `true`. It has the prop `expression`, which reads from the JWT the evaluation of the feature. You can use the `feature` function to locate features by their key. **REQUIRED**
+  - `Default`: This component will render its children if the evaluation of the feature performed in `On` component is `false`.
+  - `Loading`: This component will render its children while the evaluation of the feature is being performed.
+  - `ErrorFallback`: This component will render its children if an error occurs while the evaluation of the feature is being performed.
 
-    ```javascript
-    <Feature>
-        <On expression={feature("myFeature")}>
-            <p>Feature 1 is enabled</p>
-        </On>
-        <Default>
-            <p>Feature 1 is disabled</p>
-        </Default>
-        <Loading>
-            <p>Loading...</p>
-        </Loading>
-        <ErrorFallback>
-            <p>An error occurred</p>
-        </ErrorFallback>
-    </Feature>
-    ```
+  The evaluation of a feature that has the key `myFeature` would be:
+
+  ```javascript
+  <Feature>
+    <On expression={feature("myFeature")}>
+      <p>Feature 1 is enabled</p>
+    </On>
+    <Default>
+      <p>Feature 1 is disabled</p>
+    </Default>
+    <Loading>
+      <p>Loading...</p>
+    </Loading>
+    <ErrorFallback>
+      <p>An error occurred</p>
+    </ErrorFallback>
+  </Feature>
+  ```
 
 Also a hook is provided to get the evaluation of a feature. Its name is `useGenericFeature`, and it could be used to get the evaluation of a feature and save the result on a variable. It has the following signature:
 
 ```javascript
 const myComponent = useGenericFeature({
-    on: [
-      {
-        expression: feature("myFeature"),
-        on: <p>Feature 1 is enabled</p>,
-      },
-    ],
-    default: <p>Feature 1 is disabled</p>,
-    loading: <p>Loading...</p>,
-    errorFallback: <p>An error occurred</p>,
-  });
+  on: [
+    {
+      expression: feature("myFeature"),
+      on: <p>Feature 1 is enabled</p>,
+    },
+  ],
+  default: <p>Feature 1 is disabled</p>,
+  loading: <p>Loading...</p>,
+  errorFallback: <p>An error occurred</p>,
+});
 ```
 
 ## Extra: binary operators

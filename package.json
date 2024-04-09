@@ -6,9 +6,9 @@
   "module": "dist/esm/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "dev": "rollup -c -w",
     "test": "jest",
-    "build": "rollup -c",
+    "build:dev": "rollup -c rollup.config.dev.mjs",
+    "build:prod": "rollup -c rollup.config.prod.mjs",
     "build:types": "dts-bundle-generator --config bundle.dts.json"
   },
   "keywords": [

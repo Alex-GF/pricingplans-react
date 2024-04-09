@@ -29,7 +29,7 @@ export function NumericEvaluationForm({
   const { userContextAttributes } = useContext(EditorContext);
   const expression = parseExpression(attribute.expression);
   const numericAttributes = userContextAttributes.filter(
-    (attribute) => attribute.valueType == ValueType.NUMERIC
+    (attribute) => attribute.valueType == ValueType.Numeric
   );
 
   const [form, setForm] = useState({

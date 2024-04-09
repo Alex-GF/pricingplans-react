@@ -1,7 +1,6 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import { ValueType } from "../../types";
 import { Button } from "../../components/Button";
-import { UserContextAttribute } from "../../parsers/expression";
+import { UserContextAttribute, computeType } from "../../parsers/expression";
 
 interface UserContextFormProps {
   initialData: UserContextAttribute;
@@ -27,7 +26,7 @@ export function UserContextForm({
   const handleTypeChange = (e: ChangeEvent<HTMLSelectElement>) =>
     setUserAttribute({
       ...userAttribute,
-      valueType: e.target.value as ValueType,
+      valueType: computeType(e.target.value),
     });
 
   return (

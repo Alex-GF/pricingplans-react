@@ -8,9 +8,9 @@ describe("PricingMagerBase Suite Test", () => {
     const skynet: AutomationFeature = {
       name: "skynet",
       description: "Most powerful IA",
-      valueType: ValueType.BOOLEAN,
+      valueType: ValueType.Boolean,
       defaultValue: false,
-      type: Type.AUTOMATION,
+      type: Type.Automation,
       automationType: "BOT",
       expression: "planContext['skynet']",
       serverExpression: "",
@@ -55,9 +55,9 @@ describe("PricingMagerBase Suite Test", () => {
       features: {
         skynet: {
           description: "Most powerful IA",
-          valueType: ValueType.BOOLEAN,
+          valueType: ValueType.Boolean,
           defaultValue: false,
-          type: Type.AUTOMATION,
+          type: Type.Automation,
           automationType: "BOT",
           expression: "planContext['skynet']",
           serverExpression: "",

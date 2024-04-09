@@ -1,6 +1,5 @@
-import { ChangeEvent, Dispatch, SetStateAction } from "react";
-import { AllFeatures, PaymentTypes, Type } from "../../types/features";
-import { ValueType } from "../../types/index";
+import { Dispatch, SetStateAction } from "react";
+import { AllFeatures, PaymentTypes, Type, ValueType } from "../../types";
 
 interface DefaultValueProps {
   id: string;
@@ -10,7 +9,7 @@ interface DefaultValueProps {
 }
 
 export function DefaultValue({ id, name, form, setForm }: DefaultValueProps) {
-  if (form.type === Type.PAYMENT) {
+  if (form.type === Type.Payment) {
     return (
       <select
         value={form.defaultValue}
@@ -34,7 +33,7 @@ export function DefaultValue({ id, name, form, setForm }: DefaultValueProps) {
     );
   } else {
     switch (form.valueType) {
-      case ValueType.TEXT:
+      case ValueType.Text:
         return (
           <input
             id={id}
@@ -44,7 +43,7 @@ export function DefaultValue({ id, name, form, setForm }: DefaultValueProps) {
             onChange={(e) => setForm({ ...form, defaultValue: e.target.value })}
           />
         );
-      case ValueType.NUMERIC:
+      case ValueType.Numeric:
         return (
           <input
             id={id}
@@ -56,7 +55,7 @@ export function DefaultValue({ id, name, form, setForm }: DefaultValueProps) {
             }
           />
         );
-      case ValueType.BOOLEAN:
+      case ValueType.Boolean:
         return (
           <select
             id={id}

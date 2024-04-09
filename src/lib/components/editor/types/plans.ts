@@ -1,5 +1,4 @@
-import { FeatureOverwrite, StrNumBool, ValueOverwrite, ValueType } from ".";
-import { StandardPlan } from "../model/plans";
+import { FeatureOverwrite, StrNumBool, ValueOverwrite } from ".";
 import { PaymentTypes } from "./features";
 
 export type Plans = {

@@ -160,12 +160,12 @@ export function computeEvaluation(
 export function computeType(value: any): ValueType {
   switch (typeof value) {
     case "string":
-      return ValueType.TEXT;
+      return ValueType.Text;
     case "number":
-      return ValueType.NUMERIC;
+      return ValueType.Numeric;
     case "boolean":
-      return ValueType.BOOLEAN;
+      return ValueType.Boolean;
     default:
-      return ValueType.TEXT;
+      return ValueType.Text;
   }
 }

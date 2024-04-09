@@ -9,10 +9,10 @@ export function FeatureList() {
   return (
     <>
       {attributes.map((feature) => {
-        if (feature.type === Type.PAYMENT) {
+        if (feature.type === Type.Payment) {
         } else {
           switch (feature.valueType) {
-            case ValueType.TEXT: {
+            case ValueType.Text: {
               return (
                 <div key={feature.name} className="pp-form__group">
                   <label className="pp-form__label">{feature.name}</label>
@@ -26,7 +26,7 @@ export function FeatureList() {
                 </div>
               );
             }
-            case ValueType.NUMERIC: {
+            case ValueType.Numeric: {
               return (
                 <div key={feature.name} className="pp-form__group">
                   <label className="pp-form__label">{feature.name}</label>
@@ -40,7 +40,7 @@ export function FeatureList() {
                 </div>
               );
             }
-            case ValueType.BOOLEAN: {
+            case ValueType.Boolean: {
               return (
                 <div key={feature.name}>
                   <label>{feature.name}</label>

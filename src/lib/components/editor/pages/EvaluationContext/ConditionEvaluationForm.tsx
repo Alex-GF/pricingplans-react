@@ -34,7 +34,7 @@ export function ConditionEvaluationForm({
   });
   const { userContextAttributes } = useContext(EditorContext);
   const conditionAttributes = userContextAttributes.filter(
-    (attribute) => attribute.valueType === ValueType.BOOLEAN
+    (attribute) => attribute.valueType === ValueType.Boolean
   );
 
   console.log(parsedExpression);

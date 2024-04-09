@@ -5,7 +5,7 @@ import { Button } from "../../components/Button";
 import { Pencil, Trash } from "../../components/Icons";
 import { Modal } from "../../components/Modal";
 import { FeatureForm } from "./FeatureForm";
-import { AllFeatures, PaymentTypes, Type } from "../../types/features";
+import { AllFeatures, PaymentTypes, Type } from "../../types";
 
 interface FeatureListProps {
   command: Command;
@@ -61,15 +61,18 @@ export function FeatureList({
       {attributes.map((attribute, index) => (
         <tr key={attribute.name}>
           <td>{attribute.name}</td>
-          <td className={`pp-table-type__${attribute.valueType}`}>
+          <td className={`pp-table-type__${attribute.type}`}>
             {attribute.type}
           </td>
+          <td className={`pp-table-valueType__${attribute.valueType}`}>
+            {attribute.valueType}
+          </td>
           <td>
-            {attribute.type === Type.PAYMENT && (
+            {attribute.type === Type.Payment && (
               <PaymentTypes paymentTypes={attribute.defaultValue} />
             )}
-            {attribute.type !== Type.PAYMENT &&
-              displayDefaulValueText(attribute.valueType)}
+            {attribute.type !== Type.Payment &&
+              displayDefaulValueText(attribute.defaultValue)}
           </td>
           <td className="pp-table-actions">
             <Button

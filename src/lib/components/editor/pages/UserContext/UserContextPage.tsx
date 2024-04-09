@@ -72,7 +72,7 @@ function ModalContent({
     useContext(EditorContext);
   const emptyUserAttribute: UserContextAttribute = {
     name: "",
-    valueType: ValueType.TEXT,
+    valueType: ValueType.Text,
   };
 
   const hasSelectedUserAttribute = userAtributePosition !== null;

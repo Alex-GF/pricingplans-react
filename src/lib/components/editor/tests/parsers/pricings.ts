@@ -11,9 +11,9 @@ export const petClinic: PricingManager = {
   features: {
     maxPets: {
       description: "Max pets limit",
-      valueType: ValueType.BOOLEAN,
+      valueType: ValueType.Boolean,
       defaultValue: false,
-      type: Type.DOMAIN,
+      type: Type.Domain,
       expression: "planContext['maxPets']",
       serverExpression: "",
     },
@@ -21,7 +21,7 @@ export const petClinic: PricingManager = {
   usageLimits: {
     maxPets: {
       description: "Max pets limit",
-      valueType: ValueType.NUMERIC,
+      valueType: ValueType.Numeric,
       defaultValue: 0,
       unit: "pets",
       type: "NON_RENEWABLE",

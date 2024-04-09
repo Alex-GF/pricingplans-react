@@ -1,8 +1,7 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { DefaultValue } from "./DefaultValue";
 import { Button } from "../../components/Button";
-import { AllFeatures, Type } from "../../types/features";
-import { ValueType } from "../../types/index";
+import { AllFeatures, Type, ValueType } from "../../types";
 
 interface FeatureFormProps {
   initialData: AllFeatures;
@@ -44,21 +43,21 @@ export function FeatureForm({
 
   const handleTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     switch (attribute.type) {
-      case Type.PAYMENT: {
+      case Type.Payment: {
         setAttribute({
           ...attribute,
-          valueType: ValueType.TEXT,
+          valueType: ValueType.Text,
           defaultValue: ["ACH"],
         });
         break;
       }
-      case Type.AUTOMATION:
-      case Type.DOMAIN:
-      case Type.GUARANTEE:
-      case Type.INFORMATION:
-      case Type.INTEGRATION:
-      case Type.MANAGEMENT:
-      case Type.SUPPORT: {
+      case Type.Automation:
+      case Type.Domain:
+      case Type.Guarantee:
+      case Type.Information:
+      case Type.Integration:
+      case Type.Management:
+      case Type.Support: {
         setAttribute({
           ...attribute,
           ...computeType(e.target.value),
@@ -70,15 +69,15 @@ export function FeatureForm({
   const computeType = (
     type: string
   ):
-    | { valueType: ValueType.BOOLEAN; defaultValue: false }
-    | { valueType: ValueType.TEXT; defaultValue: "" }
-    | { valueType: ValueType.NUMERIC; defaultValue: 0 } => {
+    | { valueType: ValueType.Boolean; defaultValue: false }
+    | { valueType: ValueType.Text; defaultValue: "" }
+    | { valueType: ValueType.Numeric; defaultValue: 0 } => {
     if (type === "BOOLEAN") {
-      return { valueType: ValueType.BOOLEAN, defaultValue: false };
+      return { valueType: ValueType.Boolean, defaultValue: false };
     } else if (type === "TEXT") {
-      return { valueType: ValueType.TEXT, defaultValue: "" };
+      return { valueType: ValueType.Text, defaultValue: "" };
     } else {
-      return { valueType: ValueType.NUMERIC, defaultValue: 0 };
+      return { valueType: ValueType.Numeric, defaultValue: 0 };
     }
   };
 

@@ -3,20 +3,19 @@ import { Command } from "../../parsers/expression";
 import { Button } from "../../components/Button";
 import { Table } from "../../components/Table";
 import { Modal } from "../../components/Modal";
-import { FeatureForm } from "./FeatureForm";
 import { Plus } from "../../components/Icons";
 import { EditorContext } from "../../context/EditorContextProvider";
-import "./FeaturesPage.css";
 import { FeatureList } from "./FeatureList";
-import { AllFeatures, Type } from "../../types/features";
-import { ValueType } from "../../types/index";
+import { FeatureForm } from "./FeatureForm";
+import { AllFeatures, Type, ValueType } from "../../types";
+import "./FeaturesPage.css";
 
 const emptyAttribute: AllFeatures = {
   name: "",
   description: "",
-  valueType: ValueType.BOOLEAN,
+  valueType: ValueType.Boolean,
   defaultValue: false,
-  type: Type.DOMAIN,
+  type: Type.Domain,
   expression: "",
   serverExpression: "",
 };
@@ -66,7 +65,7 @@ export function FeaturesPage() {
 
       <Table
         className="pp-table"
-        labels={["Name", "Type", "Default", "Actions"]}
+        labels={["Name", "Type", "Value type", "Default", "Actions"]}
       >
         <FeatureList
           command={command}

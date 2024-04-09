@@ -13,6 +13,7 @@ export default class FeatureParser {
 
   public parse(): Map<string, AllFeatures> {
     const parsedFeatures = new Map<string, AllFeatures>([]);
+    console.log("Features", this.features);
     Object.entries(this.features).forEach(([name, feature]) =>
       parsedFeatures.set(name, this._parseFeature(name, feature))
     );
@@ -25,36 +26,38 @@ export default class FeatureParser {
 
   public featuresToPlanFeatures(): Map<string, MapFeatureValue> {
     const planFeatures: [string, MapFeatureValue][] = [];
-    for (const [featureName, feature] of this.parse()) {
+    const parsedFeatures = this.parse();
+    for (const [featureName, feature] of parsedFeatures) {
       planFeatures.push([featureName, { value: feature.defaultValue }]);
     }
     return new Map(planFeatures);
   }
 
-  private _valueTypeParse(a: FeatureRestriction) {
-    switch (a.valueType) {
-      case ValueType.BOOLEAN:
+  private _valueTypeParse(featureRestriction: FeatureRestriction) {
+    console.log(featureRestriction);
+    switch (featureRestriction.valueType) {
+      case ValueType.Boolean:
         return {
-          valueType: a.valueType,
-          defaultValue: a.defaultValue,
+          valueType: featureRestriction.valueType,
+          defaultValue: featureRestriction.defaultValue,
         };
-      case ValueType.NUMERIC:
+      case ValueType.Numeric:
         return {
-          valueType: a.valueType,
-          defaultValue: a.defaultValue,
+          valueType: featureRestriction.valueType,
+          defaultValue: featureRestriction.defaultValue,
         };
 
-      case ValueType.TEXT:
+      case ValueType.Text:
         return {
-          valueType: a.valueType,
-          defaultValue: a.defaultValue,
+          valueType: featureRestriction.valueType,
+          defaultValue: featureRestriction.defaultValue,
         };
     }
   }
 
   private _parseFeature(name: string, feature: Feature): AllFeatures {
     switch (feature.type) {
-      case Type.AUTOMATION:
+      case Type.Automation:
         return {
           name,
           description: feature.description,
@@ -64,7 +67,7 @@ export default class FeatureParser {
           serverExpression: feature.serverExpression,
           expression: feature.expression,
         };
-      case Type.DOMAIN:
+      case Type.Domain:
         return {
           name,
           description: feature.description,
@@ -73,7 +76,7 @@ export default class FeatureParser {
           serverExpression: feature.serverExpression,
           expression: feature.expression,
         };
-      case Type.GUARANTEE:
+      case Type.Guarantee:
         return {
           name,
           description: feature.description,
@@ -83,7 +86,7 @@ export default class FeatureParser {
           serverExpression: feature.serverExpression,
           expression: feature.expression,
         };
-      case Type.INFORMATION:
+      case Type.Information:
         return {
           name,
           description: feature.description,
@@ -92,7 +95,7 @@ export default class FeatureParser {
           serverExpression: feature.serverExpression,
           expression: feature.expression,
         };
-      case Type.INTEGRATION:
+      case Type.Integration:
         return {
           name,
           description: feature.description,
@@ -102,7 +105,7 @@ export default class FeatureParser {
           serverExpression: feature.serverExpression,
           expression: feature.expression,
         };
-      case Type.MANAGEMENT:
+      case Type.Management:
         return {
           name,
           description: feature.description,
@@ -111,7 +114,7 @@ export default class FeatureParser {
           serverExpression: feature.serverExpression,
           expression: feature.expression,
         };
-      case Type.PAYMENT:
+      case Type.Payment:
         return {
           name,
           description: feature.description,
@@ -121,7 +124,7 @@ export default class FeatureParser {
           serverExpression: feature.serverExpression,
           expression: feature.expression,
         };
-      case Type.SUPPORT:
+      case Type.Support:
         return {
           name,
           description: feature.description,

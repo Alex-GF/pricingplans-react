@@ -56,21 +56,21 @@ export function EvaluationList() {
             </Button>
             <Modal open={visible && command === "edit" && position === index}>
               <>
-                {attribute.valueType === ValueType.TEXT && (
+                {attribute.valueType === ValueType.Text && (
                   <TextEvaluationForm
                     attribute={attribute}
                     onSubmit={updateEvaluation}
                     setVisible={setVisible}
                   />
                 )}
-                {attribute.valueType === ValueType.NUMERIC && (
+                {attribute.valueType === ValueType.Numeric && (
                   <NumericEvaluationForm
                     attribute={attribute}
                     onSubmit={updateEvaluation}
                     setVisible={setVisible}
                   />
                 )}
-                {attribute.valueType === ValueType.BOOLEAN && (
+                {attribute.valueType === ValueType.Boolean && (
                   <ConditionEvaluationForm
                     attribute={attribute}
                     onSubmit={updateEvaluation}

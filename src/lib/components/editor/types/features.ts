@@ -1,14 +1,14 @@
 import { ValueType } from "../types/index";
 
 export enum Type {
-  AUTOMATION,
-  DOMAIN,
-  GUARANTEE,
-  INFORMATION,
-  INTEGRATION,
-  MANAGEMENT,
-  PAYMENT,
-  SUPPORT,
+  Automation = "AUTOMATION",
+  Domain = "DOMAIN",
+  Guarantee = "GUARANTEE",
+  Information = "INFORMATION",
+  Integration = "INTEGRATION",
+  Management = "MANAGEMENT",
+  Payment = "PAYMENT",
+  Support = "SUPPORT",
 }
 
 export type Feature =
@@ -29,18 +29,18 @@ type FeatureSkipName = Omit<FeatureBase, "name">;
 
 export type FeatureRestriction =
   | {
-      type: Exclude<Type, Type.PAYMENT>;
-      valueType: ValueType.BOOLEAN;
+      type: Exclude<Type, Type.Payment>;
+      valueType: ValueType.Boolean;
       defaultValue: boolean;
     }
   | {
-      type: Exclude<Type, Type.PAYMENT>;
-      valueType: ValueType.NUMERIC;
+      type: Exclude<Type, Type.Payment>;
+      valueType: ValueType.Numeric;
       defaultValue: number;
     }
   | {
-      type: Exclude<Type, Type.PAYMENT>;
-      valueType: ValueType.TEXT;
+      type: Exclude<Type, Type.Payment>;
+      valueType: ValueType.Text;
       defaultValue: string;
     };
 
@@ -62,24 +62,24 @@ type AutomationTypes = keyof typeof AutomationType;
 
 export type Automation = FeatureSkipName &
   FeatureRestriction & {
-    type: Type.AUTOMATION;
+    type: Type.Automation;
     automationType: AutomationTypes;
   };
 
 export type Domain = FeatureSkipName &
   FeatureRestriction & {
-    type: Type.DOMAIN;
+    type: Type.Domain;
   };
 
 export type Guarantee = FeatureSkipName &
   FeatureRestriction & {
-    type: Type.GUARANTEE;
+    type: Type.Guarantee;
     docUrl: string;
   };
 
 export type Information = FeatureSkipName &
   FeatureRestriction & {
-    type: Type.INFORMATION;
+    type: Type.Information;
   };
 
 export enum IntegrationType {
@@ -95,13 +95,13 @@ type IntegrationTypes = keyof typeof IntegrationType;
 
 export type Integration = FeatureSkipName &
   FeatureRestriction & {
-    type: Type.INTEGRATION;
+    type: Type.Integration;
     integrationType: IntegrationTypes;
   };
 
 export type Management = FeatureSkipName &
   FeatureRestriction & {
-    type: Type.MANAGEMENT;
+    type: Type.Management;
   };
 
 export type PaymentTypeKeys = keyof typeof PaymentType;
@@ -116,58 +116,58 @@ export enum PaymentType {
 }
 
 export type Payment = FeatureSkipName & {
-  type: Type.PAYMENT;
-  valueType: ValueType.TEXT;
+  type: Type.Payment;
+  valueType: ValueType.Text;
   defaultValue: PaymentTypes;
 };
 
 export type Support = FeatureSkipName &
   FeatureRestriction & {
-    type: Type.SUPPORT;
+    type: Type.Support;
   };
 
 export type AutomationFeature = FeatureBase &
   FeatureRestriction & {
-    type: Type.AUTOMATION;
+    type: Type.Automation;
     automationType: AutomationTypes;
   };
 
 export type DomainFeature = FeatureBase &
   FeatureRestriction & {
-    type: Type.DOMAIN;
+    type: Type.Domain;
   };
 
 export type GuaranteeFeature = FeatureBase &
   FeatureRestriction & {
-    type: Type.GUARANTEE;
+    type: Type.Guarantee;
     docUrl: string;
   };
 
 export type InformationFeature = FeatureBase &
   FeatureRestriction & {
-    type: Type.INFORMATION;
+    type: Type.Information;
   };
 
 export type IntegrationFeature = FeatureBase &
   FeatureRestriction & {
-    type: Type.INTEGRATION;
+    type: Type.Integration;
     integrationType: IntegrationTypes;
   };
 
 export type ManagementFeature = FeatureBase &
   FeatureRestriction & {
-    type: Type.MANAGEMENT;
+    type: Type.Management;
   };
 
 export type PaymentFeature = FeatureBase & {
-  type: Type.PAYMENT;
-  valueType: ValueType.TEXT;
+  type: Type.Payment;
+  valueType: ValueType.Text;
   defaultValue: PaymentTypes;
 };
 
 export type SupportFeature = FeatureBase &
   FeatureRestriction & {
-    type: Type.SUPPORT;
+    type: Type.Support;
   };
 
 export type AllFeatures =

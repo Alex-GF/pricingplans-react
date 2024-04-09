@@ -29,18 +29,23 @@ export type ValueOverwrite = {
 export type StrNumBool = string | number | boolean;
 
 export enum ValueType {
-  TEXT,
-  BOOLEAN,
-  NUMERIC,
+  Text = "TEXT",
+  Boolean = "BOOLEAN",
+  Numeric = "NUMERIC",
 }
 
 export interface Value<T extends StrNumBool | PaymentTypes> {
   valueType: T extends boolean
-    ? Extract<ValueType, ValueType.BOOLEAN>
+    ? Extract<ValueType, ValueType.Boolean>
     : T extends number
-    ? Extract<ValueType, ValueType.NUMERIC>
+    ? Extract<ValueType, ValueType.Numeric>
     : T extends string | PaymentTypes
-    ? Extract<ValueType, ValueType.TEXT>
+    ? Extract<ValueType, ValueType.Text>
     : never;
   defaultValue: T;
 }
+
+export * from "./addOns";
+export * from "./features";
+export * from "./plans";
+export * from "./usageLimits";
