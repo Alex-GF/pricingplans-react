@@ -1,4 +1,9 @@
-import { AllFeatures, AutomationFeature, Type } from "../../types/features";
+import {
+  AllFeatures,
+  AutomationFeature,
+  AutomationType,
+  Type,
+} from "../../types/features";
 import { StandardPlan } from "../../model/plans";
 import { PricingManager, ValueType } from "../../types/index";
 import { PricingManagerBase } from "../../model/pricingmanager";
@@ -11,7 +16,7 @@ describe("PricingMagerBase Suite Test", () => {
       valueType: ValueType.Boolean,
       defaultValue: false,
       type: Type.Automation,
-      automationType: "BOT",
+      automationType: AutomationType.Bot,
       expression: "planContext['skynet']",
       serverExpression: "",
     };
@@ -58,7 +63,7 @@ describe("PricingMagerBase Suite Test", () => {
           valueType: ValueType.Boolean,
           defaultValue: false,
           type: Type.Automation,
-          automationType: "BOT",
+          automationType: AutomationType.Bot,
           expression: "planContext['skynet']",
           serverExpression: "",
         },

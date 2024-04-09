@@ -1,5 +1,11 @@
 import { Dispatch, SetStateAction } from "react";
-import { AllFeatures, PaymentTypes, Type, ValueType } from "../../types";
+import {
+  AllFeatures,
+  PaymentType,
+  PaymentTypes,
+  Type,
+  ValueType,
+} from "../../types";
 
 interface DefaultValueProps {
   id: string;
@@ -24,11 +30,11 @@ export function DefaultValue({ id, name, form, setForm }: DefaultValueProps) {
         }
         multiple
       >
-        <option value="ACH">ACH</option>
-        <option value="CARD">CARD</option>
-        <option value="INVOICE">INVOICE</option>
-        <option value="WIRE_TRANSFER">WIRE TRANSFER</option>
-        <option value="OTHER">OTHER</option>
+        <option value={PaymentType.Ach}>ACH</option>
+        <option value={PaymentType.Card}>CARD</option>
+        <option value={PaymentType.Invoice}>INVOICE</option>
+        <option value={PaymentType.WireTransfer}>WIRE TRANSFER</option>
+        <option value={PaymentType.Other}>OTHER</option>
       </select>
     );
   } else {

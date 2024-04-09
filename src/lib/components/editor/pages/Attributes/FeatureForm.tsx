@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { DefaultValue } from "./DefaultValue";
 import { Button } from "../../components/Button";
-import { AllFeatures, Type, ValueType } from "../../types";
+import { AllFeatures, PaymentType, Type, ValueType } from "../../types";
 
 interface FeatureFormProps {
   initialData: AllFeatures;
@@ -43,11 +43,16 @@ export function FeatureForm({
 
   const handleTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     switch (attribute.type) {
+    }
+  };
+
+  const handleValueTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    switch (attribute.type) {
       case Type.Payment: {
         setAttribute({
           ...attribute,
           valueType: ValueType.Text,
-          defaultValue: ["ACH"],
+          defaultValue: [PaymentType.Ach],
         });
         break;
       }
@@ -112,6 +117,18 @@ export function FeatureForm({
         />
       </div>
       <div className="pp-form__group">
+        <label htmlFor="type" className="pp-form__label">
+          Description
+        </label>
+        <input
+          id="type"
+          name="type"
+          className="pp-form__field"
+          value={attribute.type}
+          onChange={() => console.log("Hello world")}
+        />
+      </div>
+      <div className="pp-form__group">
         <label htmlFor="description" className="pp-form__label">
           Description
         </label>
@@ -130,7 +147,7 @@ export function FeatureForm({
           id="type"
           name="type"
           value={attribute.type}
-          onChange={handleTypeChange}
+          onChange={handleValueTypeChange}
         >
           <option value="NUMERIC">NUMERIC</option>
           <option value="TEXT">TEXT</option>

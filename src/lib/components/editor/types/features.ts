@@ -52,18 +52,16 @@ type FeatureBase = {
 };
 
 export enum AutomationType {
-  BOT,
-  FILTERING,
-  TRACKING,
-  TASK_AUTOMATION,
+  Bot = "BOT",
+  Filtering = "FILTERING",
+  Tracking = "TRACKING",
+  TaskAutomation = "TASK_AUTOMATION",
 }
-
-type AutomationTypes = keyof typeof AutomationType;
 
 export type Automation = FeatureSkipName &
   FeatureRestriction & {
     type: Type.Automation;
-    automationType: AutomationTypes;
+    automationType: AutomationType;
   };
 
 export type Domain = FeatureSkipName &
@@ -83,12 +81,12 @@ export type Information = FeatureSkipName &
   };
 
 export enum IntegrationType {
-  API,
-  EXTENSION,
-  EXTERNAL_DEVICE,
-  IDENTITY_PROVIDER,
-  MARKETPLACE,
-  WEB_SAAS,
+  API = "API",
+  Extension = "EXTENSION",
+  ExternalDevice = "EXTERNAL_DEVICE",
+  IdentityProvider = "IDENTITY_PROVIDER",
+  Marketplace = "MARKETPLACE",
+  WebSAAS = "WEB_SAAS",
 }
 
 type IntegrationTypes = keyof typeof IntegrationType;
@@ -104,15 +102,14 @@ export type Management = FeatureSkipName &
     type: Type.Management;
   };
 
-export type PaymentTypeKeys = keyof typeof PaymentType;
-export type PaymentTypes = PaymentTypeKeys[];
+export type PaymentTypes = PaymentType[];
 export enum PaymentType {
-  ACH,
-  CARD,
-  GATEWAY,
-  INVOICE,
-  WIRE_TRANSFER,
-  OTHER,
+  Ach = "ACH",
+  Card = "CARD",
+  Gateway = "GATEWAY",
+  Invoice = "INVOICE",
+  WireTransfer = "WIRE_TRANSFER",
+  Other = "OTHER",
 }
 
 export type Payment = FeatureSkipName & {
@@ -129,7 +126,7 @@ export type Support = FeatureSkipName &
 export type AutomationFeature = FeatureBase &
   FeatureRestriction & {
     type: Type.Automation;
-    automationType: AutomationTypes;
+    automationType: AutomationType;
   };
 
 export type DomainFeature = FeatureBase &

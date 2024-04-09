@@ -1,5 +1,5 @@
 import { Type } from "../../types/features";
-import { PricingManager, ValueType } from "../../types/index";
+import { PricingManager, UsageLimitType, ValueType } from "../../types/index";
 
 export const petClinic: PricingManager = {
   saasName: "This is a test",
@@ -24,7 +24,7 @@ export const petClinic: PricingManager = {
       valueType: ValueType.Numeric,
       defaultValue: 0,
       unit: "pets",
-      type: "NON_RENEWABLE",
+      type: UsageLimitType.NonRenewable,
       linkedFeatures: ["maxPets"],
       expression: "",
       serverExpression: "",

@@ -1,4 +1,4 @@
-import { PaymentTypes } from "../../types/features";
+import { PaymentType, PaymentTypes } from "../../types/features";
 import { StandardPlan } from "../../model/plans";
 import { StrNumBool } from "../../types/index";
 import PlansParser from "../../parsers/plans";
@@ -126,7 +126,7 @@ test("[PlansParser] Given payment types should return list of payment types", ()
       unit: "user/month",
       features: {
         test: {
-          value: ["ACH", "CARD"],
+          value: [PaymentType.Ach, PaymentType.Card],
         },
       },
       usageLimits: null,
@@ -134,7 +134,7 @@ test("[PlansParser] Given payment types should return list of payment types", ()
   };
 
   const features: Map<string, { value: StrNumBool | PaymentTypes }> = new Map();
-  features.set("test", { value: ["ACH", "CARD"] });
+  features.set("test", { value: [PaymentType.Ach, PaymentType.Card] });
   const map: Map<string, StandardPlan> = new Map();
   map.set(
     "basic",

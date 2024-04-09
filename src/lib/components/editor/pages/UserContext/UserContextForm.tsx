@@ -1,6 +1,7 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Button } from "../../components/Button";
 import { UserContextAttribute, computeType } from "../../parsers/expression";
+import { ValueType } from "../../types";
 
 interface UserContextFormProps {
   initialData: UserContextAttribute;
@@ -45,9 +46,9 @@ export function UserContextForm({
         value={userAttribute.valueType}
         onChange={handleTypeChange}
       >
-        <option value="NUMERIC">NUMERIC</option>
-        <option value="TEXT">TEXT</option>
-        <option value="CONDITION">CONDITION</option>
+        <option value={ValueType.Numeric}>NUMERIC</option>
+        <option value={ValueType.Text}>TEXT</option>
+        <option value={ValueType.Boolean}>BOOLEAN</option>
       </select>
       <Button className="pp-btn">Save</Button>
     </form>

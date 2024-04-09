@@ -1,4 +1,4 @@
-import { StrNumBool, Value } from "../types/index";
+import { StrNumBool, Value } from "../types";
 
 export type UsageLimits = {
   [key: string]: UsageLimit;
@@ -8,12 +8,10 @@ export type UsageLimit = Renewable | NonRenewable | ResponseDriven | TimeDriven;
 
 type UsageLimitProperties = Omit<UsageLimitBaseProperties, "name">;
 
-type UsageLimitTypes = keyof typeof UsageLimitType;
-
 export interface UsageLimitBaseProperties extends Value<StrNumBool> {
   name: string;
   description: string;
-  type: UsageLimitTypes;
+  type: UsageLimitType;
   unit: string;
   linkedFeatures: string[];
   expression: string;
@@ -21,26 +19,26 @@ export interface UsageLimitBaseProperties extends Value<StrNumBool> {
 }
 
 export enum UsageLimitType {
-  NON_RENEWABLE,
-  RENEWABLE,
-  RESPONSE_DRIVEN,
-  TIME_DRIVEN,
+  NonRenewable = "NON_RENEWABLE",
+  Renewable = "RENEWABLE",
+  ResponseDriven = "RESPONSE_DRIVEN",
+  TimeDriven = "TIME_DRIVEN",
 }
 
 export interface Renewable extends UsageLimitProperties {
-  type: Extract<UsageLimitTypes, "RENEWABLE">;
+  type: UsageLimitType.Renewable;
 }
 
 export interface NonRenewable extends UsageLimitProperties {
-  type: Extract<UsageLimitTypes, "NON_RENEWABLE">;
+  type: UsageLimitType.NonRenewable;
 }
 
 export interface TimeDriven extends UsageLimitProperties {
-  type: Extract<UsageLimitTypes, "TIME_DRIVEN">;
+  type: UsageLimitType.TimeDriven;
 }
 
 export interface ResponseDriven extends UsageLimitProperties {
-  type: Extract<UsageLimitTypes, "RESPONSE_DRIVEN">;
+  type: UsageLimitType.ResponseDriven;
 }
 
 export type UsageLimitBase =
@@ -50,17 +48,17 @@ export type UsageLimitBase =
   | ResponseDrivenUL;
 
 export interface RenewableUL extends UsageLimitBaseProperties {
-  type: Extract<UsageLimitTypes, "RENEWABLE">;
+  type: UsageLimitType.Renewable;
 }
 
 export interface NonRenewableUL extends UsageLimitBaseProperties {
-  type: Extract<UsageLimitTypes, "NON_RENEWABLE">;
+  type: UsageLimitType.NonRenewable;
 }
 
 export interface TimeDrivenUL extends UsageLimitBaseProperties {
-  type: Extract<UsageLimitTypes, "TIME_DRIVEN">;
+  type: UsageLimitType.TimeDriven;
 }
 
 export interface ResponseDrivenUL extends UsageLimitBaseProperties {
-  type: Extract<UsageLimitTypes, "RESPONSE_DRIVEN">;
+  type: UsageLimitType.ResponseDriven;
 }
