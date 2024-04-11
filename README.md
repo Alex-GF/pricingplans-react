@@ -1,11 +1,11 @@
-# pricingplans-react
+# Pricing4React
 
-The aim of this package is to provide some simple and easy to use components for react that allows UI feature toggling driven by pricing features. Also take a look to the package [pricingplans-4j](https://github.com/Alex-GF/pricingplans-4j), which allows fast and easy implementation of backend logic to be used by this package.
+The aim of this package is to provide some simple and easy to use components for react that allows UI feature toggling driven by pricing features. Also take a look to the package [Pricing4Java](https://github.com/isa-group/Pricing4Java), which allows fast and easy implementation of backend logic to be used by this package.
 
 ## Installation
 
 ```bash
-npm install pricingplans-react
+npm install pricing4react
 ```
 
 ## Package logic
@@ -46,7 +46,7 @@ As you can see, with the 4 standard options of JWT, we have added a fifth: the `
 
 The `eval` field can also be a string that contains an expression that must be evaluated on the client side (for example, if it requires the previous evaluation of another feature). In this case, the expression must be a valid JavaScript expression, and the package will use the `eval` function to evaluate it. The expression can contain access the other two new paramenter on the JWT token's body: `userContext` and `planContext`. These two objects are used to store information about the user and the plan, respectively. They are optional, and if they are not present, they will be considered as empty objects.
 
-As we said, you don't have to worry about the recreation of the JWT, since [pricingplans-4j](https://github.com/Alex-GF/pricingplans-4j) will do it for you on backend. However, if you want to create your own JWT, as long as it follows the structure above, the package will be able to perform the toggling.
+As we said, you don't have to worry about the recreation of the JWT, since [Pricing4Java](https://github.com/isa-group/Pricing4Java) will do it for you on backend. However, if you want to create your own JWT, as long as it follows the structure above, the package will be able to perform the toggling.
 
 ## Usage
 
