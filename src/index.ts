@@ -15,3 +15,8 @@ export {
   Loading,
   ErrorFallback,
 } from "./lib/components/feature/Feature";
+
+export {
+  fetchWithPricingInterceptor,
+  searchNewTokenAndUpdate,
+} from "./services/api.service";

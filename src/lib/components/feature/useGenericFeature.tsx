@@ -1,6 +1,5 @@
 import { NAryFunction } from "../../logic/model/NAryFunction";
-import React, { useContext, useEffect, useState } from "react";
-import { FeatureContext } from "./FeatureContext";
+import React, { useEffect, useState } from "react";
 
 export interface GenericFeatureHookOptions {
   /**
@@ -18,7 +17,6 @@ export type FeatureResponse = JSX.Element;
 export function useGenericFeature(
   options: GenericFeatureHookOptions
 ): FeatureResponse {
-  const { featureRetriever } = useContext(FeatureContext);
   const [errored, setErrored] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   // Index of the feature that was evaluated to true

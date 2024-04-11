@@ -2,26 +2,12 @@ import { NAryFunction } from "../../logic/model/NAryFunction";
 import { useGenericFeature } from "./useGenericFeature";
 import React, { useEffect, useMemo, useState } from "react";
 
-// type FeatureProps =
-//   | {
-//       flags: string | string[];
-//       value?: undefined;
-//       expectedValue?: FeatureValue
-//     }
-//   | {
-//       flags?: undefined;
-//       value: boolean;
-//       expectedValue?: undefined
-//     };
-
-// type FeaturePropsWithChildren = FeatureProps & { children: React.ReactNode };
-
 export function On({
   children,
-  expression,
+  expression
 }: {
   children: React.ReactNode;
-  expression: NAryFunction<boolean>;
+  expression?: NAryFunction<boolean> | undefined;
 }) {
   return <>{children}</>;
 }
@@ -38,7 +24,7 @@ export function ErrorFallback({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
-export function Feature({ children }: { children: React.ReactNode }) {
+export function Feature({ children, expression }: { children: React.ReactNode, expression: NAryFunction<boolean>}) {
   const [key, setKey] = useState(0);
   const [onChildren, setOnChildren] = useState<React.ReactElement[]>([]);
   const [defaultChildren, setDefaultChildren] = useState<React.ReactElement[]>(
@@ -51,9 +37,12 @@ export function Feature({ children }: { children: React.ReactNode }) {
 
   const onExpressions = useMemo(() => {
     return onChildren.map((child) => {
+
+      let evaluationExpression = child.props.expression !== undefined ? child.props.expression : expression;
+
       return {
         on: child.props.children,
-        expression: child.props.expression,
+        expression: evaluationExpression,
       };
     });
   }, [onChildren]);

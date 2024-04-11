@@ -1,19 +1,16 @@
-import FeatureRetriever from "../../components/feature/FeatureRetriever";
-import { NAryFunction, NAryFunctionOptions } from "./NAryFunction";
+import { NAryFunction } from "./NAryFunction";
 import { error, ResultValue, value } from "./ResultValue";
 import tokenService from "../../../services/token.service";
 
 export class Feature implements NAryFunction<boolean> {
     featureId: string;
-    featureRetriever?: FeatureRetriever;
 
-    constructor(featureId: string, featureRetriever?: FeatureRetriever) {
+    constructor(featureId: string) {
         this.featureId = featureId;
-        this.featureRetriever = featureRetriever;
     }
 
-    async eval(options?: NAryFunctionOptions): Promise<ResultValue<boolean>> {
-        const retriever = tokenService.getFromToken("features");//this.featureRetriever ?? options?.featureRetriever;
+    async eval(): Promise<ResultValue<boolean>> {
+        const retriever = tokenService.getFromToken("features");
         if (!retriever) {
             return error("Error evaluating Feature " + this.featureId + ". No FeatureRetriever provided");
         }
@@ -55,9 +52,8 @@ export class Feature implements NAryFunction<boolean> {
 /**
  * NAryFunction that returns a feature boolean value.
  * @param featureId Id of the feature
- * @param featureRetriever FeatureRetriever instance. Recommended to just call featureRetriever.getLogicFeature()
  * @returns 
  */
-export function feature(featureId: string, featureRetriever?: FeatureRetriever): NAryFunction<boolean> {
-    return new Feature(featureId, featureRetriever);
+export function feature(featureId: string): NAryFunction<boolean> {
+    return new Feature(featureId);
 }

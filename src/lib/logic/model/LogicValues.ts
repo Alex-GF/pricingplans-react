@@ -1,4 +1,4 @@
-import { AttributeValue } from "../../components/feature/FeatureRetriever";
+import { AttributeValue } from "./util";
 import { NAryFunction } from "./NAryFunction";
 
 export type LogicNumber = NAryFunction<number> | number;

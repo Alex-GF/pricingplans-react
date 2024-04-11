@@ -1,5 +1,5 @@
 import { LogicBoolean } from "./LogicValues";
-import { NAryFunction, NAryFunctionOptions } from "./NAryFunction";
+import { NAryFunction } from "./NAryFunction";
 import { error, ResultValue, value } from "./ResultValue";
 import { booleanFunction } from "./util";
 
@@ -25,9 +25,9 @@ class BinaryLogicalPredicate implements NAryFunction<boolean> {
     this.op = operator;
   }
 
-  async eval(options?: NAryFunctionOptions): Promise<ResultValue<boolean>> {
-    const lEval = await this.left.eval(options);
-    const rEval = await this.right.eval(options);
+  async eval(): Promise<ResultValue<boolean>> {
+    const lEval = await this.left.eval();
+    const rEval = await this.right.eval();
     if (lEval.isError || rEval.isError) {
       return error(
         "Error evaluating Boolean Expression: " +

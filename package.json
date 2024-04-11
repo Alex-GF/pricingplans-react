@@ -1,6 +1,6 @@
 {
   "name": "pricing4react",
-  "version": "1.2.4",
+  "version": "1.4.0",
   "description": "A library of components that ease the integration of feature toggling driven by pricing plans into your React application's UI.",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",

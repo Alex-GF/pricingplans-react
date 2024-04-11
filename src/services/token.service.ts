@@ -10,18 +10,13 @@ class TokenService {
         return user?.refreshToken;
     }
 
-    // getLocalAccessToken() {
-    //     const user = JSON.parse(localStorage.getItem("user"));
-    //     return user?.token;
-    // }
-
-    getLocalAccessToken() {
-        const jwt = JSON.parse(localStorage.getItem("jwt")  as string);
+    getLocalPricingToken() {
+        const jwt = JSON.parse(localStorage.getItem("pricingToken")  as string);
         return jwt ? jwt : null;
     }
 
     getFromToken(key: string) {
-        const jwt = JSON.parse(localStorage.getItem("jwt")  as string);
+        const jwt = JSON.parse(localStorage.getItem("pricingToken")  as string);
 
         if (jwt) {
 
@@ -33,8 +28,8 @@ class TokenService {
         return null;
     }
 
-    updateLocalAccessToken(token: string) {
-        window.localStorage.setItem("jwt", JSON.stringify(token));
+    updateLocalPricingToken(token: string) {
+        window.localStorage.setItem("pricingToken", JSON.stringify(token));
     }
 
     getUser() {
@@ -47,7 +42,7 @@ class TokenService {
 
     removeUser() {
         window.localStorage.removeItem("user");
-        window.localStorage.removeItem("jwt");
+        window.localStorage.removeItem("pricingToken");
     }
 
     updateJWTToken() {
@@ -56,14 +51,14 @@ class TokenService {
             fetch("/api/v1/auth/refreshToken", {
                 method: 'POST',
                 headers: {
-                    "Authorization": `Bearer ${this.getLocalAccessToken()}`,
+                    "Authorization": `Bearer ${this.getLocalPricingToken()}`,
                     'Content-Type': 'application/json'
                 },
             })
             .then((response) => response.json())
             .then((data) => {
                 console.log(data);
-                this.updateLocalAccessToken(data.newToken);
+                this.updateLocalPricingToken(data.newToken);
                 resolve();
             }).catch((error) => {reject(error)});
         });

@@ -1,6 +1,6 @@
-import { AttributeValue } from "../../components/feature/FeatureRetriever";
+import { AttributeValue } from "./util";
 import { LogicAttributeValue, LogicNumber } from "./LogicValues";
-import { NAryFunction, NAryFunctionOptions } from "./NAryFunction";
+import { NAryFunction } from "./NAryFunction";
 import { error, ResultValue, value } from "./ResultValue";
 import { attrValueFunction, numberFunction } from "./util";
 
@@ -28,9 +28,9 @@ class BinaryRelationalPredicate implements NAryFunction<boolean> {
     this.op = operator;
   }
 
-  async eval(options?: NAryFunctionOptions): Promise<ResultValue<boolean>> {
-    const lEval = await this.left.eval(options);
-    const rEval = await this.right.eval(options);
+  async eval(): Promise<ResultValue<boolean>> {
+    const lEval = await this.left.eval();
+    const rEval = await this.right.eval();
     if (lEval.isError || rEval.isError) {
       return error(
         "Error evaluating Relational Binary Expression: " +

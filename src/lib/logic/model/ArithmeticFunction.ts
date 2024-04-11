@@ -1,5 +1,5 @@
 import { LogicNumber } from "./LogicValues";
-import { NAryFunction, NAryFunctionOptions } from "./NAryFunction";
+import { NAryFunction } from "./NAryFunction";
 import { error, ResultValue, value } from "./ResultValue";
 import { numberFunction } from "./util";
 
@@ -27,9 +27,9 @@ class ArithmeticFunction implements NAryFunction<number> {
     this.op = operator;
   }
 
-  async eval(options?: NAryFunctionOptions): Promise<ResultValue<number>> {
-    const lEval = await this.left.eval(options);
-    const rEval = await this.right.eval(options);
+  async eval(): Promise<ResultValue<number>> {
+    const lEval = await this.left.eval();
+    const rEval = await this.right.eval();
     if (lEval.isError || rEval.isError) {
       return error(
         "Error evaluating Arithmetic Expression: " +

@@ -1,5 +1,7 @@
 # Pricing4React
 
+![NPM Version](https://img.shields.io/npm/v/pricing4react)
+
 The aim of this package is to provide some simple and easy to use components for react that allows UI feature toggling driven by pricing features. Also take a look to the package [Pricing4Java](https://github.com/isa-group/Pricing4Java), which allows fast and easy implementation of backend logic to be used by this package.
 
 ## Installation
@@ -139,36 +141,4 @@ The usage of the operators is as follows:
   </On>
   ...
 </Feature>
-```
-
-## Development setup
-
-First step: Inside the application you want to embed the Pricing Editor
-
-```sh
-cd react-app/node_modules/react
-npm link
-```
-
-Second step: Inside our library link
-
-```sh
-cd pricingplans-react
-npm link react
-```
-
-Third step: Inside our library
-
-```sh
-cd pricingplans-react
-npm link
-```
-
-First step: Inside the application you want to embed the Pricing Editor
-
-Fouth step: Inside the react application
-
-```sh
-cd react-app
-npm link pricingplans-react
 ```

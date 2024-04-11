@@ -1,20 +1,7 @@
-import FeatureRetriever, {
-  AttributeValue,
-} from "../../components/feature/FeatureRetriever";
-import { attribute } from "./Attribute";
-import { feature } from "./Feature";
 import { NAryFunction } from "./NAryFunction";
 import constant from "./Constant";
 
-export function makeFeatureAttributeRetrievers(
-  featureRetriever: FeatureRetriever
-) {
-  return {
-    feature: (featureId: string) => feature(featureId, featureRetriever),
-    attribute: (attributeId: string) =>
-      attribute(attributeId, featureRetriever),
-  };
-}
+export type AttributeValue = number | string;
 
 export function numberFunction<T>(
   left: NAryFunction<number> | number,
