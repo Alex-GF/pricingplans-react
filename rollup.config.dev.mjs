@@ -5,22 +5,19 @@ import copy from "rollup-plugin-copy";
 import commonjs from "@rollup/plugin-commonjs";
 import watchAssets from "rollup-plugin-watch-assets";
 import replace from "@rollup/plugin-replace";
+import livereload from "rollup-plugin-livereload";
+import serve from "rollup-plugin-serve";
 
 //Postcss Plugins
 import cssnano from "cssnano";
 
 export default [
   {
-    input: "src/index.ts",
+    input: "src/lib/components/editor/editor.tsx",
     output: [
       {
-        file: "dist/esm/index.js",
+        file: "public/bundle.js",
         format: "esm",
-        sourcemap: true,
-      },
-      {
-        file: "dist/cjs/index.js",
-        format: "cjs",
         sourcemap: true,
       },
     ],
@@ -31,23 +28,29 @@ export default [
       postcss({ plugins: [cssnano()] }),
       copy({
         targets: [
-          { src: "src/lib/components/editor/assets/**/*", dest: "dist/assets" },
+          {
+            src: "src/lib/components/editor/index.html",
+            dest: "public",
+          },
+          {
+            src: "src/lib/components/editor/assets/**/*",
+            dest: "public/assets",
+          },
         ],
       }),
       watchAssets({ assets: ["src"] }),
+      serve({
+        open: true,
+        contentBase: "public",
+        historyApiFallback: true,
+        host: "localhost",
+        port: 3000,
+      }),
+      livereload("public"),
       replace({
         preventAssignment: true,
         "process.env.NODE_ENV": '"development"',
       }),
-    ],
-    external: [
-      "axios",
-      "buffer",
-      "long",
-      "protobufjs/minimal",
-      "react",
-      "react-dom",
-      "react-router-dom",
     ],
   },
 ];
