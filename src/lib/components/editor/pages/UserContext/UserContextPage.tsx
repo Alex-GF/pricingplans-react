@@ -7,14 +7,9 @@ import { UserContextForm } from "./UserContextForm";
 import { Plus } from "../../components/Icons";
 import { EditorContext } from "../../context/EditorContextProvider";
 import { UserAttributeList } from "./UserFeatureList";
-import { ValueType } from "../../types/index";
+import { ValueType } from "../../types";
 
-interface UserContextPageProps {
-  title: string;
-  tableHeaders: string[];
-}
-
-export function UserContextPage({ title, tableHeaders }: UserContextPageProps) {
+export function UserContextPage() {
   const [visible, setVisible] = useState(false);
   const [command, setCommand] = useState("add" as Command);
   const [selected, setSelected] = useState<null | number>(null);
@@ -30,7 +25,7 @@ export function UserContextPage({ title, tableHeaders }: UserContextPageProps) {
   return (
     <article className="pp-content__main">
       <header className="pp-content-header">
-        <h1>{title}</h1>
+        <h1>User context</h1>
         <Button
           className="pp-content-header__btn"
           onClick={() => handleClickAdd()}
@@ -39,7 +34,7 @@ export function UserContextPage({ title, tableHeaders }: UserContextPageProps) {
         </Button>
       </header>
 
-      <Table className="pp-table" labels={tableHeaders}>
+      <Table className="pp-table" labels={["Name", "Type", "Actions"]}>
         <UserAttributeList
           setCommand={setCommand}
           setSelected={setSelected}

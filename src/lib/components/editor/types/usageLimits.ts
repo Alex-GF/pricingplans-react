@@ -13,7 +13,7 @@ export interface UsageLimitBaseProperties extends Value<StrNumBool> {
   description: string;
   type: UsageLimitType;
   unit: string;
-  linkedFeatures: string[];
+  linkedFeatures: string[] | null;
   expression: string;
   serverExpression: string;
 }

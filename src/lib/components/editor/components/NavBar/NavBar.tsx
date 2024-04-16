@@ -39,7 +39,7 @@ export function NavBar({ hidden, onSave }: NavBarProps) {
       />
       <ul className="pp-nav-items">
         <li>
-          <NavLink className={computeNavLinkStatus} to="attributes">
+          <NavLink className={computeNavLinkStatus} to="features">
             Attributes
           </NavLink>
         </li>
@@ -64,7 +64,7 @@ export function NavBar({ hidden, onSave }: NavBarProps) {
           </NavLink>
         </li>
       </ul>
-      <Button className="pp-btn" onClick={() => console.log("Click Save")}>
+      <Button className="pp-btn" onClick={() => console.log("Salva")}>
         Save
       </Button>
     </nav>

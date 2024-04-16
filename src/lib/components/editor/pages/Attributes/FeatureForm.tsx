@@ -1,7 +1,13 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { DefaultValue } from "./DefaultValue";
 import { Button } from "../../components/Button";
-import { AllFeatures, PaymentType, Type, ValueType } from "../../types";
+import {
+  AllFeatures,
+  IntegrationType,
+  PaymentType,
+  Type,
+  ValueType,
+} from "../../types";
 
 interface FeatureFormProps {
   initialData: AllFeatures;
@@ -43,6 +49,32 @@ export function FeatureForm({
 
   const handleTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     switch (attribute.type) {
+      case Type.Automation: {
+        const { automationType, type, ...rest } = attribute;
+        switch (e.target.value as Type) {
+          case Type.Automation:
+            return;
+          case Type.Domain:
+            setAttribute({ ...rest, type: Type.Domain });
+
+          case Type.Guarantee:
+            setAttribute({ ...rest, type: Type.Guarantee, docUrl: "" });
+          case Type.Integration:
+            setAttribute({
+              ...rest,
+              type: Type.Integration,
+              integrationType: IntegrationType.API,
+            });
+          case Type.Information:
+            setAttribute({ ...rest, type: Type.Information });
+
+          case Type.Management:
+            setAttribute({ ...rest, type: Type.Management });
+
+          case Type.Support:
+            setAttribute({ ...rest, type: Type.Support });
+        }
+      }
     }
   };
 
@@ -65,13 +97,13 @@ export function FeatureForm({
       case Type.Support: {
         setAttribute({
           ...attribute,
-          ...computeType(e.target.value),
+          ...computeValueType(e.target.value),
         });
       }
     }
   };
 
-  const computeType = (
+  const computeValueType = (
     type: string
   ):
     | { valueType: ValueType.Boolean; defaultValue: false }
@@ -118,15 +150,24 @@ export function FeatureForm({
       </div>
       <div className="pp-form__group">
         <label htmlFor="type" className="pp-form__label">
-          Description
+          Type
         </label>
-        <input
+        <select
           id="type"
           name="type"
           className="pp-form__field"
           value={attribute.type}
           onChange={() => console.log("Hello world")}
-        />
+        >
+          <option value={Type.Automation}>AUTOMATION</option>
+          <option value={Type.Domain}>DOMAIN</option>
+          <option value={Type.Guarantee}>GUARANTEE</option>
+          <option value={Type.Information}>INFORMATION</option>
+          <option value={Type.Integration}>INTEGRATION</option>
+          <option value={Type.Management}>MANAGEMENT</option>
+          <option value={Type.Payment}>PAYMENT</option>
+          <option value={Type.Support}>SUPPORT</option>
+        </select>
       </div>
       <div className="pp-form__group">
         <label htmlFor="description" className="pp-form__label">
@@ -142,16 +183,16 @@ export function FeatureForm({
       </div>
 
       <div>
-        <label htmlFor="type">Type</label>
+        <label htmlFor="valueType">Value type</label>
         <select
-          id="type"
-          name="type"
-          value={attribute.type}
+          id="valueType"
+          name="valueType"
+          value={attribute.valueType}
           onChange={handleValueTypeChange}
         >
-          <option value="NUMERIC">NUMERIC</option>
-          <option value="TEXT">TEXT</option>
-          <option value="CONDITION">CONDITION</option>
+          <option value={ValueType.Boolean}>BOOLEAN</option>
+          <option value={ValueType.Text}>TEXT</option>
+          <option value={ValueType.Numeric}>NUMERIC</option>
         </select>
       </div>
 

@@ -86,16 +86,22 @@ export enum IntegrationType {
   ExternalDevice = "EXTERNAL_DEVICE",
   IdentityProvider = "IDENTITY_PROVIDER",
   Marketplace = "MARKETPLACE",
-  WebSAAS = "WEB_SAAS",
+  WebSaaS = "WEB_SAAS",
 }
 
-type IntegrationTypes = keyof typeof IntegrationType;
-
 export type Integration = FeatureSkipName &
-  FeatureRestriction & {
-    type: Type.Integration;
-    integrationType: IntegrationTypes;
-  };
+  FeatureRestriction &
+  (
+    | {
+        type: Type.Integration;
+        integrationType: IntegrationType.WebSaaS;
+        pricingUrls: string[];
+      }
+    | {
+        type: Type.Integration;
+        integrationType: Exclude<IntegrationType, IntegrationType.WebSaaS>;
+      }
+  );
 
 export type Management = FeatureSkipName &
   FeatureRestriction & {
@@ -146,10 +152,18 @@ export type InformationFeature = FeatureBase &
   };
 
 export type IntegrationFeature = FeatureBase &
-  FeatureRestriction & {
-    type: Type.Integration;
-    integrationType: IntegrationTypes;
-  };
+  FeatureRestriction &
+  (
+    | {
+        type: Type.Integration;
+        integrationType: IntegrationType.WebSaaS;
+        pricingUrls: string[];
+      }
+    | {
+        type: Type.Integration;
+        integrationType: Exclude<IntegrationType, IntegrationType.WebSaaS>;
+      }
+  );
 
 export type ManagementFeature = FeatureBase &
   FeatureRestriction & {

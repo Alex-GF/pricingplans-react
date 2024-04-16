@@ -9,6 +9,7 @@ import {
   Guarantee,
   Information,
   Integration,
+  IntegrationType,
   Management,
   Payment,
   Support,
@@ -100,13 +101,23 @@ export default class FeatureSerializer {
         return information;
       }
       case Type.Integration: {
-        const integration: Integration = {
+        const commonProperties = {
           ...commonFeatures,
           ...this._serializeValueType(feature),
           type: feature.type,
+        };
+        if (feature.integrationType === IntegrationType.WebSaaS) {
+          return {
+            ...commonProperties,
+            integrationType: IntegrationType.WebSaaS,
+            pricingUrls: feature.pricingUrls,
+          };
+        }
+
+        return {
+          ...commonProperties,
           integrationType: feature.integrationType,
         };
-        return integration;
       }
       case Type.Management: {
         const management: Management = {

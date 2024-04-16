@@ -4,6 +4,7 @@ import {
   Feature,
   FeatureRestriction,
   Features,
+  IntegrationType,
   Type,
 } from "../types/features";
 import { MapFeatureValue } from "../types/plans";
@@ -95,16 +96,29 @@ export default class FeatureParser {
           serverExpression: feature.serverExpression,
           expression: feature.expression,
         };
-      case Type.Integration:
-        return {
+      case Type.Integration: {
+        const commonProperties = {
           name,
           description: feature.description,
           ...this._valueTypeParse(feature),
           type: feature.type,
-          integrationType: feature.integrationType,
           serverExpression: feature.serverExpression,
           expression: feature.expression,
         };
+        if (feature.integrationType === IntegrationType.WebSaaS) {
+          return {
+            ...commonProperties,
+            integrationType: IntegrationType.WebSaaS,
+            pricingUrls: feature.pricingUrls,
+          };
+        }
+
+        return {
+          ...commonProperties,
+          integrationType: feature.integrationType,
+        };
+      }
+
       case Type.Management:
         return {
           name,
