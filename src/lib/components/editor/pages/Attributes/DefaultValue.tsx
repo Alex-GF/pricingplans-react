@@ -18,6 +18,7 @@ export function DefaultValue({ id, name, form, setForm }: DefaultValueProps) {
   if (form.type === Type.Payment) {
     return (
       <select
+        className="pp-form__field"
         value={form.defaultValue}
         onChange={(e) =>
           setForm({
@@ -44,6 +45,7 @@ export function DefaultValue({ id, name, form, setForm }: DefaultValueProps) {
           <input
             id={id}
             name={name}
+            className="pp-form__field"
             type="text"
             value={form.defaultValue}
             onChange={(e) => setForm({ ...form, defaultValue: e.target.value })}
@@ -54,6 +56,7 @@ export function DefaultValue({ id, name, form, setForm }: DefaultValueProps) {
           <input
             id={id}
             name={name}
+            className="pp-form__field"
             type="number"
             value={form.defaultValue}
             onChange={(e) =>
@@ -66,6 +69,7 @@ export function DefaultValue({ id, name, form, setForm }: DefaultValueProps) {
           <select
             id={id}
             name={name}
+            className="pp-form__field"
             value={form.defaultValue.toString()}
             onChange={(e) =>
               setForm({ ...form, defaultValue: e.target.value === "true" })

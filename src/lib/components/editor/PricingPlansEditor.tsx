@@ -6,6 +6,7 @@ import { NavBar } from "./components/NavBar";
 import "./Form.css";
 import "./PricingPlansEditor.css";
 import { PricingManager } from "./types/index";
+import { useToggle } from "./hooks";
 
 interface PricingPlansEditorProps {
   pricingContext: PricingManager;
@@ -20,11 +21,7 @@ export function PricingPlansEditor({
   returnTo,
   onSave,
 }: PricingPlansEditorProps) {
-  const [hidden, setHidden] = useState(false);
-
-  const handleClick = () => {
-    setHidden(!hidden);
-  };
+  const { visible, changeStatus } = useToggle(true);
 
   return (
     <EditorContextProvider
@@ -33,12 +30,12 @@ export function PricingPlansEditor({
       returnTo={returnTo}
     >
       <div className="pp-editor">
-        <NavBar hidden={hidden} onSave={onSave} />
+        <NavBar hidden={!visible} onSave={onSave} />
         <main className="pp-content">
           <Toggle
             className="pp-toggle pp-content__toggle"
-            isHidden={hidden}
-            onClick={handleClick}
+            isHidden={visible}
+            onClick={changeStatus}
           />
           <Outlet />
         </main>

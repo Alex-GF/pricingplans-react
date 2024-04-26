@@ -3,11 +3,14 @@ import { DefaultValue } from "./DefaultValue";
 import { Button } from "../../components/Button";
 import {
   AllFeatures,
+  AutomationType,
   IntegrationType,
   PaymentType,
   Type,
   ValueType,
 } from "../../types";
+import { Select } from "../../components/Select";
+import { computeFeatureType } from "./utils";
 
 interface FeatureFormProps {
   initialData: AllFeatures;
@@ -48,34 +51,8 @@ export function FeatureForm({
     setAttribute({ ...attribute, description: e.target.value });
 
   const handleTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    switch (attribute.type) {
-      case Type.Automation: {
-        const { automationType, type, ...rest } = attribute;
-        switch (e.target.value as Type) {
-          case Type.Automation:
-            return;
-          case Type.Domain:
-            setAttribute({ ...rest, type: Type.Domain });
-
-          case Type.Guarantee:
-            setAttribute({ ...rest, type: Type.Guarantee, docUrl: "" });
-          case Type.Integration:
-            setAttribute({
-              ...rest,
-              type: Type.Integration,
-              integrationType: IntegrationType.API,
-            });
-          case Type.Information:
-            setAttribute({ ...rest, type: Type.Information });
-
-          case Type.Management:
-            setAttribute({ ...rest, type: Type.Management });
-
-          case Type.Support:
-            setAttribute({ ...rest, type: Type.Support });
-        }
-      }
-    }
+    const feature = computeFeatureType(attribute, e.target.value as Type);
+    setAttribute({ ...feature });
   };
 
   const handleValueTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -148,27 +125,23 @@ export function FeatureForm({
           onChange={handleNameChange}
         />
       </div>
-      <div className="pp-form__group">
-        <label htmlFor="type" className="pp-form__label">
-          Type
-        </label>
-        <select
-          id="type"
-          name="type"
-          className="pp-form__field"
-          value={attribute.type}
-          onChange={() => console.log("Hello world")}
-        >
-          <option value={Type.Automation}>AUTOMATION</option>
-          <option value={Type.Domain}>DOMAIN</option>
-          <option value={Type.Guarantee}>GUARANTEE</option>
-          <option value={Type.Information}>INFORMATION</option>
-          <option value={Type.Integration}>INTEGRATION</option>
-          <option value={Type.Management}>MANAGEMENT</option>
-          <option value={Type.Payment}>PAYMENT</option>
-          <option value={Type.Support}>SUPPORT</option>
-        </select>
-      </div>
+      <Select
+        label="Feature type"
+        id="featureType"
+        value={attribute.type}
+        onChange={handleTypeChange}
+        options={[
+          { value: Type.Automation, label: Type.Automation },
+          { value: Type.Domain, label: Type.Domain },
+          { value: Type.Guarantee, label: Type.Guarantee },
+          { value: Type.Information, label: Type.Information },
+          { value: Type.Integration, label: Type.Integration },
+          { value: Type.Management, label: Type.Management },
+          { value: Type.Payment, label: Type.Payment },
+          { value: Type.Support, label: Type.Support },
+        ]}
+      />
+
       <div className="pp-form__group">
         <label htmlFor="description" className="pp-form__label">
           Description
@@ -182,17 +155,23 @@ export function FeatureForm({
         />
       </div>
 
-      <div>
+      <div className="pp-form__group">
         <label htmlFor="valueType">Value type</label>
         <select
           id="valueType"
           name="valueType"
+          className="pp-form__field"
           value={attribute.valueType}
           onChange={handleValueTypeChange}
+          disabled={attribute.type === Type.Payment}
         >
-          <option value={ValueType.Boolean}>BOOLEAN</option>
+          {attribute.type !== Type.Payment && (
+            <option value={ValueType.Boolean}>BOOLEAN</option>
+          )}
           <option value={ValueType.Text}>TEXT</option>
-          <option value={ValueType.Numeric}>NUMERIC</option>
+          {attribute.type !== Type.Payment && (
+            <option value={ValueType.Numeric}>NUMERIC</option>
+          )}
         </select>
       </div>
 
@@ -214,6 +193,89 @@ export function FeatureForm({
           setForm={setAttribute}
         />
       </div>
+
+      {attribute.type === Type.Automation && (
+        <Select
+          id="automationType"
+          label="Automation type"
+          value={attribute.automationType}
+          onChange={(e) =>
+            setAttribute({
+              ...attribute,
+              automationType: e.target.value as AutomationType,
+            })
+          }
+          options={[
+            { value: AutomationType.Bot, label: AutomationType.Bot },
+            {
+              value: AutomationType.Filtering,
+              label: AutomationType.Filtering,
+            },
+            {
+              value: AutomationType.TaskAutomation,
+              label: "TASK AUTOMATION",
+            },
+            {
+              value: AutomationType.Tracking,
+              label: AutomationType.Tracking,
+            },
+          ]}
+        />
+      )}
+
+      {attribute.type === Type.Guarantee && (
+        <div className="pp-form__group">
+          <label htmlFor="docUrl" className="pp-form__label">
+            Documentation URL
+          </label>
+          <input
+            id="docUrl"
+            name="docUrl"
+            className="pp-form__field"
+            value={attribute.docUrl}
+            onChange={(e) =>
+              setAttribute({ ...attribute, docUrl: e.target.value })
+            }
+          />
+        </div>
+      )}
+
+      {attribute.type === Type.Integration && (
+        <div className="pp-form__group">
+          <label htmlFor="integrationType">Integration Type</label>
+          <select
+            id="integrationType"
+            name="integrationType"
+            className="pp-form__field"
+            value={attribute.integrationType}
+            onChange={(e) => {
+              const integrationType = e.target.value as IntegrationType;
+              if (integrationType === IntegrationType.WebSaaS) {
+                setAttribute({
+                  ...attribute,
+                  integrationType: integrationType,
+                  pricingUrls: [""],
+                });
+                return;
+              }
+
+              setAttribute({ ...attribute, integrationType: integrationType });
+            }}
+          >
+            <option value={IntegrationType.API}>API</option>
+            <option value={IntegrationType.Extension}>EXTENSION</option>
+            <option value={IntegrationType.ExternalDevice}>
+              EXTERNAL DEVICE
+            </option>
+            <option value={IntegrationType.IdentityProvider}>
+              IDENTITY PROVIDER
+            </option>
+            <option value={IntegrationType.Marketplace}>MARKETPLACE</option>
+            <option value={IntegrationType.WebSaaS}>WEB SAAS</option>
+          </select>
+        </div>
+      )}
+
       <Button
         className="pp-btn"
         onClick={() =>

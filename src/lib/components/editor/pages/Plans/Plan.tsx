@@ -5,6 +5,7 @@ import { EditorContext } from "../../context/EditorContextProvider";
 import { ArrowLeft } from "../../components/Icons";
 import { FeatureList } from "./FeatureList";
 import { PlanState } from "../../types/plans";
+import { PaymentTypes, StrNumBool } from "../../types";
 
 interface PlanLocation {
   index: number;
@@ -32,6 +33,18 @@ export function Plan() {
         };
 
   const [plan, setPlan] = useState<PlanState>(initialPlan);
+  const [featuresValues, setFeatureValues] = useState(initialPlan.features);
+
+  const handleFeatureChange = (
+    featureName: string,
+    currentValue: StrNumBool | PaymentTypes
+  ) => {
+    setFeatureValues(
+      featuresValues
+        .filter(([name, _]) => name === featureName)
+        .map(([name, _]) => [name, currentValue])
+    );
+  };
 
   const isPlanNameEmpty = plan.name === "";
   const isPlanNameCompound = plan.name.trim().split(" ").length > 1;
@@ -137,7 +150,7 @@ export function Plan() {
           />
         </div>
 
-        <FeatureList />
+        <FeatureList onFeatureChange={handleFeatureChange} />
         <footer className="pp-plan-actions">
           {isPlanIncluded && (
             <Button

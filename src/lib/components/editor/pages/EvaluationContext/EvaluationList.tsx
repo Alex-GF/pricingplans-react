@@ -9,11 +9,12 @@ import { ConditionEvaluationForm } from "./ConditionEvaluationForm";
 import { Modal } from "../../components/Modal";
 import { ValueType } from "../../types/index";
 import { AllFeatures } from "../../types/features";
+import { useToggle } from "../../hooks";
 
 export function EvaluationList() {
   const { attributes, setAttributes } = useContext(EditorContext);
   const [position, setPosition] = useState(-1);
-  const [visible, setVisible] = useState(false);
+  const { visible, on: openModal, off: closeModal } = useToggle();
   const [command, setCommand] = useState("edit" as Command);
 
   const updateEvaluation = (name: string, expression: string) =>
@@ -30,7 +31,7 @@ export function EvaluationList() {
         attribute.name === name ? { ...attribute, expression: "" } : attribute
       )
     );
-    setVisible(false);
+    closeModal();
   };
 
   return (
@@ -48,7 +49,7 @@ export function EvaluationList() {
             <Button
               onClick={() => {
                 setCommand("edit");
-                setVisible(true);
+                openModal();
                 setPosition(index);
               }}
             >
@@ -60,21 +61,21 @@ export function EvaluationList() {
                   <TextEvaluationForm
                     attribute={attribute}
                     onSubmit={updateEvaluation}
-                    setVisible={setVisible}
+                    closeModal={closeModal}
                   />
                 )}
                 {attribute.valueType === ValueType.Numeric && (
                   <NumericEvaluationForm
                     attribute={attribute}
                     onSubmit={updateEvaluation}
-                    setVisible={setVisible}
+                    closeModal={closeModal}
                   />
                 )}
                 {attribute.valueType === ValueType.Boolean && (
                   <ConditionEvaluationForm
                     attribute={attribute}
                     onSubmit={updateEvaluation}
-                    setVisible={setVisible}
+                    closeModal={closeModal}
                   />
                 )}
               </>
@@ -82,7 +83,7 @@ export function EvaluationList() {
 
             <Button
               onClick={() => {
-                setVisible(true);
+                openModal();
                 setCommand("delete");
                 setPosition(index);
               }}
@@ -93,7 +94,7 @@ export function EvaluationList() {
               <h2>
                 This action will stop evaluating {attribute.name}. Are you sure?
               </h2>
-              <Button className="pp-btn" onClick={() => setVisible(false)}>
+              <Button className="pp-btn" onClick={closeModal}>
                 NO
               </Button>
               <Button

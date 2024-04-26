@@ -9,6 +9,7 @@ import { FeatureList } from "./FeatureList";
 import { FeatureForm } from "./FeatureForm";
 import { AllFeatures, Type, ValueType } from "../../types";
 import "./FeaturesPage.css";
+import { useToggle } from "../../hooks";
 
 const emptyAttribute: AllFeatures = {
   name: "",
@@ -23,12 +24,8 @@ const emptyAttribute: AllFeatures = {
 export function FeaturesPage() {
   const { attributes, setAttributes } = useContext(EditorContext);
 
-  const [visible, setvisible] = useState(false);
   const [command, setCommand] = useState("add" as Command);
-
-  const openModal = () => setvisible(true);
-
-  const closeModal = () => setvisible(false);
+  const { visible, on: openModal, off: closeModal } = useToggle();
 
   const addAttribute = (attribute: AllFeatures) => {
     setAttributes([...attributes, attribute]);
@@ -71,7 +68,8 @@ export function FeaturesPage() {
           command={command}
           setCommand={setCommand}
           isModalVisible={visible}
-          setVisible={setvisible}
+          openModal={openModal}
+          closeModal={closeModal}
         />
       </Table>
     </article>

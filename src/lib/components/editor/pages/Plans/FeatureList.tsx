@@ -1,9 +1,16 @@
-import { useContext } from "react";
+import { Dispatch, SetStateAction, useContext } from "react";
 import { EditorContext } from "../../context/EditorContextProvider";
-import { ValueType } from "../../types/index";
-import { Type } from "../../types/features";
+import { PlanFeaturesState, StrNumBool, ValueType } from "../../types/index";
+import { PaymentType, PaymentTypes, Type } from "../../types/features";
 
-export function FeatureList() {
+interface FeatureListProps {
+  onFeatureChange: (
+    featureName: string,
+    value: StrNumBool | PaymentTypes
+  ) => void;
+}
+
+export function FeatureList({ onFeatureChange }: FeatureListProps) {
   const { attributes } = useContext(EditorContext);
 
   return (
@@ -22,6 +29,9 @@ export function FeatureList() {
                     id={feature.name}
                     name={feature.name}
                     value={feature.defaultValue}
+                    onChange={(e) =>
+                      onFeatureChange(e.target.name, e.target.value)
+                    }
                   />
                 </div>
               );
@@ -36,6 +46,9 @@ export function FeatureList() {
                     id={feature.name}
                     name={feature.name}
                     value={feature.defaultValue}
+                    onChange={(e) =>
+                      onFeatureChange(e.target.name, e.target.value)
+                    }
                   />
                 </div>
               );
@@ -49,6 +62,9 @@ export function FeatureList() {
                     id={feature.name}
                     name={feature.name}
                     checked={feature.defaultValue}
+                    onChange={(e) =>
+                      onFeatureChange(e.target.name, e.target.value)
+                    }
                   />
                 </div>
               );

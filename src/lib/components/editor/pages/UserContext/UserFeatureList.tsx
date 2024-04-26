@@ -7,13 +7,13 @@ import { Pencil, Trash } from "../../components/Icons";
 interface UserAttributeListProps {
   setCommand: Dispatch<SetStateAction<Command>>;
   setSelected: Dispatch<SetStateAction<null | number>>;
-  setVisible: Dispatch<SetStateAction<boolean>>;
+  openModal: () => void;
 }
 
 export function UserAttributeList({
   setCommand,
   setSelected,
-  setVisible,
+  openModal,
 }: UserAttributeListProps) {
   const { userContextAttributes } = useContext(EditorContext);
 
@@ -30,7 +30,7 @@ export function UserAttributeList({
               onClick={() => {
                 setCommand("edit");
                 setSelected(index);
-                setVisible(true);
+                openModal();
               }}
             >
               <Pencil />
@@ -40,7 +40,7 @@ export function UserAttributeList({
               onClick={() => {
                 setCommand("delete");
                 setSelected(index);
-                setVisible(true);
+                openModal();
               }}
             >
               <Trash />

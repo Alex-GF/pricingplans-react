@@ -8,13 +8,12 @@ import { Plus } from "../../components/Icons";
 import { EditorContext } from "../../context/EditorContextProvider";
 import { UserAttributeList } from "./UserFeatureList";
 import { ValueType } from "../../types";
+import { useToggle } from "../../hooks";
 
 export function UserContextPage() {
-  const [visible, setVisible] = useState(false);
+  const { visible, on: openModal, off: closeModal } = useToggle();
   const [command, setCommand] = useState("add" as Command);
   const [selected, setSelected] = useState<null | number>(null);
-
-  const openModal = () => setVisible(true);
 
   const handleClickAdd = () => {
     setCommand("add");
@@ -38,14 +37,14 @@ export function UserContextPage() {
         <UserAttributeList
           setCommand={setCommand}
           setSelected={setSelected}
-          setVisible={setVisible}
+          openModal={openModal}
         />
       </Table>
       <Modal open={visible}>
         <ModalContent
           command={command}
           userAtributePosition={selected}
-          setVisible={setVisible}
+          closeModal={closeModal}
         />
       </Modal>
     </article>
@@ -55,13 +54,13 @@ export function UserContextPage() {
 interface ModalContentProps {
   command: Command;
   userAtributePosition: number | null;
-  setVisible: Dispatch<SetStateAction<boolean>>;
+  closeModal: () => void;
 }
 
 function ModalContent({
   command,
   userAtributePosition,
-  setVisible,
+  closeModal,
 }: ModalContentProps) {
   const { userContextAttributes, setUserContextAttributes } =
     useContext(EditorContext);
@@ -75,11 +74,9 @@ function ModalContent({
     ? userContextAttributes[userAtributePosition].name
     : "";
 
-  const closeModal = () => setVisible(false);
-
   const addUserAttribute = (attribute: UserContextAttribute) => {
     setUserContextAttributes([...userContextAttributes, attribute]);
-    setVisible(false);
+    closeModal();
   };
 
   const updateUserAttribute = (newAttribute: UserContextAttribute) => {

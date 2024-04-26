@@ -18,13 +18,13 @@ import { ValueType } from "../../types";
 interface ConditionEvaluationFormProps {
   attribute: AllFeatures;
   onSubmit: (name: string, expression: string) => void;
-  setVisible: Dispatch<SetStateAction<boolean>>;
+  closeModal: () => void;
 }
 
 export function ConditionEvaluationForm({
   attribute,
   onSubmit,
-  setVisible,
+  closeModal,
 }: ConditionEvaluationFormProps) {
   const parsedExpression = parseExpression(attribute.expression);
 
@@ -51,7 +51,7 @@ export function ConditionEvaluationForm({
       rightOperand
     );
     onSubmit(attribute.name, exp);
-    setVisible(false);
+    closeModal();
   };
 
   return (
@@ -97,11 +97,7 @@ export function ConditionEvaluationForm({
           ))}
         </select>
       </div>
-      <Button
-        type="button"
-        className="pp-btn"
-        onClick={() => setVisible(false)}
-      >
+      <Button type="button" className="pp-btn" onClick={closeModal}>
         Close
       </Button>
 

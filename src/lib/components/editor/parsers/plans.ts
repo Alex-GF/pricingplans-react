@@ -42,7 +42,7 @@ export default class PlansParser {
   ): PlanFeaturesState {
     const plansFeaturesState: PlanFeaturesState = [];
     for (const [featureName, feature] of features) {
-      plansFeaturesState.push({ name: featureName, value: feature.value });
+      plansFeaturesState.push([featureName, feature.value]);
     }
     return plansFeaturesState;
   }

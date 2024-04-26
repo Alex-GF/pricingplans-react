@@ -18,13 +18,13 @@ import {
 interface TextEvaluationFormProps {
   attribute: AllFeatures;
   onSubmit: (name: string, expression: string) => void;
-  setVisible: Dispatch<SetStateAction<boolean>>;
+  closeModal: () => void;
 }
 
 export function TextEvaluationForm({
   attribute,
   onSubmit,
-  setVisible,
+  closeModal,
 }: TextEvaluationFormProps) {
   const expression = parseExpression(attribute.expression);
 
@@ -57,7 +57,7 @@ export function TextEvaluationForm({
       rightOperand
     );
     onSubmit(attribute.name, expression);
-    setVisible(false);
+    closeModal();
   };
 
   return (
@@ -118,11 +118,7 @@ export function TextEvaluationForm({
           />
         )}
       </div>
-      <Button
-        type="button"
-        className="pp-btn"
-        onClick={() => setVisible(false)}
-      >
+      <Button type="button" className="pp-btn" onClick={closeModal}>
         Close
       </Button>
 

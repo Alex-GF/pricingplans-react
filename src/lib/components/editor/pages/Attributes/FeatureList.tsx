@@ -11,12 +11,14 @@ interface FeatureListProps {
   command: Command;
   setCommand: Dispatch<SetStateAction<Command>>;
   isModalVisible: boolean;
-  setVisible: Dispatch<SetStateAction<boolean>>;
+  openModal: () => void;
+  closeModal: () => void;
 }
 
 export function FeatureList({
   isModalVisible,
-  setVisible,
+  openModal,
+  closeModal,
   command,
   setCommand,
 }: FeatureListProps) {
@@ -44,7 +46,7 @@ export function FeatureList({
     );
     setAttributes(newFeatures);
 
-    setVisible(false);
+    openModal();
   };
 
   const handleEditAttribute = (newAttribute: AllFeatures) => {
@@ -53,7 +55,7 @@ export function FeatureList({
         return index === position ? newAttribute : previousAttribute;
       })
     );
-    setVisible(false);
+    closeModal();
   };
 
   return (
@@ -78,7 +80,7 @@ export function FeatureList({
             <Button
               onClick={() => {
                 setPosition(index);
-                setVisible(true);
+                openModal();
                 setCommand("edit");
               }}
             >
@@ -92,7 +94,7 @@ export function FeatureList({
                 onSubmit={handleEditAttribute}
                 onValidation={duplicatedAttributeWhenEditing}
               />
-              <Button className="pp-btn" onClick={() => setVisible(false)}>
+              <Button className="pp-btn" onClick={closeModal}>
                 Close
               </Button>
             </Modal>
@@ -100,7 +102,7 @@ export function FeatureList({
             <Button
               onClick={() => {
                 setPosition(index);
-                setVisible(true);
+                openModal();
                 setCommand("delete");
               }}
             >
@@ -113,7 +115,7 @@ export function FeatureList({
               }
             >
               <h2>Do you want to delete {attribute.name}?</h2>
-              <Button className="pp-btn" onClick={() => setVisible(false)}>
+              <Button className="pp-btn" onClick={closeModal}>
                 NO
               </Button>
               <Button

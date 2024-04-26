@@ -18,13 +18,13 @@ import { ValueType } from "../../types";
 interface NumericEvaluationFormProps {
   attribute: AllFeatures;
   onSubmit: (name: string, expression: string) => void;
-  setVisible: Dispatch<SetStateAction<boolean>>;
+  closeModal: () => void;
 }
 
 export function NumericEvaluationForm({
   attribute,
   onSubmit,
-  setVisible,
+  closeModal,
 }: NumericEvaluationFormProps) {
   const { userContextAttributes } = useContext(EditorContext);
   const expression = parseExpression(attribute.expression);
@@ -49,7 +49,7 @@ export function NumericEvaluationForm({
       rightOperand
     );
     onSubmit(attribute.name, expression);
-    setVisible(false);
+    closeModal();
   };
 
   return (
@@ -92,11 +92,7 @@ export function NumericEvaluationForm({
           ))}
         </select>
       </div>
-      <Button
-        type="button"
-        className="pp-btn"
-        onClick={() => setVisible(false)}
-      >
+      <Button type="button" className="pp-btn" onClick={closeModal}>
         Close
       </Button>
 
