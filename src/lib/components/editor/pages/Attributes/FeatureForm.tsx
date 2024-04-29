@@ -273,6 +273,24 @@ export function FeatureForm({
             <option value={IntegrationType.Marketplace}>MARKETPLACE</option>
             <option value={IntegrationType.WebSaaS}>WEB SAAS</option>
           </select>
+
+          {attribute.integrationType === IntegrationType.WebSaaS && (
+            <div className="pp-form__group">
+              <label htmlFor="pricingUrls">Pricing Urls</label>
+              <input
+                id="pricingUrls"
+                name="pricingUrls"
+                className="pp-form__field"
+                value={attribute.pricingUrls.join(",")}
+                onChange={(e) =>
+                  setAttribute({
+                    ...attribute,
+                    pricingUrls: e.target.value.trim().split(","),
+                  })
+                }
+              />
+            </div>
+          )}
         </div>
       )}
 

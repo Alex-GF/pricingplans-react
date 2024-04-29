@@ -58,6 +58,7 @@ export function DefaultValue({ id, name, form, setForm }: DefaultValueProps) {
             name={name}
             className="pp-form__field"
             type="number"
+            min={0}
             value={form.defaultValue}
             onChange={(e) =>
               setForm({ ...form, defaultValue: e.target.valueAsNumber })

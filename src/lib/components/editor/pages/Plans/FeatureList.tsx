@@ -1,23 +1,26 @@
-import { Dispatch, SetStateAction, useContext } from "react";
+import { useContext } from "react";
 import { EditorContext } from "../../context/EditorContextProvider";
 import { PlanFeaturesState, StrNumBool, ValueType } from "../../types/index";
-import { PaymentType, PaymentTypes, Type } from "../../types/features";
+import { PaymentTypes, Type } from "../../types/features";
 
 interface FeatureListProps {
+  values: PlanFeaturesState;
   onFeatureChange: (
     featureName: string,
     value: StrNumBool | PaymentTypes
   ) => void;
 }
 
-export function FeatureList({ onFeatureChange }: FeatureListProps) {
+export function FeatureList({ values, onFeatureChange }: FeatureListProps) {
   const { attributes } = useContext(EditorContext);
-
   return (
     <>
       {attributes.map((feature) => {
         if (feature.type === Type.Payment) {
         } else {
+          console.log(
+            values.filter(([name, _]) => name === feature.name)[0][1]
+          );
           switch (feature.valueType) {
             case ValueType.Text: {
               return (
@@ -63,7 +66,7 @@ export function FeatureList({ onFeatureChange }: FeatureListProps) {
                     name={feature.name}
                     checked={feature.defaultValue}
                     onChange={(e) =>
-                      onFeatureChange(e.target.name, e.target.value)
+                      onFeatureChange(e.target.name, e.target.checked)
                     }
                   />
                 </div>

@@ -34,6 +34,7 @@ export function Plan() {
 
   const [plan, setPlan] = useState<PlanState>(initialPlan);
   const [featuresValues, setFeatureValues] = useState(initialPlan.features);
+  console.log(featuresValues);
 
   const handleFeatureChange = (
     featureName: string,
@@ -150,8 +151,11 @@ export function Plan() {
           />
         </div>
 
-        <FeatureList onFeatureChange={handleFeatureChange} />
-        <footer className="pp-plan-actions">
+        <FeatureList
+          values={featuresValues}
+          onFeatureChange={handleFeatureChange}
+        />
+        <div className="pp-plan-actions">
           {isPlanIncluded && (
             <Button
               className="pp-btn"
@@ -165,7 +169,7 @@ export function Plan() {
           <Button className="pp-btn">
             {isPlanIncluded ? "Save changes" : "Add plan"}
           </Button>
-        </footer>
+        </div>
       </form>
     </article>
   );
