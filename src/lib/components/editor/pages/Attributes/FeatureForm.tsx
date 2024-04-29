@@ -52,7 +52,7 @@ export function FeatureForm({
 
   const handleTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const feature = computeFeatureType(attribute, e.target.value as Type);
-    setAttribute({ ...feature });
+    setAttribute(feature);
   };
 
   const handleValueTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {

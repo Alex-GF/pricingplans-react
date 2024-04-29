@@ -6,7 +6,7 @@
   "module": "dist/esm/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "dev": "rollup -c rollup.config.dev.mjs",
+    "dev": "rollup -c rollup.config.dev.mjs -w",
     "test": "jest",
     "build:dev": "rollup -c rollup.config.dev.mjs",
     "build:prod": "rollup -c rollup.config.prod.mjs",

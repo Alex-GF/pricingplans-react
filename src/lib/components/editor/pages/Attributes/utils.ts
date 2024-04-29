@@ -43,6 +43,7 @@ export function computeFeatureType(
     case Type.Payment:
       feat = fromPaymentToOtherFeature(currentFeature, selectedType);
   }
+
   return feat;
 }
 
@@ -217,8 +218,7 @@ function fromDomainInformationManagementAndSupportToOtherFeature(
     case Type.Information:
     case Type.Management:
     case Type.Support:
-      console.log(featureType);
-      return { ...feature };
+      return { ...feature, type: featureType };
     case Type.Automation:
       return {
         ...rest,

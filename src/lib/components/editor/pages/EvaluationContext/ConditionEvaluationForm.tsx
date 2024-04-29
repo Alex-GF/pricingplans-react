@@ -37,8 +37,6 @@ export function ConditionEvaluationForm({
     (attribute) => attribute.valueType === ValueType.Boolean
   );
 
-  console.log(parsedExpression);
-
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 

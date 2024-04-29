@@ -14,7 +14,6 @@ export default class FeatureParser {
 
   public parse(): Map<string, AllFeatures> {
     const parsedFeatures = new Map<string, AllFeatures>([]);
-    console.log("Features", this.features);
     Object.entries(this.features).forEach(([name, feature]) =>
       parsedFeatures.set(name, this._parseFeature(name, feature))
     );
@@ -35,7 +34,6 @@ export default class FeatureParser {
   }
 
   private _valueTypeParse(featureRestriction: FeatureRestriction) {
-    console.log(featureRestriction);
     switch (featureRestriction.valueType) {
       case ValueType.Boolean:
         return {
