@@ -5,7 +5,7 @@ import { EditorContext } from "../../context/EditorContextProvider";
 import { ArrowLeft } from "../../components/Icons";
 import { FeatureList } from "./FeatureList";
 import { PlanState } from "../../types/plans";
-import { PaymentTypes, StrNumBool } from "../../types";
+import { PaymentTypes, StrNumBool, Type } from "../../types";
 
 interface PlanLocation {
   index: number;
@@ -33,18 +33,17 @@ export function Plan() {
         };
 
   const [plan, setPlan] = useState<PlanState>(initialPlan);
-  const [featuresValues, setFeatureValues] = useState(initialPlan.features);
-  console.log(featuresValues);
 
   const handleFeatureChange = (
     featureName: string,
     currentValue: StrNumBool | PaymentTypes
   ) => {
-    setFeatureValues(
-      featuresValues
-        .filter(([name, _]) => name === featureName)
-        .map(([name, _]) => [name, currentValue])
+    const feat = plan.features.map((feature) =>
+      feature.name === featureName
+        ? { ...feature, value: currentValue }
+        : feature
     );
+    setPlan({ ...plan, features: feat });
   };
 
   const isPlanNameEmpty = plan.name === "";
@@ -56,7 +55,7 @@ export function Plan() {
     if (!plans) {
       return;
     }
-    setPlans([...plans, { ...plan, annualPrice: plan.annualPrice }]);
+    setPlans([...plans, { ...plan }]);
   };
 
   const editPlan = (planPosition: number) => {
@@ -152,7 +151,7 @@ export function Plan() {
         </div>
 
         <FeatureList
-          values={featuresValues}
+          values={plan.features}
           onFeatureChange={handleFeatureChange}
         />
         <div className="pp-plan-actions">

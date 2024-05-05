@@ -31,4 +31,7 @@ export type PlanState = Omit<Plan, "features" | "usageLimits"> & {
 
 export type PlanFeaturesState = PlanFeatureState[];
 
-export type PlanFeatureState = [string, StrNumBool | PaymentTypes];
+export type PlanFeatureState = {
+  name: string;
+  value: StrNumBool | PaymentTypes;
+};

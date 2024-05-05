@@ -1,7 +1,7 @@
-import { useContext } from "react";
+import { ChangeEvent, useContext } from "react";
 import { EditorContext } from "../../context/EditorContextProvider";
 import { PlanFeaturesState, StrNumBool, ValueType } from "../../types/index";
-import { PaymentTypes, Type } from "../../types/features";
+import { PaymentType, PaymentTypes, Type } from "../../types/features";
 
 interface FeatureListProps {
   values: PlanFeaturesState;
@@ -13,25 +13,53 @@ interface FeatureListProps {
 
 export function FeatureList({ values, onFeatureChange }: FeatureListProps) {
   const { attributes } = useContext(EditorContext);
+
+  const handlePaymentTypesChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const selectedPayments = Array.from(
+      e.target.selectedOptions,
+      (option) => option.value
+    ) as PaymentTypes;
+    onFeatureChange(e.target.name, selectedPayments);
+  };
   return (
     <>
-      {attributes.map((feature) => {
+      {attributes.map((feature, index) => {
         if (feature.type === Type.Payment) {
-        } else {
-          console.log(
-            values.filter(([name, _]) => name === feature.name)[0][1]
+          return (
+            <div className="pp-form__group">
+              <label htmlFor={feature.name} className="pp-form__label">
+                Defaut Value
+              </label>
+              <select
+                id={feature.name}
+                name={feature.name}
+                className="pp-form__field"
+                value={values[index].value as PaymentTypes}
+                onChange={handlePaymentTypesChange}
+                multiple
+              >
+                <option value={PaymentType.Ach}>ACH</option>
+                <option value={PaymentType.Card}>CARD</option>
+                <option value={PaymentType.Invoice}>INVOICE</option>
+                <option value={PaymentType.WireTransfer}>WIRE TRANSFER</option>
+                <option value={PaymentType.Other}>OTHER</option>
+              </select>
+            </div>
           );
+        } else {
           switch (feature.valueType) {
             case ValueType.Text: {
               return (
                 <div key={feature.name} className="pp-form__group">
-                  <label className="pp-form__label">{feature.name}</label>
+                  <label htmlFor={feature.name} className="pp-form__label">
+                    {feature.name}
+                  </label>
                   <input
                     className="pp-form__field"
                     type="text"
                     id={feature.name}
                     name={feature.name}
-                    value={feature.defaultValue}
+                    value={values[index].value as string}
                     onChange={(e) =>
                       onFeatureChange(e.target.name, e.target.value)
                     }
@@ -42,13 +70,15 @@ export function FeatureList({ values, onFeatureChange }: FeatureListProps) {
             case ValueType.Numeric: {
               return (
                 <div key={feature.name} className="pp-form__group">
-                  <label className="pp-form__label">{feature.name}</label>
+                  <label htmlFor={feature.name} className="pp-form__label">
+                    {feature.name}
+                  </label>
                   <input
                     className="pp-form__field"
                     type="number"
                     id={feature.name}
                     name={feature.name}
-                    value={feature.defaultValue}
+                    value={values[index].value as number}
                     onChange={(e) =>
                       onFeatureChange(e.target.name, e.target.value)
                     }
@@ -58,18 +88,18 @@ export function FeatureList({ values, onFeatureChange }: FeatureListProps) {
             }
             case ValueType.Boolean: {
               return (
-                <div key={feature.name}>
-                  <label>{feature.name}</label>
+                <>
+                  <label htmlFor={feature.name}>{feature.name}</label>
                   <input
                     type="checkbox"
                     id={feature.name}
                     name={feature.name}
-                    checked={feature.defaultValue}
+                    checked={values[index]?.value as boolean}
                     onChange={(e) =>
                       onFeatureChange(e.target.name, e.target.checked)
                     }
                   />
-                </div>
+                </>
               );
             }
           }

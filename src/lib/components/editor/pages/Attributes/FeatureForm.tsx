@@ -1,16 +1,11 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useContext, useState } from "react";
 import { DefaultValue } from "./DefaultValue";
 import { Button } from "../../components/Button";
-import {
-  AllFeatures,
-  AutomationType,
-  IntegrationType,
-  PaymentType,
-  Type,
-  ValueType,
-} from "../../types";
+import { AllFeatures, PaymentType, Type, ValueType } from "../../types";
 import { Select } from "../../components/Select";
 import { computeFeatureType } from "./utils";
+import { AutomationFeature } from "./AutomationFeature";
+import { IntegrationFeature } from "./IntegrationFeature";
 
 interface FeatureFormProps {
   initialData: AllFeatures;
@@ -23,7 +18,7 @@ export function FeatureForm({
   onSubmit,
   onValidation,
 }: FeatureFormProps) {
-  const [attribute, setAttribute] = useState(initialData);
+  const [attribute, setAttribute] = useState<AllFeatures>(initialData);
   const [errors, setErrors] = useState({
     nameIsEmpty: false,
     defaultValueIsEmpty: false,
@@ -63,6 +58,7 @@ export function FeatureForm({
           valueType: ValueType.Text,
           defaultValue: [PaymentType.Ach],
         });
+
         break;
       }
       case Type.Automation:
@@ -125,22 +121,24 @@ export function FeatureForm({
           onChange={handleNameChange}
         />
       </div>
-      <Select
-        label="Feature type"
-        id="featureType"
-        value={attribute.type}
-        onChange={handleTypeChange}
-        options={[
-          { value: Type.Automation, label: Type.Automation },
-          { value: Type.Domain, label: Type.Domain },
-          { value: Type.Guarantee, label: Type.Guarantee },
-          { value: Type.Information, label: Type.Information },
-          { value: Type.Integration, label: Type.Integration },
-          { value: Type.Management, label: Type.Management },
-          { value: Type.Payment, label: Type.Payment },
-          { value: Type.Support, label: Type.Support },
-        ]}
-      />
+      <div className="pp-form__group">
+        <Select
+          label="Feature type"
+          id="featureType"
+          value={attribute.type}
+          onChange={handleTypeChange}
+          options={[
+            { value: Type.Automation, label: Type.Automation },
+            { value: Type.Domain, label: Type.Domain },
+            { value: Type.Guarantee, label: Type.Guarantee },
+            { value: Type.Information, label: Type.Information },
+            { value: Type.Integration, label: Type.Integration },
+            { value: Type.Management, label: Type.Management },
+            { value: Type.Payment, label: Type.Payment },
+            { value: Type.Support, label: Type.Support },
+          ]}
+        />
+      </div>
 
       <div className="pp-form__group">
         <label htmlFor="description" className="pp-form__label">
@@ -195,32 +193,7 @@ export function FeatureForm({
       </div>
 
       {attribute.type === Type.Automation && (
-        <Select
-          id="automationType"
-          label="Automation type"
-          value={attribute.automationType}
-          onChange={(e) =>
-            setAttribute({
-              ...attribute,
-              automationType: e.target.value as AutomationType,
-            })
-          }
-          options={[
-            { value: AutomationType.Bot, label: AutomationType.Bot },
-            {
-              value: AutomationType.Filtering,
-              label: AutomationType.Filtering,
-            },
-            {
-              value: AutomationType.TaskAutomation,
-              label: "TASK AUTOMATION",
-            },
-            {
-              value: AutomationType.Tracking,
-              label: AutomationType.Tracking,
-            },
-          ]}
-        />
+        <AutomationFeature feature={attribute} setFeature={setAttribute} />
       )}
 
       {attribute.type === Type.Guarantee && (
@@ -241,57 +214,7 @@ export function FeatureForm({
       )}
 
       {attribute.type === Type.Integration && (
-        <div className="pp-form__group">
-          <label htmlFor="integrationType">Integration Type</label>
-          <select
-            id="integrationType"
-            name="integrationType"
-            className="pp-form__field"
-            value={attribute.integrationType}
-            onChange={(e) => {
-              const integrationType = e.target.value as IntegrationType;
-              if (integrationType === IntegrationType.WebSaaS) {
-                setAttribute({
-                  ...attribute,
-                  integrationType: integrationType,
-                  pricingUrls: [""],
-                });
-                return;
-              }
-
-              setAttribute({ ...attribute, integrationType: integrationType });
-            }}
-          >
-            <option value={IntegrationType.API}>API</option>
-            <option value={IntegrationType.Extension}>EXTENSION</option>
-            <option value={IntegrationType.ExternalDevice}>
-              EXTERNAL DEVICE
-            </option>
-            <option value={IntegrationType.IdentityProvider}>
-              IDENTITY PROVIDER
-            </option>
-            <option value={IntegrationType.Marketplace}>MARKETPLACE</option>
-            <option value={IntegrationType.WebSaaS}>WEB SAAS</option>
-          </select>
-
-          {attribute.integrationType === IntegrationType.WebSaaS && (
-            <div className="pp-form__group">
-              <label htmlFor="pricingUrls">Pricing Urls</label>
-              <input
-                id="pricingUrls"
-                name="pricingUrls"
-                className="pp-form__field"
-                value={attribute.pricingUrls.join(",")}
-                onChange={(e) =>
-                  setAttribute({
-                    ...attribute,
-                    pricingUrls: e.target.value.trim().split(","),
-                  })
-                }
-              />
-            </div>
-          )}
-        </div>
+        <IntegrationFeature feature={attribute} setFeature={setAttribute} />
       )}
 
       <Button

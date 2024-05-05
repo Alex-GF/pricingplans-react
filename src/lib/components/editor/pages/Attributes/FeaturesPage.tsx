@@ -22,13 +22,25 @@ const emptyAttribute: AllFeatures = {
 };
 
 export function FeaturesPage() {
-  const { attributes, setAttributes } = useContext(EditorContext);
+  const { attributes, setAttributes, plans, setPlans } =
+    useContext(EditorContext);
 
   const [command, setCommand] = useState("add" as Command);
   const { visible, on: openModal, off: closeModal } = useToggle();
 
   const addAttribute = (attribute: AllFeatures) => {
     setAttributes([...attributes, attribute]);
+
+    if (plans) {
+      const updatedPlans = plans.map((plan) => ({
+        ...plan,
+        features: [
+          ...plan.features,
+          { name: attribute.name, value: attribute.defaultValue },
+        ],
+      }));
+      setPlans(updatedPlans);
+    }
     closeModal();
   };
 

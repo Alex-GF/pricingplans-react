@@ -22,7 +22,8 @@ export function FeatureList({
   command,
   setCommand,
 }: FeatureListProps) {
-  const { attributes, setAttributes } = useContext(EditorContext);
+  const { attributes, setAttributes, plans, setPlans } =
+    useContext(EditorContext);
   const [position, setPosition] = useState(-1);
 
   const displayDefaulValueText = (defaultValue: string | number | boolean) => {
@@ -45,6 +46,13 @@ export function FeatureList({
       (attribute) => attribute.name !== name
     );
     setAttributes(newFeatures);
+    if (plans) {
+      const updatedPlans = plans.map((plan) => ({
+        ...plan,
+        features: plan.features.filter((feature) => feature.name !== name),
+      }));
+      setPlans(updatedPlans);
+    }
 
     openModal();
   };
@@ -55,6 +63,18 @@ export function FeatureList({
         return index === position ? newAttribute : previousAttribute;
       })
     );
+    if (plans) {
+      setPlans(
+        plans.map((plan) => ({
+          ...plan,
+          features: plan.features.map((feature, index) =>
+            index === position
+              ? { ...feature, value: newAttribute.defaultValue }
+              : feature
+          ),
+        }))
+      );
+    }
     closeModal();
   };
 

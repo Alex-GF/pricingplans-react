@@ -1,6 +1,7 @@
-import { Dispatch, SetStateAction } from "react";
+import { ChangeEvent, Dispatch, SetStateAction } from "react";
 import {
   AllFeatures,
+  PaymentFeature,
   PaymentType,
   PaymentTypes,
   Type,
@@ -15,20 +16,23 @@ interface DefaultValueProps {
 }
 
 export function DefaultValue({ id, name, form, setForm }: DefaultValueProps) {
+  const handlePaymentTypesChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const selectedPayments = Array.from(
+      e.target.selectedOptions,
+      (option) => option.value
+    ) as PaymentTypes;
+    setForm({
+      ...form,
+      defaultValue: selectedPayments,
+    } as PaymentFeature);
+  };
+
   if (form.type === Type.Payment) {
     return (
       <select
         className="pp-form__field"
         value={form.defaultValue}
-        onChange={(e) =>
-          setForm({
-            ...form,
-            defaultValue: Array.from(
-              e.target.selectedOptions,
-              (option) => option.value
-            ) as PaymentTypes,
-          })
-        }
+        onChange={handlePaymentTypesChange}
         multiple
       >
         <option value={PaymentType.Ach}>ACH</option>
