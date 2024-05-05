@@ -4,7 +4,6 @@ import {
   AutomationType,
   DomainFeature,
   GuaranteeFeature,
-  Information,
   InformationFeature,
   IntegrationFeature,
   IntegrationType,

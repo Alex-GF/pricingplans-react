@@ -5,7 +5,7 @@ import { EditorContext } from "../../context/EditorContextProvider";
 import { ArrowLeft } from "../../components/Icons";
 import { FeatureList } from "./FeatureList";
 import { PlanState } from "../../types/plans";
-import { PaymentTypes, StrNumBool, Type } from "../../types";
+import { PaymentTypes, StrNumBool } from "../../types";
 
 interface PlanLocation {
   index: number;
