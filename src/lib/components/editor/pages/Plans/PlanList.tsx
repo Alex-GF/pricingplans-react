@@ -22,8 +22,12 @@ export function PlanList() {
               <h2>{plan.name}</h2>
               <h3>Description</h3>
               <p>{plan.description}</p>
-              <h3>Price</h3>
+              <h3>Annual Price</h3>
               <span>{plan.annualPrice}</span>
+              <h3>Monthly Price</h3>
+              <span>{plan.monthlyPrice}</span>
+              <h3>Unit</h3>
+              <span>{plan.unit}</span>
             </div>
           </Link>
         </li>

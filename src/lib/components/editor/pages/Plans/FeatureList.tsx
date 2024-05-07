@@ -88,7 +88,7 @@ export function FeatureList({ values, onFeatureChange }: FeatureListProps) {
             }
             case ValueType.Boolean: {
               return (
-                <>
+                <div key={feature.name}>
                   <label htmlFor={feature.name}>{feature.name}</label>
                   <input
                     type="checkbox"
@@ -99,7 +99,7 @@ export function FeatureList({ values, onFeatureChange }: FeatureListProps) {
                       onFeatureChange(e.target.name, e.target.checked)
                     }
                   />
-                </>
+                </div>
               );
             }
           }

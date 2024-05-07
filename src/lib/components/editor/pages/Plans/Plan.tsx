@@ -18,19 +18,23 @@ export function Plan() {
   const navigate = useNavigate();
   const goBack = () => navigate("..");
 
-  const { plans, setPlans } = useContext(EditorContext);
+  const { attributes, plans, setPlans } = useContext(EditorContext);
 
-  const initialPlan =
-    isPlanIncluded && plans
-      ? plans[index]
-      : {
-          name: "",
-          description: "",
-          unit: "user/month",
-          annualPrice: 0,
-          monthlyPrice: 0,
-          features: [],
-        };
+  const defaultFeatureValues = attributes.map((feature) => ({
+    name: feature.name,
+    value: feature.defaultValue,
+  }));
+
+  const newPlan = {
+    name: "",
+    description: "",
+    unit: "user/month",
+    annualPrice: 0,
+    monthlyPrice: 0,
+    features: defaultFeatureValues,
+  };
+
+  const initialPlan = isPlanIncluded && plans ? plans[index] : newPlan;
 
   const [plan, setPlan] = useState<PlanState>(initialPlan);
 
@@ -137,13 +141,36 @@ export function Plan() {
               Invalid price. Plan has to be zero or positive and contain a dot
             </small>
           )}
-          <label htmlFor="price" className="pp-form__label">
-            Price
+          <label htmlFor="monthlyPrice" className="pp-form__label">
+            Monthly Price
           </label>
           <input
-            id="price"
-            name="price"
+            id="monthlyPrice"
+            name="monthlyPrice"
             type="number"
+            min={0}
+            step={0.01}
+            className="pp-form__field"
+            value={plan.monthlyPrice}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="pp-form__group">
+          {!isValidPrice && (
+            <small>
+              Invalid price. Plan has to be zero or positive and contain a dot
+            </small>
+          )}
+          <label htmlFor="annualPrice" className="pp-form__label">
+            Annual Price
+          </label>
+          <input
+            id="annualPrice"
+            name="annualPrice"
+            type="number"
+            min={0}
+            step={0.01}
             className="pp-form__field"
             value={plan.annualPrice}
             onChange={handleChange}
