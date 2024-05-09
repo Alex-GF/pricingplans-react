@@ -1,7 +1,29 @@
 import { Features, PaymentTypes } from "../types/features";
 import { AddOns } from "./addOns";
-import { MapStandardValue, Plans } from "./plans";
+import {
+  MapStandardValue,
+  PlansWithAnnualBilling,
+  PlansWithRegularBilling,
+} from "./plans";
 import { UsageLimits } from "./usageLimits";
+
+export * from "./addOns";
+export * from "./features";
+export * from "./plans";
+export * from "./usageLimits";
+
+export type PricingWithRegularBilling = {
+  saasName: string;
+  day: number;
+  month: number;
+  year: number;
+  currency: string;
+  hasAnnualPayment: false;
+  features: Features;
+  usageLimits: UsageLimits | null;
+  plans: PlansWithRegularBilling | null;
+  addOns: AddOns | null;
+};
 
 export type PricingManager = {
   saasName: string;
@@ -9,12 +31,20 @@ export type PricingManager = {
   month: number;
   year: number;
   currency: string;
-  hasAnnualPayment: boolean;
   features: Features;
   usageLimits: UsageLimits | null;
-  plans: Plans | null;
   addOns: AddOns | null;
-};
+} & BillingType;
+
+export type BillingType =
+  | {
+      hasAnnualPayment: false;
+      plans: PlansWithRegularBilling;
+    }
+  | {
+      hasAnnualPayment: true;
+      plans: PlansWithAnnualBilling;
+    };
 
 export type FeatureOverwrite = {
   [key: string]: {
@@ -45,7 +75,7 @@ export interface Value<T extends StrNumBool | PaymentTypes> {
   defaultValue: T;
 }
 
-export * from "./addOns";
-export * from "./features";
-export * from "./plans";
-export * from "./usageLimits";
+export type PricingState = Omit<
+  PricingManager,
+  "features" | "usageLimits" | "plans" | "addOns"
+> | null;

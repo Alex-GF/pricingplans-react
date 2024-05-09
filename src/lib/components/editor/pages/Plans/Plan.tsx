@@ -18,7 +18,11 @@ export function Plan() {
   const navigate = useNavigate();
   const goBack = () => navigate("..");
 
-  const { attributes, plans, setPlans } = useContext(EditorContext);
+  const { pricing, attributes, plans, setPlans } = useContext(EditorContext);
+
+  if (!pricing) {
+    throw new Error("You are not consuming the context correctly");
+  }
 
   const defaultFeatureValues = attributes.map((feature) => ({
     name: feature.name,
@@ -51,14 +55,22 @@ export function Plan() {
   };
 
   const isPlanNameEmpty = plan.name === "";
-  const isPlanNameCompound = plan.name.trim().split(" ").length > 1;
   const priceRegex = /^\d+.?\d{0,2}?$/;
-  const isValidPrice = priceRegex.test(plan.annualPrice.toString());
+  const isValidPrice = plan.annualPrice
+    ? priceRegex.test(plan.annualPrice.toString())
+    : true;
+  const isMonthlyPriceGreaterThanAnnualPrice = plan.annualPrice
+    ? plan.monthlyPrice >= plan.annualPrice
+    : true;
+
+  const formHasErrors =
+    isPlanNameEmpty || !isValidPrice || !isMonthlyPriceGreaterThanAnnualPrice;
 
   const addPlan = () => {
     if (!plans) {
       return;
     }
+
     setPlans([...plans, { ...plan }]);
   };
 
@@ -80,11 +92,15 @@ export function Plan() {
       return;
     }
     setPlans(plans.filter((_, index) => index !== state.index));
-    goBack();
   };
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
+
+    if (formHasErrors) {
+      return;
+    }
+
     if (isPlanIncluded) {
       editPlan(index);
     } else {
@@ -106,12 +122,10 @@ export function Plan() {
       </header>
       <form className="pp-form" onSubmit={handleSubmit}>
         <div className="pp-form__group">
-          {isPlanNameEmpty && <small>Plan name is required</small>}
-          {isPlanNameCompound && (
-            <small>
-              Compound plan names are not allowed. Use only one word
-            </small>
+          {isPlanNameEmpty && (
+            <small className="pp-form__errors">Plan name is required</small>
           )}
+
           <label htmlFor="name" className="pp-form__label">
             Plan name
           </label>
@@ -137,10 +151,11 @@ export function Plan() {
         </div>
         <div className="pp-form__group">
           {!isValidPrice && (
-            <small>
+            <small className="pp-form__errors">
               Invalid price. Plan has to be zero or positive and contain a dot
             </small>
           )}
+
           <label htmlFor="monthlyPrice" className="pp-form__label">
             Monthly Price
           </label>
@@ -156,27 +171,35 @@ export function Plan() {
           />
         </div>
 
-        <div className="pp-form__group">
-          {!isValidPrice && (
-            <small>
-              Invalid price. Plan has to be zero or positive and contain a dot
-            </small>
-          )}
-          <label htmlFor="annualPrice" className="pp-form__label">
-            Annual Price
-          </label>
-          <input
-            id="annualPrice"
-            name="annualPrice"
-            type="number"
-            min={0}
-            step={0.01}
-            className="pp-form__field"
-            value={plan.annualPrice}
-            onChange={handleChange}
-          />
-        </div>
-
+        {pricing.hasAnnualPayment && plan.annualPrice && (
+          <div className="pp-form__group">
+            {!isValidPrice && (
+              <small className="pp-form_errors">
+                Invalid price. Plan has to be zero or positive and contain a dot
+              </small>
+            )}
+            {!isMonthlyPriceGreaterThanAnnualPrice && (
+              <small className="pp-form__errors">
+                Annual price is greater than the monthly price. You should give
+                your users a discount.
+              </small>
+            )}
+            <label htmlFor="annualPrice" className="pp-form__label">
+              Annual Price
+            </label>
+            <input
+              id="annualPrice"
+              name="annualPrice"
+              type="number"
+              min={0}
+              step={0.01}
+              className="pp-form__field"
+              value={plan.annualPrice}
+              onChange={handleChange}
+            />
+          </div>
+        )}
+        <h2>Features</h2>
         <FeatureList
           values={plan.features}
           onFeatureChange={handleFeatureChange}

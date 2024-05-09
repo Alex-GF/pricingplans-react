@@ -34,7 +34,7 @@ export const petClinic: PricingManager = {
     basic: {
       description: "Basic",
       monthlyPrice: 20,
-      annualPrice: 10,
+      annualPrice: null,
       unit: "user/month",
       features: null,
       usageLimits: null,
@@ -42,7 +42,7 @@ export const petClinic: PricingManager = {
     pro: {
       description: "Basic",
       monthlyPrice: 40,
-      annualPrice: 20,
+      annualPrice: null,
       unit: "user/month",
       features: {
         maxPets: {
@@ -58,6 +58,7 @@ export const petClinic: PricingManager = {
   },
   addOns: {
     extra: {
+      description: null,
       availableFor: ["pro"],
       price: null,
       unit: "user/month",

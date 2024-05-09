@@ -1,0 +1,23 @@
+.pp-plan-items {
+  text-decoration: none;
+  display: flex;
+  gap: 1rem;
+  list-style: none;
+}
+
+.pp-plan-item {
+  display: inline-block;
+  text-decoration: none;
+  color: black;
+}
+
+.pp-plan-card {
+  background-color: white;
+  padding: 1rem;
+  border-radius: 1rem;
+  border: 1px solid black;
+}
+
+.pp-link .pp-plan-card:hover {
+  background-color: #e0e0e0;
+}

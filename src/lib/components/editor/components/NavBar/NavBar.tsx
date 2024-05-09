@@ -39,8 +39,13 @@ export function NavBar({ hidden, onSave }: NavBarProps) {
       />
       <ul className="pp-nav-items">
         <li>
+          <NavLink className={computeNavLinkStatus} to="pricing">
+            Pricing Configuration
+          </NavLink>
+        </li>
+        <li>
           <NavLink className={computeNavLinkStatus} to="features">
-            Attributes
+            Features
           </NavLink>
         </li>
         <li>
@@ -50,7 +55,12 @@ export function NavBar({ hidden, onSave }: NavBarProps) {
         </li>
         <li>
           <NavLink className={computeNavLinkStatus} to="plans">
-            Pricing plans
+            Plans
+          </NavLink>
+        </li>
+        <li>
+          <NavLink className={computeNavLinkStatus} to="addOns">
+            AddOns
           </NavLink>
         </li>
         <li>

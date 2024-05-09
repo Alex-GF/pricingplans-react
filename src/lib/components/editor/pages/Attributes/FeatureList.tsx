@@ -54,7 +54,7 @@ export function FeatureList({
       setPlans(updatedPlans);
     }
 
-    openModal();
+    closeModal();
   };
 
   const handleEditAttribute = (newAttribute: AllFeatures) => {

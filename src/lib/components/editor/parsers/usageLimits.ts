@@ -1,14 +1,29 @@
-import { UsageLimitBase, UsageLimits } from "../types/usageLimits";
+import { StrNumBool } from "../types";
+import { UsageLimitBaseProperties, UsageLimits } from "../types/usageLimits";
 
-export default class UsageLimitParser {
-  constructor(private usageLimits: UsageLimits) {}
+interface ParsedUsageLimitsResult {
+  parsedUsageLimits: UsageLimitBaseProperties[];
+  defaultValues: {
+    name: string;
+    value: StrNumBool;
+  }[];
+}
 
-  public parse(): Map<string, UsageLimitBase> {
-    const parsedUsageLimits = new Map<string, UsageLimitBase>([]);
-    Object.entries(this.usageLimits).forEach(([name, usageLimit]) => {
-      const ul: UsageLimitBase = { ...usageLimit, name: name };
-      parsedUsageLimits.set(name, ul);
-    });
-    return parsedUsageLimits;
+export default function parseUsageLimits(
+  usageLimits: UsageLimits | null
+): ParsedUsageLimitsResult {
+  if (!usageLimits) {
+    return { parsedUsageLimits: [], defaultValues: [] };
   }
+
+  const parsedUsageLimits = Object.entries(usageLimits).map(
+    ([usageLimitName, usageLimit]) => ({ ...usageLimit, name: usageLimitName })
+  );
+
+  const defaultValues = parsedUsageLimits.map((usageLimit) => ({
+    name: usageLimit.name,
+    value: usageLimit.defaultValue,
+  }));
+
+  return { parsedUsageLimits, defaultValues };
 }

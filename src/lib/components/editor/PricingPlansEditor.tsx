@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { EditorContextProvider } from "./context/EditorContextProvider";
 import { Toggle } from "./components/Toggle";

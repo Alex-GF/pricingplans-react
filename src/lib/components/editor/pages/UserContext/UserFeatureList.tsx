@@ -21,7 +21,7 @@ export function UserAttributeList({
     <>
       {userContextAttributes.map((attribute, index) => (
         <tr key={attribute.name}>
-          <td>{attribute.valueType}</td>
+          <td>{attribute.name}</td>
           <td className={`pp-table-type__${attribute.valueType}`}>
             {attribute.valueType}
           </td>

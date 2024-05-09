@@ -5,6 +5,8 @@ import { UserContextPage } from "./pages/UserContext";
 import { EvaluationPage } from "./pages/EvaluationContext";
 import { Plan, Plans } from "./pages/Plans";
 import { PricingManager } from "./types/index";
+import { AddOn, AddOnsPage } from "./pages/AddOns";
+import { PricingConfig } from "./pages/PricingConfig";
 
 interface PricingConfigurationRoutesProps {
   pricingContext: PricingManager;
@@ -46,11 +48,16 @@ export function PricingConfigurationRoutes({
         }
       >
         <Route path="/" element={<h1>Pricingplans-react</h1>} />
+        <Route path="pricing" element={<PricingConfig />} />
         <Route path="features" element={<FeaturesPage />} />
         <Route path="user-context" element={<UserContextPage />} />
         <Route path="plans" element={<Outlet />}>
           <Route index element={<Plans />} />
           <Route path=":planId" element={<Plan />}></Route>
+        </Route>
+        <Route path="addOns" element={<Outlet />}>
+          <Route index element={<AddOnsPage />} />
+          <Route path=":addOnId" element={<AddOn />}></Route>
         </Route>
         <Route path="evaluation" element={<EvaluationPage />} />
       </Route>

@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Button } from "../../components/Button";
-import { UserContextAttribute, computeType } from "../../parsers/expression";
+import { UserContextAttribute } from "../../parsers/expression";
 import { ValueType } from "../../types";
 
 interface UserContextFormProps {
@@ -27,22 +27,26 @@ export function UserContextForm({
   const handleTypeChange = (e: ChangeEvent<HTMLSelectElement>) =>
     setUserAttribute({
       ...userAttribute,
-      valueType: computeType(e.target.value),
+      valueType: e.target.value as ValueType,
     });
 
   return (
     <form className="pp-form" onSubmit={handleSubmit}>
-      <label htmlFor="name">Name</label>
-      <input
-        id="name"
-        name="name"
-        value={userAttribute.name}
-        onChange={handleNameChange}
-      />
-      <label htmlFor="type">Type</label>
+      <div className="pp-form__group">
+        <label htmlFor="name">Name</label>
+        <input
+          id="name"
+          name="name"
+          className="pp-form__field"
+          value={userAttribute.name}
+          onChange={handleNameChange}
+        />
+      </div>
+
+      <label htmlFor="valueType">Type</label>
       <select
-        id="type"
-        name="type"
+        id="valueType"
+        name="valueType"
         value={userAttribute.valueType}
         onChange={handleTypeChange}
       >

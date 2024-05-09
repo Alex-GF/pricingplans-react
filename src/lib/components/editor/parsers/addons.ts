@@ -1,54 +1,36 @@
-import { StandardAddOn } from "../model/addons";
-import { MapFeatureValue, MapStandardValue } from "../types/plans";
-import { FeatureOverwrite, ValueOverwrite } from "../types/index";
-import { AddOn, AddOns } from "../types/addOns";
+import { PricingManager } from "../types/index";
+import { AddOns, AddOnsState } from "../types/addOns";
+import { parseOverwrittenFeatures, parseOverwrittenUsageLimits } from ".";
 
-export default class AddOnsParser {
-  constructor(private addOns: AddOns) {}
-
-  public parse(): Map<string, StandardAddOn> {
-    const parsedAddOns = new Map<string, StandardAddOn>([]);
-    Object.entries(this.addOns).forEach(([name, plan]) =>
-      parsedAddOns.set(name, this._parseAddOn(name, plan))
-    );
-    return parsedAddOns;
+export default function parseAddOns(
+  pricingManager: PricingManager
+): AddOnsState {
+  if (!pricingManager.addOns) {
+    return [];
   }
 
-  private _parseAddOn(name: string, addOn: AddOn): StandardAddOn {
-    return new StandardAddOn(
-      name,
-      addOn.availableFor,
-      addOn.unit,
-      addOn.price,
-      addOn.annualPrice,
-      addOn.monthlyPrice,
-      addOn.features ? this._parsePlanFeatures(addOn.features) : null,
-      addOn.usageLimits ? this._parsePlanUsageLimits(addOn.usageLimits) : null,
-      addOn.usageLimitsExtensions
-        ? this._parsePlanUsageLimits(addOn.usageLimitsExtensions)
-        : null
+  return Object.entries(pricingManager.addOns).map(([addOnName, addOn]) => {
+    const addOnFeatures = parseOverwrittenFeatures(
+      pricingManager.features,
+      addOn.features
     );
-  }
 
-  private _parsePlanFeatures(
-    features: FeatureOverwrite
-  ): Map<string, MapFeatureValue> {
-    const featuresMap: Map<string, MapFeatureValue> = new Map([]);
-
-    Object.entries(features).forEach(([name, feature]) =>
-      featuresMap.set(name, feature)
-    );
-    return featuresMap;
-  }
-
-  private _parsePlanUsageLimits(
-    usageLimits: ValueOverwrite
-  ): Map<string, MapStandardValue> {
-    const usageLimitsMap: Map<string, MapStandardValue> = new Map([]);
-
-    Object.entries(usageLimits).forEach(([name, usageLimit]) =>
-      usageLimitsMap.set(name, usageLimit)
-    );
-    return usageLimitsMap;
-  }
+    return {
+      ...addOn,
+      name: addOnName,
+      features: addOnFeatures,
+      usageLimits: addOn.usageLimits
+        ? parseOverwrittenUsageLimits(
+            pricingManager.usageLimits,
+            addOn.usageLimits
+          )
+        : [],
+      usageLimitsExtensions: addOn.usageLimitsExtensions
+        ? parseOverwrittenUsageLimits(
+            pricingManager.usageLimits,
+            addOn.usageLimitsExtensions
+          )
+        : [],
+    };
+  });
 }

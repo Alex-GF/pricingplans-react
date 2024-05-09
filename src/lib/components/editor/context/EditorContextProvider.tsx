@@ -1,31 +1,39 @@
 import { Dispatch, SetStateAction, createContext, useState } from "react";
 import { UserContextAttributes } from "../parsers/expression";
 import { parseAttributeExpressionToUserAttributes } from "../parsers/expression";
-import PricingManagerParser from "../parsers/pricingManager";
 import { AllFeatures, FeatureState } from "../types/features";
-import { PricingManager } from "../types/index";
+import { AddOnsState, PricingManager, PricingState } from "../types/index";
 import { PlansState } from "../types/plans";
+import parsePricingManager from "../parsers/pricingManager";
 
 interface EditorContextProps {
+  pricing: PricingState;
+  setPricing: Dispatch<SetStateAction<PricingState>>;
   attributes: AllFeatures[];
   setAttributes: Dispatch<SetStateAction<AllFeatures[]>>;
   userContextAttributes: UserContextAttributes;
   setUserContextAttributes: Dispatch<SetStateAction<UserContextAttributes>>;
   plans: PlansState;
   setPlans: Dispatch<SetStateAction<PlansState>>;
+  addOns: AddOnsState;
+  setAddOns: Dispatch<SetStateAction<AddOnsState>>;
   theme: string;
   returnTo: string;
 }
 
 export const EditorContext = createContext<EditorContextProps>({
-  theme: "blue",
-  returnTo: "/",
+  pricing: null as PricingState,
+  setPricing: () => null,
   attributes: [] as FeatureState,
   setAttributes: () => null,
   userContextAttributes: [] as UserContextAttributes,
   setUserContextAttributes: () => null,
   plans: null as PlansState,
   setPlans: () => null,
+  addOns: null as AddOnsState,
+  setAddOns: () => null,
+  theme: "blue",
+  returnTo: "/",
 });
 
 interface EditorContextProviderProps {
@@ -43,29 +51,45 @@ export function EditorContextProvider({
 }: EditorContextProviderProps) {
   const editorTheme = theme ? theme : "blue";
   const retTo = returnTo ? returnTo : "/";
-  const pricingManager = new PricingManagerParser(
-    pricingContext
-  ).parseToState();
+  const pricingManager = parsePricingManager(pricingContext);
 
   const initialUserAttributes = parseAttributeExpressionToUserAttributes(
     pricingManager.features
   ).filter((userAttribute) => userAttribute.name !== "");
-  const [attributes, setAttributes] = useState<FeatureState>(
-    pricingManager.features
-  );
+
   const [userContextAttributes, setUserContextAttributes] = useState(
     initialUserAttributes
   );
+
+  const initialPricing = {
+    saasName: pricingManager.saasName,
+    day: pricingManager.day,
+    month: pricingManager.month,
+    year: pricingManager.year,
+    currency: pricingManager.currency,
+    hasAnnualPayment: pricingManager.hasAnnualPayment,
+  };
+
+  const [pricing, setPricing] = useState<PricingState>(initialPricing);
+  const [attributes, setAttributes] = useState<FeatureState>(
+    pricingManager.features
+  );
   const [plans, setPlans] = useState<PlansState>(pricingManager.plans);
+  const [addOns, setAddOns] = useState<AddOnsState>(pricingManager.addOns);
+
   return (
     <EditorContext.Provider
       value={{
+        pricing,
+        setPricing,
         attributes,
         setAttributes,
         userContextAttributes,
         setUserContextAttributes,
         plans,
         setPlans,
+        addOns,
+        setAddOns,
         theme: editorTheme,
         returnTo: retTo,
       }}
