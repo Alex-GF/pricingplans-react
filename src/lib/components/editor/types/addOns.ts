@@ -1,26 +1,43 @@
 import { FeatureOverwrite, PlanFeaturesState, ValueOverwrite } from ".";
 
-export type AddOns = {
-  [key: string]: AddOn;
+export type GlobalPriceAddOns = {
+  [key: string]: AddOnGlobalBilling;
 };
 
-export type AddOn =
-  | {
-      availableFor: string[];
-      description: string | null;
-      unit: string;
-      features: FeatureOverwrite | null;
-      usageLimits: ValueOverwrite | null;
-      usageLimitsExtensions: ValueOverwrite | null;
-    } & Billing;
+export type MonthlyAddOns = {
+  [key: string]: AddOnWithMonthlyBilling;
+};
 
-type Billing =
-  | {
-      price: number;
-      annualPrice: null;
-      monthlyPrice: null;
-    }
-  | { price: null; annualPrice: number; monthlyPrice: number };
+export type MonthlyAndAnnualAddOns = {
+  [key: string]: AddOnWithMonthlyAndAnnualBilling;
+};
+
+interface AddOn {
+  availableFor: string[];
+  description: string | null;
+  unit: string;
+  features: FeatureOverwrite | null;
+  usageLimits: ValueOverwrite | null;
+  usageLimitsExtensions: ValueOverwrite | null;
+}
+
+type AddOnGlobalBilling = {
+  price: number;
+  monthlyPrice: null;
+  annualPrice: null;
+} & AddOn;
+
+type AddOnWithMonthlyBilling = {
+  price: null;
+  monthlyPrice: number;
+  annualPrice: null;
+} & AddOn;
+
+type AddOnWithMonthlyAndAnnualBilling = {
+  price: null;
+  monthlyPrice: number;
+  annualPrice: number;
+} & AddOn;
 
 export type AddOnsState = AddOnState[] | null;
 

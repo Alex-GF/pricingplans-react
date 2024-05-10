@@ -15,7 +15,7 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <PricingConfigurationRoutes
-        pricingContext={overleaf}
+        pricingContext={petClinic}
         returnTo="/"
         onSave={onSave}
       />

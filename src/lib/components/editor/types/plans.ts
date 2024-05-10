@@ -9,22 +9,20 @@ export interface PlansWithRegularBilling {
   [key: string]: PlanWithRegularBilling;
 }
 
-export interface PlanWithRegularBilling {
+interface PlanAttributes {
   description: string;
   monthlyPrice: number;
-  annualPrice: null;
   unit: string;
   features: FeatureOverwrite | null;
   usageLimits: ValueOverwrite | null;
 }
 
-export interface PlanWithAnnualBilling {
-  description: string;
-  monthlyPrice: number;
+export interface PlanWithRegularBilling extends PlanAttributes {
+  annualPrice: null;
+}
+
+export interface PlanWithAnnualBilling extends PlanAttributes {
   annualPrice: number;
-  unit: string;
-  features: FeatureOverwrite | null;
-  usageLimits: ValueOverwrite | null;
 }
 
 type Plan = PlanWithAnnualBilling | PlanWithRegularBilling;

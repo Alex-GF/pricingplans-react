@@ -62,8 +62,8 @@ export const petClinic: PricingManager = {
       availableFor: ["pro"],
       price: null,
       unit: "user/month",
-      annualPrice: 20,
       monthlyPrice: 10,
+      annualPrice: null,
       features: {
         maxPets: {
           value: true,

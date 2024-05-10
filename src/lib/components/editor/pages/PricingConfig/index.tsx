@@ -16,7 +16,7 @@ export function PricingConfig() {
 
   return (
     <article className="pp-content__main">
-      <header className="pp-content__header">
+      <header className="pp-content-header">
         <h1>Pricing Configuration</h1>
       </header>
       <form>

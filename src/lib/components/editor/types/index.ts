@@ -1,5 +1,9 @@
 import { Features, PaymentTypes } from "../types/features";
-import { AddOns } from "./addOns";
+import {
+  GlobalPriceAddOns,
+  MonthlyAddOns,
+  MonthlyAndAnnualAddOns,
+} from "./addOns";
 import {
   MapStandardValue,
   PlansWithAnnualBilling,
@@ -12,19 +16,6 @@ export * from "./features";
 export * from "./plans";
 export * from "./usageLimits";
 
-export type PricingWithRegularBilling = {
-  saasName: string;
-  day: number;
-  month: number;
-  year: number;
-  currency: string;
-  hasAnnualPayment: false;
-  features: Features;
-  usageLimits: UsageLimits | null;
-  plans: PlansWithRegularBilling | null;
-  addOns: AddOns | null;
-};
-
 export type PricingManager = {
   saasName: string;
   day: number;
@@ -33,17 +24,18 @@ export type PricingManager = {
   currency: string;
   features: Features;
   usageLimits: UsageLimits | null;
-  addOns: AddOns | null;
 } & BillingType;
 
 export type BillingType =
   | {
       hasAnnualPayment: false;
       plans: PlansWithRegularBilling;
+      addOns: GlobalPriceAddOns | MonthlyAddOns | null;
     }
   | {
       hasAnnualPayment: true;
       plans: PlansWithAnnualBilling;
+      addOns: GlobalPriceAddOns | MonthlyAndAnnualAddOns | null;
     };
 
 export type FeatureOverwrite = {

@@ -1,5 +1,5 @@
 import { PricingManager } from "../types/index";
-import { AddOns, AddOnsState } from "../types/addOns";
+import { AddOnsState } from "../types/addOns";
 import { parseOverwrittenFeatures, parseOverwrittenUsageLimits } from ".";
 
 export default function parseAddOns(

@@ -12,6 +12,8 @@ export default function parsePricingManager(pricingManager: PricingManager) {
   const plans = parsePlans(pricingManager);
   const addOns = parseAddOns(pricingManager);
 
+  console.log(addOns);
+
   return {
     ...pricingManager,
     features,

@@ -3,31 +3,32 @@ import { EditorContext } from "../../context/EditorContextProvider";
 import { Link } from "react-router-dom";
 
 export function AddOnsList() {
-  const { plans } = useContext(EditorContext);
+  const { addOns } = useContext(EditorContext);
 
-  if (!plans) {
-    return <p>You do not have any plans!</p>;
+  if (!addOns) {
+    return <p>You do not have any addOns!</p>;
   }
 
   return (
     <ul className="pp-plan-items">
-      {plans.map((plan, index) => (
-        <li key={plan.name}>
+      {addOns.map((addOn, index) => (
+        <li key={addOn.name}>
           <Link
             className="pp-plan-item pp-plan-card"
-            to={plan.name}
+            to={addOn.name}
             state={{ index }}
           >
             <div>
-              <h2>{plan.name}</h2>
-              <h3>Description</h3>
-              <p>{plan.description}</p>
-              <h3>Annual Price</h3>
-              <span>{plan.annualPrice}</span>
-              <h3>Monthly Price</h3>
-              <span>{plan.monthlyPrice}</span>
+              <h2>{addOn.name}</h2>
+              <h3>Available for plans</h3>
+              <ul>
+                {addOn.availableFor.map((plan) => (
+                  <li key={plan}>{plan.toUpperCase()}</li>
+                ))}
+              </ul>
+
               <h3>Unit</h3>
-              <span>{plan.unit}</span>
+              <span>{addOn.unit}</span>
             </div>
           </Link>
         </li>

@@ -17,7 +17,13 @@ export function AddOn() {
   const navigate = useNavigate();
   const goBack = () => navigate("..");
 
-  const { attributes, plans, addOns, setAddOns } = useContext(EditorContext);
+  const {
+    attributes,
+    plans,
+    addOns,
+    setAddOns,
+    pricing: config,
+  } = useContext(EditorContext);
 
   const defaultFeatureValues = attributes.map((feature) => ({
     name: feature.name,
@@ -25,19 +31,30 @@ export function AddOn() {
   }));
 
   const newPlan: AddOnState = {
+    name: "",
     description: null,
     availableFor: [""],
-    name: "",
     unit: "user/month",
-    price: null,
-    annualPrice: 0,
-    monthlyPrice: 0,
     features: defaultFeatureValues,
   };
 
   const initialAddOn = isPlanIncluded && addOns ? addOns[index] : newPlan;
 
   const [addOn, setAddOn] = useState<AddOnState>(initialAddOn);
+  const [billing, setBilling] = useState("global");
+  const [pricing, setPricing] = useState({
+    price: 0,
+    monthlyPrice: null,
+    annualPrice: null,
+  });
+
+  const handleBillingTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setBilling(e.target.value);
+
+    if (e.target.value === "global") {
+      setPricing({ price: 0, monthlyPrice: null, annualPrice: null });
+    }
+  };
 
   const handleFeatureChange = (
     featureName: string,
@@ -52,14 +69,8 @@ export function AddOn() {
   };
 
   const isPlanNameEmpty = addOn.name === "";
-  const isMonthlyPriceGreaterThanAnnualPrice =
-    !addOn.price && addOn.annualPrice && addOn.monthlyPrice
-      ? addOn.monthlyPrice >= addOn.annualPrice
-      : false;
 
-  const formHasErrors =
-    isPlanNameEmpty || !isMonthlyPriceGreaterThanAnnualPrice;
-
+  const formHasErrors = isPlanNameEmpty;
   const addPlan = () => {
     if (!addOns) {
       return;
@@ -74,9 +85,7 @@ export function AddOn() {
     }
 
     const newPlans = addOns.map((oldPlan, index) =>
-      index === planPosition
-        ? { ...addOn, annualPrice: Number(addOn.annualPrice) }
-        : oldPlan
+      index === planPosition ? { ...addOn, annualPrice: 0 } : oldPlan
     );
     setAddOns(newPlans);
   };
@@ -131,6 +140,65 @@ export function AddOn() {
             onChange={handleChange}
           />
         </div>
+        <div className="pp-form__group">
+          <label htmlFor="billingType" className="pp-form__label">
+            Billing type
+          </label>
+          <select
+            id="billingType"
+            name="billingType"
+            value={billing}
+            onChange={handleBillingTypeChange}
+          >
+            <option value="global">Global</option>
+            <option value="monthly">Monthly</option>
+          </select>
+        </div>
+        {billing === "global" && (
+          <div className="pp-form__group">
+            <label htmlFor="price" className="pp-form__label">
+              Price
+            </label>
+            <input
+              id="price"
+              name="price"
+              className="pp-form__field"
+              value={pricing.price}
+              onChange={handleChange}
+            />
+          </div>
+        )}
+
+        {billing === "monthly" && (
+          <>
+            <div className="pp-form__group">
+              <label htmlFor="monthlyPrice" className="pp-form__label">
+                Monthly Price
+              </label>
+              <input
+                id="monthlyPrice"
+                name="monthlyPrice"
+                className="pp-form__field"
+                value={pricing.price}
+                onChange={handleChange}
+              />
+            </div>
+            {config?.hasAnnualPayment && (
+              <div className="pp-form__group">
+                <label htmlFor="annualPrice" className="pp-form__label">
+                  Annual Price
+                </label>
+                <input
+                  id="annualPrice"
+                  name="annualPrice"
+                  className="pp-form__field"
+                  value={pricing.price}
+                  onChange={handleChange}
+                />
+              </div>
+            )}
+          </>
+        )}
 
         <h2>Features</h2>
         <FeatureList
