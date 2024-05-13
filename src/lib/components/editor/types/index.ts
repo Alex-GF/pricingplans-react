@@ -4,11 +4,7 @@ import {
   MonthlyAddOns,
   MonthlyAndAnnualAddOns,
 } from "./addOns";
-import {
-  MapStandardValue,
-  PlansWithAnnualBilling,
-  PlansWithRegularBilling,
-} from "./plans";
+import { PlansWithAnnualBilling, PlansWithRegularBilling } from "./plans";
 import { UsageLimits } from "./usageLimits";
 
 export * from "./addOns";
@@ -45,7 +41,9 @@ export type FeatureOverwrite = {
 };
 
 export type ValueOverwrite = {
-  [key: string]: MapStandardValue;
+  [key: string]: {
+    value: StrNumBool;
+  };
 };
 
 export type StrNumBool = string | number | boolean;

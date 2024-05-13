@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { PricingConfigurationRoutes } from "./PricingConfigurationRoutes";
-import { overleaf, petClinic } from "./tests/parsers/pricings";
+import { petClinic } from "./tests/parsers/petclinic";
 import { PricingManager } from "./types";
 
 const onSave = (pricingContext: PricingManager) => console.log(pricingContext);

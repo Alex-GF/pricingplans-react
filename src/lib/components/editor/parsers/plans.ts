@@ -13,16 +13,18 @@ export default function parsePlans(pricingManager: PricingManager): PlansState {
       plan.features
     );
 
+    const usageLimits = pricingManager.usageLimits
+      ? parseOverwrittenUsageLimits(
+          pricingManager.usageLimits,
+          plan.usageLimits
+        )
+      : [];
+
     return {
       ...plan,
       name: planName,
       features,
-      usageLimits: pricingManager.usageLimits
-        ? parseOverwrittenUsageLimits(
-            pricingManager.usageLimits,
-            plan.usageLimits
-          )
-        : [],
+      usageLimits,
     };
   });
 }

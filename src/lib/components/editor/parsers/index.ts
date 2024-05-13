@@ -25,11 +25,12 @@ export function parseOverwrittenFeatures(
     return defaultValues;
   }
 
-  return defaultValues.map((feature) =>
-    overwrittenFeatures[feature.name]
-      ? { ...feature, value: overwrittenFeatures[feature.name].value }
-      : feature
-  );
+  return defaultValues.map((feature) => ({
+    ...feature,
+    value: overwrittenFeatures[feature.name]
+      ? overwrittenFeatures[feature.name].value
+      : feature.value,
+  }));
 }
 
 export function parseOverwrittenUsageLimits(
@@ -42,13 +43,14 @@ export function parseOverwrittenUsageLimits(
 
   const { defaultValues } = parseUsageLimits(usageLimits);
 
-  if (!overwrittenUsageLimits) {
+  if (overwrittenUsageLimits === null) {
     return defaultValues;
   }
 
-  return Object.entries(defaultValues).map(([usageLimitName, usageLimit]) =>
-    overwrittenUsageLimits[usageLimitName]
-      ? { ...usageLimit, value: overwrittenUsageLimits[usageLimitName].value }
-      : usageLimit
-  );
+  return defaultValues.map((usageLimit) => ({
+    ...usageLimit,
+    value: overwrittenUsageLimits[usageLimit.name]
+      ? overwrittenUsageLimits[usageLimit.name].value
+      : usageLimit.value,
+  }));
 }

@@ -31,10 +31,6 @@ export interface MapFeatureValue {
   value: StrNumBool | PaymentTypes;
 }
 
-export interface MapStandardValue {
-  value: StrNumBool;
-}
-
 export type PlansState = PlanState[] | null;
 
 export type PlanState = Omit<Plan, "features" | "usageLimits"> & {

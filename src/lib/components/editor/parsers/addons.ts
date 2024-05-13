@@ -10,27 +10,31 @@ export default function parseAddOns(
   }
 
   return Object.entries(pricingManager.addOns).map(([addOnName, addOn]) => {
-    const addOnFeatures = parseOverwrittenFeatures(
+    const features = parseOverwrittenFeatures(
       pricingManager.features,
       addOn.features
     );
 
+    const usageLimits = addOn.usageLimits
+      ? parseOverwrittenUsageLimits(
+          pricingManager.usageLimits,
+          addOn.usageLimits
+        )
+      : [];
+
+    const usageLimitsExtensions = addOn.usageLimitsExtensions
+      ? parseOverwrittenUsageLimits(
+          pricingManager.usageLimits,
+          addOn.usageLimitsExtensions
+        )
+      : [];
+
     return {
       ...addOn,
       name: addOnName,
-      features: addOnFeatures,
-      usageLimits: addOn.usageLimits
-        ? parseOverwrittenUsageLimits(
-            pricingManager.usageLimits,
-            addOn.usageLimits
-          )
-        : [],
-      usageLimitsExtensions: addOn.usageLimitsExtensions
-        ? parseOverwrittenUsageLimits(
-            pricingManager.usageLimits,
-            addOn.usageLimitsExtensions
-          )
-        : [],
+      features,
+      usageLimits,
+      usageLimitsExtensions,
     };
   });
 }
