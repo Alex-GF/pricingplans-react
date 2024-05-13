@@ -1,10 +1,10 @@
 import { Dispatch, SetStateAction, createContext, useState } from "react";
 import { UserContextAttributes } from "../parsers/expression";
 import { parseAttributeExpressionToUserAttributes } from "../parsers/expression";
-import { AllFeatures, FeatureState } from "../types/features";
+import { AllFeatures, ParsedFeatures } from "../types/features";
 import { AddOnsState, PricingManager, PricingState } from "../types/index";
 import { PlansState } from "../types/plans";
-import parsePricingManager from "../parsers/pricingManager";
+import parsePricingManager from "../parsers";
 
 interface EditorContextProps {
   pricing: PricingState;
@@ -24,7 +24,7 @@ interface EditorContextProps {
 export const EditorContext = createContext<EditorContextProps>({
   pricing: null as PricingState,
   setPricing: () => null,
-  attributes: [] as FeatureState,
+  attributes: [] as ParsedFeatures,
   setAttributes: () => null,
   userContextAttributes: [] as UserContextAttributes,
   setUserContextAttributes: () => null,
@@ -71,7 +71,7 @@ export function EditorContextProvider({
   };
 
   const [pricing, setPricing] = useState<PricingState>(initialPricing);
-  const [attributes, setAttributes] = useState<FeatureState>(
+  const [attributes, setAttributes] = useState<ParsedFeatures>(
     pricingManager.features
   );
   const [plans, setPlans] = useState<PlansState>(pricingManager.plans);

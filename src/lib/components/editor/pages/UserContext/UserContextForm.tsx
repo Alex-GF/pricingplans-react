@@ -14,8 +14,14 @@ export function UserContextForm({
 }: UserContextFormProps) {
   const [userAttribute, setUserAttribute] = useState(initialData);
 
+  const nameIsEmpty = userAttribute.name === "";
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
+
+    if (nameIsEmpty) {
+      return;
+    }
 
     onSubmit(userAttribute);
   };

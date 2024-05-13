@@ -1,21 +1,24 @@
-import { ValueType } from "../types/index";
+import { ParsedOverwrittenFeatures, ValueType } from "../types/index";
 import {
   AllFeatures,
   Feature,
   FeatureRestriction,
   Features,
   IntegrationType,
+  ParsedFeatures,
   Type,
 } from "../types/features";
 
 export default function parseFeatures(features: Features) {
-  const parsedFeatures = Object.entries(features).map(
+  const parsedFeatures: ParsedFeatures = Object.entries(features).map(
     ([featureName, feature]) => parseFeature(featureName, feature)
   );
-  const defaultValues = parsedFeatures.map((feature) => ({
-    name: feature.name,
-    value: feature.defaultValue,
-  }));
+  const defaultValues: ParsedOverwrittenFeatures = parsedFeatures.map(
+    (feature) => ({
+      name: feature.name,
+      value: feature.defaultValue,
+    })
+  );
   return { parsedFeatures, defaultValues };
 }
 
@@ -28,8 +31,8 @@ function parseFeature(name: string, feature: Feature): AllFeatures {
         ...valueTypeParse(feature),
         type: feature.type,
         automationType: feature.automationType,
-        serverExpression: feature.serverExpression,
         expression: feature.expression,
+        serverExpression: feature.serverExpression,
       };
     case Type.Domain:
       return {
@@ -37,8 +40,8 @@ function parseFeature(name: string, feature: Feature): AllFeatures {
         description: feature.description,
         ...valueTypeParse(feature),
         type: feature.type,
-        serverExpression: feature.serverExpression,
         expression: feature.expression,
+        serverExpression: feature.serverExpression,
       };
     case Type.Guarantee:
       return {
@@ -47,8 +50,8 @@ function parseFeature(name: string, feature: Feature): AllFeatures {
         ...valueTypeParse(feature),
         type: feature.type,
         docUrl: feature.docUrl,
-        serverExpression: feature.serverExpression,
         expression: feature.expression,
+        serverExpression: feature.serverExpression,
       };
     case Type.Information:
       return {
@@ -56,8 +59,8 @@ function parseFeature(name: string, feature: Feature): AllFeatures {
         description: feature.description,
         ...valueTypeParse(feature),
         type: feature.type,
-        serverExpression: feature.serverExpression,
         expression: feature.expression,
+        serverExpression: feature.serverExpression,
       };
     case Type.Integration: {
       const commonProperties = {
@@ -65,8 +68,8 @@ function parseFeature(name: string, feature: Feature): AllFeatures {
         description: feature.description,
         ...valueTypeParse(feature),
         type: feature.type,
-        serverExpression: feature.serverExpression,
         expression: feature.expression,
+        serverExpression: feature.serverExpression,
       };
       if (feature.integrationType === IntegrationType.WebSaaS) {
         return {
@@ -88,8 +91,8 @@ function parseFeature(name: string, feature: Feature): AllFeatures {
         description: feature.description,
         ...valueTypeParse(feature),
         type: feature.type,
-        serverExpression: feature.serverExpression,
         expression: feature.expression,
+        serverExpression: feature.serverExpression,
       };
     case Type.Payment:
       return {
@@ -98,8 +101,8 @@ function parseFeature(name: string, feature: Feature): AllFeatures {
         valueType: feature.valueType,
         defaultValue: feature.defaultValue,
         type: feature.type,
-        serverExpression: feature.serverExpression,
         expression: feature.expression,
+        serverExpression: feature.serverExpression,
       };
     case Type.Support:
       return {
@@ -107,8 +110,8 @@ function parseFeature(name: string, feature: Feature): AllFeatures {
         description: feature.description,
         ...valueTypeParse(feature),
         type: feature.type,
-        serverExpression: feature.serverExpression,
         expression: feature.expression,
+        serverExpression: feature.serverExpression,
       };
   }
 }

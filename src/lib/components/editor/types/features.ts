@@ -191,4 +191,4 @@ export type AllFeatures =
   | PaymentFeature
   | SupportFeature;
 
-export type FeatureState = AllFeatures[];
+export type ParsedFeatures = AllFeatures[];

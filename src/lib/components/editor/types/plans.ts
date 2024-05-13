@@ -1,4 +1,10 @@
-import { FeatureOverwrite, StrNumBool, ValueOverwrite } from ".";
+import {
+  FeatureOverwrite,
+  ParsedOverwrittenFeatures,
+  ParsedOverwrittenUsageLimits,
+  StrNumBool,
+  ValueOverwrite,
+} from ".";
 import { PaymentTypes } from "./features";
 
 export interface PlansWithAnnualBilling {
@@ -31,16 +37,14 @@ export interface MapFeatureValue {
   value: StrNumBool | PaymentTypes;
 }
 
-export type PlansState = PlanState[] | null;
+export type PlansState = ParsedPlans | null;
 
-export type PlanState = Omit<Plan, "features" | "usageLimits"> & {
+export type PlanState = ParsedPlan;
+
+export type ParsedPlans = ParsedPlan[];
+
+type ParsedPlan = Omit<Plan, "features" | "usageLimits"> & {
   name: string;
-  features: PlanFeaturesState;
-};
-
-export type PlanFeaturesState = PlanFeatureState[];
-
-export type PlanFeatureState = {
-  name: string;
-  value: StrNumBool | PaymentTypes;
+  features: ParsedOverwrittenFeatures;
+  usageLimits: ParsedOverwrittenUsageLimits;
 };

@@ -1,4 +1,4 @@
-import parsePricingManager from "../../parsers/pricingManager";
+import parsePricingManager from "../../parsers";
 import { Type, UsageLimitType, ValueType } from "../../types";
 import { petClinic, expectedPetclinic } from "./petclinic";
 

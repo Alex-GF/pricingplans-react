@@ -41,6 +41,8 @@ export interface ResponseDriven extends UsageLimitProperties {
   type: UsageLimitType.ResponseDriven;
 }
 
+export type ParsedUsageLimits = UsageLimitBase[];
+
 export type UsageLimitBase =
   | RenewableUL
   | NonRenewableUL

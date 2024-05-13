@@ -36,6 +36,8 @@ export function AddOn() {
     availableFor: [""],
     unit: "user/month",
     features: defaultFeatureValues,
+    usageLimits: [],
+    usageLimitsExtensions: [],
   };
 
   const initialAddOn = isPlanIncluded && addOns ? addOns[index] : newPlan;

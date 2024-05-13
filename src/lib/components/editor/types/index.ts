@@ -1,11 +1,16 @@
-import { Features, PaymentTypes } from "../types/features";
+import { Features, ParsedFeatures, PaymentTypes } from "../types/features";
 import {
   GlobalPriceAddOns,
   MonthlyAddOns,
   MonthlyAndAnnualAddOns,
+  ParsedAddOns,
 } from "./addOns";
-import { PlansWithAnnualBilling, PlansWithRegularBilling } from "./plans";
-import { UsageLimits } from "./usageLimits";
+import {
+  ParsedPlans,
+  PlansWithAnnualBilling,
+  PlansWithRegularBilling,
+} from "./plans";
+import { ParsedUsageLimits, UsageLimits } from "./usageLimits";
 
 export * from "./addOns";
 export * from "./features";
@@ -64,6 +69,42 @@ export interface Value<T extends StrNumBool | PaymentTypes> {
     : never;
   defaultValue: T;
 }
+
+export type ParsedPricingManager = Omit<
+  PricingManager,
+  "features" | "usageLimits" | "plans" | "addOns"
+> & {
+  features: ParsedFeatures;
+  usageLimits: ParsedUsageLimits | null;
+} & PlansOrAddOns;
+
+type PlansOrAddOns =
+  | {
+      plans: ParsedPlans;
+      addOns: null;
+    }
+  | {
+      plans: null;
+      addOns: ParsedAddOns;
+    }
+  | {
+      plans: ParsedPlans;
+      addOns: ParsedAddOns;
+    };
+
+export type ParsedOverwrittenFeatures = ParsedOverwrittenFeature[];
+
+type ParsedOverwrittenFeature = {
+  name: string;
+  value: StrNumBool | PaymentTypes;
+};
+
+export type ParsedOverwrittenUsageLimits = ParsedOverwrittenUsageLimit[];
+
+type ParsedOverwrittenUsageLimit = {
+  name: string;
+  value: StrNumBool;
+};
 
 export type PricingState = Omit<
   PricingManager,

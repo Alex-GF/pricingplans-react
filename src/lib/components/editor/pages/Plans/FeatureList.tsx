@@ -1,10 +1,14 @@
 import { ChangeEvent, useContext } from "react";
 import { EditorContext } from "../../context/EditorContextProvider";
-import { PlanFeaturesState, StrNumBool, ValueType } from "../../types/index";
+import {
+  ParsedOverwrittenFeatures,
+  StrNumBool,
+  ValueType,
+} from "../../types/index";
 import { PaymentType, PaymentTypes, Type } from "../../types/features";
 
 interface FeatureListProps {
-  values: PlanFeaturesState;
+  values: ParsedOverwrittenFeatures;
   onFeatureChange: (
     featureName: string,
     value: StrNumBool | PaymentTypes

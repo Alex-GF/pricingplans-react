@@ -1,4 +1,9 @@
-import { FeatureOverwrite, PlanFeaturesState, ValueOverwrite } from ".";
+import {
+  FeatureOverwrite,
+  ParsedOverwrittenFeatures,
+  ParsedOverwrittenUsageLimits,
+  ValueOverwrite,
+} from ".";
 
 export type GlobalPriceAddOns = {
   [key: string]: AddOnGlobalBilling;
@@ -39,12 +44,18 @@ type AddOnWithMonthlyAndAnnualBilling = {
   annualPrice: number;
 } & AddOn;
 
-export type AddOnsState = AddOnState[] | null;
+export type AddOnsState = ParsedAddOns | null;
 
-export type AddOnState = Omit<
+export type AddOnState = ParsedAddOn;
+
+export type ParsedAddOns = ParsedAddOn[];
+
+type ParsedAddOn = Omit<
   AddOn,
   "features" | "usageLimits" | "usageLimitsExtensions"
 > & {
   name: string;
-  features: PlanFeaturesState;
+  features: ParsedOverwrittenFeatures;
+  usageLimits: ParsedOverwrittenUsageLimits;
+  usageLimitsExtensions: ParsedOverwrittenUsageLimits;
 };

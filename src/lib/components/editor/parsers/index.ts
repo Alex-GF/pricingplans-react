@@ -1,24 +1,110 @@
 import {
   FeatureOverwrite,
   Features,
-  PlanFeaturesState,
+  ParsedAddOns,
+  ParsedOverwrittenFeatures,
+  ParsedOverwrittenUsageLimits,
+  ParsedPlans,
+  ParsedPricingManager,
+  PricingManager,
   UsageLimits,
   ValueOverwrite,
-} from "../types";
+} from "../types/index";
 import parseFeatures from "./features";
 import parseUsageLimits from "./usageLimits";
 
-export * from "./addons";
-export * from "./expression";
-export * from "./features";
-export * from "./plans";
-export * from "./pricingManager";
-export * from "./usageLimits";
+export default function parsePricingManager(
+  pricingManager: PricingManager
+): ParsedPricingManager {
+  const { parsedFeatures: features } = parseFeatures(pricingManager.features);
+  const { parsedUsageLimits: usageLimits } = parseUsageLimits(
+    pricingManager.usageLimits
+  );
 
-export function parseOverwrittenFeatures(
+  if (!pricingManager.plans && !pricingManager.addOns) {
+    throw Error(
+      "Neither plans or addOns were defined. Please define plans or addOns or both."
+    );
+  }
+
+  const plans = parsePlans(pricingManager);
+  const addOns = parseAddOns(pricingManager);
+
+  return {
+    ...pricingManager,
+    features,
+    usageLimits,
+    plans,
+    addOns,
+  };
+}
+
+function parsePlans(pricingManager: PricingManager): ParsedPlans {
+  if (!pricingManager.plans) {
+    return [];
+  }
+
+  return Object.entries(pricingManager.plans).map(([planName, plan]) => {
+    const features = parseOverwrittenFeatures(
+      pricingManager.features,
+      plan.features
+    );
+
+    const usageLimits = pricingManager.usageLimits
+      ? parseOverwrittenUsageLimits(
+          pricingManager.usageLimits,
+          plan.usageLimits
+        )
+      : [];
+
+    return {
+      ...plan,
+      name: planName,
+      features,
+      usageLimits,
+    };
+  });
+}
+
+function parseAddOns(pricingManager: PricingManager): ParsedAddOns {
+  if (!pricingManager.addOns) {
+    return [];
+  }
+
+  return Object.entries(pricingManager.addOns).map(([addOnName, addOn]) => {
+    const features = parseOverwrittenFeatures(
+      pricingManager.features,
+      addOn.features
+    );
+
+    const usageLimits = addOn.usageLimits
+      ? parseOverwrittenUsageLimits(
+          pricingManager.usageLimits,
+          addOn.usageLimits
+        )
+      : [];
+
+    const usageLimitsExtensions = addOn.usageLimitsExtensions
+      ? parseOverwrittenUsageLimits(
+          pricingManager.usageLimits,
+          addOn.usageLimitsExtensions
+        )
+      : [];
+
+    return {
+      ...addOn,
+      name: addOnName,
+      features,
+      usageLimits,
+      usageLimitsExtensions,
+    };
+  });
+}
+
+function parseOverwrittenFeatures(
   features: Features,
   overwrittenFeatures: FeatureOverwrite | null
-): PlanFeaturesState {
+): ParsedOverwrittenFeatures {
   const { defaultValues } = parseFeatures(features);
 
   if (!overwrittenFeatures) {
@@ -33,10 +119,10 @@ export function parseOverwrittenFeatures(
   }));
 }
 
-export function parseOverwrittenUsageLimits(
+function parseOverwrittenUsageLimits(
   usageLimits: UsageLimits | null,
   overwrittenUsageLimits: ValueOverwrite | null
-) {
+): ParsedOverwrittenUsageLimits {
   if (!usageLimits) {
     return [];
   }

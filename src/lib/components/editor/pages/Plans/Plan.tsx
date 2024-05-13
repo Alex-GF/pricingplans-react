@@ -36,6 +36,7 @@ export function Plan() {
     annualPrice: 0,
     monthlyPrice: 0,
     features: defaultFeatureValues,
+    usageLimits: [],
   };
 
   const initialPlan = isPlanIncluded && plans ? plans[index] : newPlan;
