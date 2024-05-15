@@ -6,7 +6,7 @@ import {
   Features,
   IntegrationType,
   ParsedFeatures,
-  Type,
+  FeatureType,
 } from "../types/features";
 
 export default function parseFeatures(features: Features) {
@@ -23,49 +23,55 @@ export default function parseFeatures(features: Features) {
 }
 
 function parseFeature(name: string, feature: Feature): AllFeatures {
+  let description: string | null = "";
+
+  if (feature.description) {
+    description = feature.description;
+  }
+
   switch (feature.type) {
-    case Type.Automation:
+    case FeatureType.Automation:
       return {
         name,
-        description: feature.description,
+        description,
         ...valueTypeParse(feature),
         type: feature.type,
         automationType: feature.automationType,
         expression: feature.expression,
         serverExpression: feature.serverExpression,
       };
-    case Type.Domain:
+    case FeatureType.Domain:
       return {
         name,
-        description: feature.description,
+        description,
         ...valueTypeParse(feature),
         type: feature.type,
         expression: feature.expression,
         serverExpression: feature.serverExpression,
       };
-    case Type.Guarantee:
+    case FeatureType.Guarantee:
       return {
         name,
-        description: feature.description,
+        description,
         ...valueTypeParse(feature),
         type: feature.type,
         docUrl: feature.docUrl,
         expression: feature.expression,
         serverExpression: feature.serverExpression,
       };
-    case Type.Information:
+    case FeatureType.Information:
       return {
         name,
-        description: feature.description,
+        description,
         ...valueTypeParse(feature),
         type: feature.type,
         expression: feature.expression,
         serverExpression: feature.serverExpression,
       };
-    case Type.Integration: {
+    case FeatureType.Integration: {
       const commonProperties = {
         name,
-        description: feature.description,
+        description,
         ...valueTypeParse(feature),
         type: feature.type,
         expression: feature.expression,
@@ -85,29 +91,29 @@ function parseFeature(name: string, feature: Feature): AllFeatures {
       };
     }
 
-    case Type.Management:
+    case FeatureType.Management:
       return {
         name,
-        description: feature.description,
+        description,
         ...valueTypeParse(feature),
         type: feature.type,
         expression: feature.expression,
         serverExpression: feature.serverExpression,
       };
-    case Type.Payment:
+    case FeatureType.Payment:
       return {
         name,
-        description: feature.description,
+        description,
         valueType: feature.valueType,
         defaultValue: feature.defaultValue,
         type: feature.type,
         expression: feature.expression,
         serverExpression: feature.serverExpression,
       };
-    case Type.Support:
+    case FeatureType.Support:
       return {
         name,
-        description: feature.description,
+        description,
         ...valueTypeParse(feature),
         type: feature.type,
         expression: feature.expression,

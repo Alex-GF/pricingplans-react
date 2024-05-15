@@ -7,7 +7,7 @@ import { Plus } from "../../components/Icons";
 import { EditorContext } from "../../context/EditorContextProvider";
 import { FeatureList } from "./FeatureList";
 import { FeatureForm } from "./FeatureForm";
-import { AllFeatures, Type, ValueType } from "../../types";
+import { AllFeatures, FeatureType, ValueType } from "../../types";
 import "./FeaturesPage.css";
 import { useToggle } from "../../hooks";
 
@@ -16,7 +16,7 @@ const emptyAttribute: AllFeatures = {
   description: "",
   valueType: ValueType.Boolean,
   defaultValue: false,
-  type: Type.Domain,
+  type: FeatureType.Domain,
   expression: "",
   serverExpression: "",
 };

@@ -1,6 +1,6 @@
-import { ValueType } from "../types/index";
+import { Evaluable, ValueType } from "../types/index";
 
-export enum Type {
+export enum FeatureType {
   Automation = "AUTOMATION",
   Domain = "DOMAIN",
   Guarantee = "GUARANTEE",
@@ -29,27 +29,25 @@ type FeatureSkipName = Omit<FeatureBase, "name">;
 
 export type FeatureRestriction =
   | {
-      type: Exclude<Type, Type.Payment>;
+      type: Exclude<FeatureType, FeatureType.Payment>;
       valueType: ValueType.Boolean;
       defaultValue: boolean;
     }
   | {
-      type: Exclude<Type, Type.Payment>;
+      type: Exclude<FeatureType, FeatureType.Payment>;
       valueType: ValueType.Numeric;
       defaultValue: number;
     }
   | {
-      type: Exclude<Type, Type.Payment>;
+      type: Exclude<FeatureType, FeatureType.Payment>;
       valueType: ValueType.Text;
       defaultValue: string;
     };
 
-type FeatureBase = {
+interface FeatureBase extends Evaluable {
   name: string;
-  description: string;
-  expression: string;
-  serverExpression: string;
-};
+  description?: string | null;
+}
 
 export enum AutomationType {
   Bot = "BOT",
@@ -60,24 +58,24 @@ export enum AutomationType {
 
 export type Automation = FeatureSkipName &
   FeatureRestriction & {
-    type: Type.Automation;
+    type: FeatureType.Automation;
     automationType: AutomationType;
   };
 
 export type Domain = FeatureSkipName &
   FeatureRestriction & {
-    type: Type.Domain;
+    type: FeatureType.Domain;
   };
 
 export type Guarantee = FeatureSkipName &
   FeatureRestriction & {
-    type: Type.Guarantee;
+    type: FeatureType.Guarantee;
     docUrl: string;
   };
 
 export type Information = FeatureSkipName &
   FeatureRestriction & {
-    type: Type.Information;
+    type: FeatureType.Information;
   };
 
 export enum IntegrationType {
@@ -93,19 +91,19 @@ export type Integration = FeatureSkipName &
   FeatureRestriction &
   (
     | {
-        type: Type.Integration;
+        type: FeatureType.Integration;
         integrationType: IntegrationType.WebSaaS;
         pricingUrls: string[];
       }
     | {
-        type: Type.Integration;
+        type: FeatureType.Integration;
         integrationType: Exclude<IntegrationType, IntegrationType.WebSaaS>;
       }
   );
 
 export type Management = FeatureSkipName &
   FeatureRestriction & {
-    type: Type.Management;
+    type: FeatureType.Management;
   };
 
 export type PaymentTypes = PaymentType[];
@@ -119,66 +117,66 @@ export enum PaymentType {
 }
 
 export type Payment = FeatureSkipName & {
-  type: Type.Payment;
+  type: FeatureType.Payment;
   valueType: ValueType.Text;
   defaultValue: PaymentTypes;
 };
 
 export type Support = FeatureSkipName &
   FeatureRestriction & {
-    type: Type.Support;
+    type: FeatureType.Support;
   };
 
 export type AutomationFeature = FeatureBase &
   FeatureRestriction & {
-    type: Type.Automation;
+    type: FeatureType.Automation;
     automationType: AutomationType;
   };
 
 export type DomainFeature = FeatureBase &
   FeatureRestriction & {
-    type: Type.Domain;
+    type: FeatureType.Domain;
   };
 
 export type GuaranteeFeature = FeatureBase &
   FeatureRestriction & {
-    type: Type.Guarantee;
+    type: FeatureType.Guarantee;
     docUrl: string;
   };
 
 export type InformationFeature = FeatureBase &
   FeatureRestriction & {
-    type: Type.Information;
+    type: FeatureType.Information;
   };
 
 export type IntegrationFeature = FeatureBase &
   FeatureRestriction &
   (
     | {
-        type: Type.Integration;
+        type: FeatureType.Integration;
         integrationType: IntegrationType.WebSaaS;
         pricingUrls: string[];
       }
     | {
-        type: Type.Integration;
+        type: FeatureType.Integration;
         integrationType: Exclude<IntegrationType, IntegrationType.WebSaaS>;
       }
   );
 
 export type ManagementFeature = FeatureBase &
   FeatureRestriction & {
-    type: Type.Management;
+    type: FeatureType.Management;
   };
 
 export type PaymentFeature = FeatureBase & {
-  type: Type.Payment;
+  type: FeatureType.Payment;
   valueType: ValueType.Text;
   defaultValue: PaymentTypes;
 };
 
 export type SupportFeature = FeatureBase &
   FeatureRestriction & {
-    type: Type.Support;
+    type: FeatureType.Support;
   };
 
 export type AllFeatures =

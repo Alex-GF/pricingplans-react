@@ -5,7 +5,7 @@ import {
   StrNumBool,
   ValueType,
 } from "../../types/index";
-import { PaymentType, PaymentTypes, Type } from "../../types/features";
+import { PaymentType, PaymentTypes, FeatureType } from "../../types/features";
 
 interface FeatureListProps {
   values: ParsedOverwrittenFeatures;
@@ -28,7 +28,7 @@ export function FeatureList({ values, onFeatureChange }: FeatureListProps) {
   return (
     <>
       {attributes.map((feature, index) => {
-        if (feature.type === Type.Payment) {
+        if (feature.type === FeatureType.Payment) {
           return (
             <div className="pp-form__group">
               <label htmlFor={feature.name} className="pp-form__label">

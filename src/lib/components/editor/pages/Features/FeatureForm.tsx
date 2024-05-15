@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, useContext, useState } from "react";
 import { DefaultValue } from "./DefaultValue";
 import { Button } from "../../components/Button";
-import { AllFeatures, PaymentType, Type, ValueType } from "../../types";
+import { AllFeatures, PaymentType, FeatureType, ValueType } from "../../types";
 import { Select } from "../../components/Select";
 import { computeFeatureType } from "./utils";
 import { AutomationFeature } from "./AutomationFeature";
@@ -46,13 +46,16 @@ export function FeatureForm({
     setAttribute({ ...attribute, description: e.target.value });
 
   const handleTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const feature = computeFeatureType(attribute, e.target.value as Type);
+    const feature = computeFeatureType(
+      attribute,
+      e.target.value as FeatureType
+    );
     setAttribute(feature);
   };
 
   const handleValueTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     switch (attribute.type) {
-      case Type.Payment: {
+      case FeatureType.Payment: {
         setAttribute({
           ...attribute,
           valueType: ValueType.Text,
@@ -61,13 +64,13 @@ export function FeatureForm({
 
         break;
       }
-      case Type.Automation:
-      case Type.Domain:
-      case Type.Guarantee:
-      case Type.Information:
-      case Type.Integration:
-      case Type.Management:
-      case Type.Support: {
+      case FeatureType.Automation:
+      case FeatureType.Domain:
+      case FeatureType.Guarantee:
+      case FeatureType.Information:
+      case FeatureType.Integration:
+      case FeatureType.Management:
+      case FeatureType.Support: {
         setAttribute({
           ...attribute,
           ...computeValueType(e.target.value),
@@ -128,14 +131,14 @@ export function FeatureForm({
           value={attribute.type}
           onChange={handleTypeChange}
           options={[
-            { value: Type.Automation, label: Type.Automation },
-            { value: Type.Domain, label: Type.Domain },
-            { value: Type.Guarantee, label: Type.Guarantee },
-            { value: Type.Information, label: Type.Information },
-            { value: Type.Integration, label: Type.Integration },
-            { value: Type.Management, label: Type.Management },
-            { value: Type.Payment, label: Type.Payment },
-            { value: Type.Support, label: Type.Support },
+            { value: FeatureType.Automation, label: FeatureType.Automation },
+            { value: FeatureType.Domain, label: FeatureType.Domain },
+            { value: FeatureType.Guarantee, label: FeatureType.Guarantee },
+            { value: FeatureType.Information, label: FeatureType.Information },
+            { value: FeatureType.Integration, label: FeatureType.Integration },
+            { value: FeatureType.Management, label: FeatureType.Management },
+            { value: FeatureType.Payment, label: FeatureType.Payment },
+            { value: FeatureType.Support, label: FeatureType.Support },
           ]}
         />
       </div>
@@ -161,13 +164,13 @@ export function FeatureForm({
           className="pp-form__field"
           value={attribute.valueType}
           onChange={handleValueTypeChange}
-          disabled={attribute.type === Type.Payment}
+          disabled={attribute.type === FeatureType.Payment}
         >
-          {attribute.type !== Type.Payment && (
+          {attribute.type !== FeatureType.Payment && (
             <option value={ValueType.Boolean}>BOOLEAN</option>
           )}
           <option value={ValueType.Text}>TEXT</option>
-          {attribute.type !== Type.Payment && (
+          {attribute.type !== FeatureType.Payment && (
             <option value={ValueType.Numeric}>NUMERIC</option>
           )}
         </select>
@@ -192,11 +195,11 @@ export function FeatureForm({
         />
       </div>
 
-      {attribute.type === Type.Automation && (
+      {attribute.type === FeatureType.Automation && (
         <AutomationFeature feature={attribute} setFeature={setAttribute} />
       )}
 
-      {attribute.type === Type.Guarantee && (
+      {attribute.type === FeatureType.Guarantee && (
         <div className="pp-form__group">
           <label htmlFor="docUrl" className="pp-form__label">
             Documentation URL
@@ -213,7 +216,7 @@ export function FeatureForm({
         </div>
       )}
 
-      {attribute.type === Type.Integration && (
+      {attribute.type === FeatureType.Integration && (
         <IntegrationFeature feature={attribute} setFeature={setAttribute} />
       )}
 

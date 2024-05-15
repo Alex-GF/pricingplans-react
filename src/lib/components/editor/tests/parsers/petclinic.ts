@@ -1,4 +1,4 @@
-import { IntegrationType, Type } from "../../types/features";
+import { IntegrationType, FeatureType } from "../../types/features";
 import { PricingManager, UsageLimitType, ValueType } from "../../types/index";
 
 export const petClinic: PricingManager = {
@@ -13,7 +13,7 @@ export const petClinic: PricingManager = {
       description: "Max pets limit",
       valueType: ValueType.Boolean,
       defaultValue: false,
-      type: Type.Domain,
+      type: FeatureType.Domain,
       expression: "planContext['maxPets']",
       serverExpression: "",
     },
@@ -60,10 +60,8 @@ export const petClinic: PricingManager = {
     extra: {
       description: null,
       availableFor: ["pro"],
-      price: null,
       unit: "user/month",
-      monthlyPrice: 10,
-      annualPrice: null,
+      price: 10,
       features: {
         maxPets: {
           value: true,
@@ -96,7 +94,7 @@ export const expectedPetclinic = {
       description: "Max pets limit",
       valueType: ValueType.Boolean,
       defaultValue: false,
-      type: Type.Domain,
+      type: FeatureType.Domain,
       expression: "planContext['maxPets']",
       serverExpression: "",
     },

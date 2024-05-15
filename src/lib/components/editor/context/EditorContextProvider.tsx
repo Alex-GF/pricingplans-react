@@ -2,13 +2,17 @@ import { Dispatch, SetStateAction, createContext, useState } from "react";
 import { UserContextAttributes } from "../parsers/expression";
 import { parseAttributeExpressionToUserAttributes } from "../parsers/expression";
 import { AllFeatures, ParsedFeatures } from "../types/features";
-import { AddOnsState, PricingManager, PricingState } from "../types/index";
+import {
+  AddOnsState,
+  PricingManager,
+  PricingManagerState,
+} from "../types/index";
 import { PlansState } from "../types/plans";
 import parsePricingManager from "../parsers";
 
 interface EditorContextProps {
-  pricing: PricingState;
-  setPricing: Dispatch<SetStateAction<PricingState>>;
+  pricing: PricingManagerState;
+  setPricing: Dispatch<SetStateAction<PricingManagerState>>;
   attributes: AllFeatures[];
   setAttributes: Dispatch<SetStateAction<AllFeatures[]>>;
   userContextAttributes: UserContextAttributes;
@@ -22,7 +26,7 @@ interface EditorContextProps {
 }
 
 export const EditorContext = createContext<EditorContextProps>({
-  pricing: null as PricingState,
+  pricing: null as PricingManagerState,
   setPricing: () => null,
   attributes: [] as ParsedFeatures,
   setAttributes: () => null,
@@ -63,14 +67,12 @@ export function EditorContextProvider({
 
   const initialPricing = {
     saasName: pricingManager.saasName,
-    day: pricingManager.day,
-    month: pricingManager.month,
-    year: pricingManager.year,
+    date: pricingManager.date,
     currency: pricingManager.currency,
     hasAnnualPayment: pricingManager.hasAnnualPayment,
   };
 
-  const [pricing, setPricing] = useState<PricingState>(initialPricing);
+  const [pricing, setPricing] = useState<PricingManagerState>(initialPricing);
   const [attributes, setAttributes] = useState<ParsedFeatures>(
     pricingManager.features
   );

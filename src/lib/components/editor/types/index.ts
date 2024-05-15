@@ -1,10 +1,5 @@
 import { Features, ParsedFeatures, PaymentTypes } from "../types/features";
-import {
-  GlobalPriceAddOns,
-  MonthlyAddOns,
-  MonthlyAndAnnualAddOns,
-  ParsedAddOns,
-} from "./addOns";
+import { StandardAddOns, MonthlyAddOns, ParsedAddOns } from "./addOns";
 import {
   ParsedPlans,
   PlansWithAnnualBilling,
@@ -16,6 +11,13 @@ export * from "./addOns";
 export * from "./features";
 export * from "./plans";
 export * from "./usageLimits";
+
+export type PricingManagerCommonProps = Pick<
+  PricingManager,
+  "saasName" | "currency" | "hasAnnualPayment"
+> & { date: string };
+
+export type PricingManagerState = PricingManagerCommonProps | null;
 
 export type PricingManager = {
   saasName: string;
@@ -31,12 +33,12 @@ export type BillingType =
   | {
       hasAnnualPayment: false;
       plans: PlansWithRegularBilling;
-      addOns: GlobalPriceAddOns | MonthlyAddOns | null;
+      addOns: StandardAddOns | null;
     }
   | {
       hasAnnualPayment: true;
       plans: PlansWithAnnualBilling;
-      addOns: GlobalPriceAddOns | MonthlyAndAnnualAddOns | null;
+      addOns: MonthlyAddOns | null;
     };
 
 export type FeatureOverwrite = {
@@ -50,6 +52,11 @@ export type ValueOverwrite = {
     value: StrNumBool;
   };
 };
+
+export interface Evaluable {
+  expression: string;
+  serverExpression?: string | null;
+}
 
 export type StrNumBool = string | number | boolean;
 
@@ -70,10 +77,11 @@ export interface Value<T extends StrNumBool | PaymentTypes> {
   defaultValue: T;
 }
 
-export type ParsedPricingManager = Omit<
+export type ParsedPricingManager = Pick<
   PricingManager,
-  "features" | "usageLimits" | "plans" | "addOns"
+  "saasName" | "currency" | "hasAnnualPayment"
 > & {
+  date: string;
   features: ParsedFeatures;
   usageLimits: ParsedUsageLimits | null;
 } & PlansOrAddOns;
@@ -94,6 +102,11 @@ type PlansOrAddOns =
 
 export type ParsedOverwrittenFeatures = ParsedOverwrittenFeature[];
 
+export interface OverwritableAttributes {
+  features: FeatureOverwrite | null;
+  usageLimits: ValueOverwrite | null;
+}
+
 type ParsedOverwrittenFeature = {
   name: string;
   value: StrNumBool | PaymentTypes;
@@ -105,8 +118,3 @@ type ParsedOverwrittenUsageLimit = {
   name: string;
   value: StrNumBool;
 };
-
-export type PricingState = Omit<
-  PricingManager,
-  "features" | "usageLimits" | "plans" | "addOns"
-> | null;

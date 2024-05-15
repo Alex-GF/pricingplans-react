@@ -1,48 +1,33 @@
 import {
-  FeatureOverwrite,
+  OverwritableAttributes,
   ParsedOverwrittenFeatures,
   ParsedOverwrittenUsageLimits,
   ValueOverwrite,
 } from ".";
 
-export type GlobalPriceAddOns = {
-  [key: string]: AddOnGlobalBilling;
+export type StandardAddOns = {
+  [key: string]: StandardAddOn;
 };
 
 export type MonthlyAddOns = {
   [key: string]: AddOnWithMonthlyBilling;
 };
 
-export type MonthlyAndAnnualAddOns = {
-  [key: string]: AddOnWithMonthlyAndAnnualBilling;
-};
-
-interface AddOn {
+interface AddOnCommonProps extends OverwritableAttributes {
   availableFor: string[];
-  description: string | null;
+  description?: string | null;
   unit: string;
-  features: FeatureOverwrite | null;
-  usageLimits: ValueOverwrite | null;
   usageLimitsExtensions: ValueOverwrite | null;
 }
 
-type AddOnGlobalBilling = {
+type StandardAddOn = {
   price: number;
-  monthlyPrice: null;
-  annualPrice: null;
-} & AddOn;
+} & AddOnCommonProps;
 
 type AddOnWithMonthlyBilling = {
-  price: null;
   monthlyPrice: number;
-  annualPrice: null;
-} & AddOn;
-
-type AddOnWithMonthlyAndAnnualBilling = {
-  price: null;
-  monthlyPrice: number;
-  annualPrice: number;
-} & AddOn;
+  annualPrice?: number | null;
+} & AddOnCommonProps;
 
 export type AddOnsState = ParsedAddOns | null;
 
@@ -51,7 +36,7 @@ export type AddOnState = ParsedAddOn;
 export type ParsedAddOns = ParsedAddOn[];
 
 type ParsedAddOn = Omit<
-  AddOn,
+  AddOnCommonProps,
   "features" | "usageLimits" | "usageLimitsExtensions"
 > & {
   name: string;

@@ -1,9 +1,8 @@
 import {
-  FeatureOverwrite,
+  OverwritableAttributes,
   ParsedOverwrittenFeatures,
   ParsedOverwrittenUsageLimits,
   StrNumBool,
-  ValueOverwrite,
 } from ".";
 import { PaymentTypes } from "./features";
 
@@ -15,12 +14,10 @@ export interface PlansWithRegularBilling {
   [key: string]: PlanWithRegularBilling;
 }
 
-interface PlanAttributes {
-  description: string;
+interface PlanAttributes extends OverwritableAttributes {
+  description?: string | null;
   monthlyPrice: number;
   unit: string;
-  features: FeatureOverwrite | null;
-  usageLimits: ValueOverwrite | null;
 }
 
 export interface PlanWithRegularBilling extends PlanAttributes {
@@ -43,8 +40,9 @@ export type PlanState = ParsedPlan;
 
 export type ParsedPlans = ParsedPlan[];
 
-type ParsedPlan = Omit<Plan, "features" | "usageLimits"> & {
+type ParsedPlan = Omit<Plan, "description" | "features" | "usageLimits"> & {
   name: string;
+  description: string;
   features: ParsedOverwrittenFeatures;
   usageLimits: ParsedOverwrittenUsageLimits;
 };

@@ -11,35 +11,35 @@ import {
   PaymentFeature,
   PaymentType,
   SupportFeature,
-  Type,
+  FeatureType,
   ValueType,
 } from "../../types";
 
 export function computeFeatureType(
   currentFeature: AllFeatures,
-  selectedType: Type
+  selectedType: FeatureType
 ): AllFeatures {
   let feat: AllFeatures;
   switch (currentFeature.type) {
-    case Type.Domain:
-    case Type.Information:
-    case Type.Management:
-    case Type.Support:
+    case FeatureType.Domain:
+    case FeatureType.Information:
+    case FeatureType.Management:
+    case FeatureType.Support:
       feat = fromDomainInformationManagementAndSupportToOtherFeature(
         currentFeature,
         selectedType
       );
       break;
-    case Type.Automation:
+    case FeatureType.Automation:
       feat = fromAutomationToOtherFeature(currentFeature, selectedType);
       break;
-    case Type.Guarantee:
+    case FeatureType.Guarantee:
       feat = fromGuaranteeToOtherFeature(currentFeature, selectedType);
       break;
-    case Type.Integration:
+    case FeatureType.Integration:
       feat = fromIntegrationToOtherFeature(currentFeature, selectedType);
       break;
-    case Type.Payment:
+    case FeatureType.Payment:
       feat = fromPaymentToOtherFeature(currentFeature, selectedType);
   }
 
@@ -48,29 +48,29 @@ export function computeFeatureType(
 
 function fromAutomationToOtherFeature(
   automationFeature: AutomationFeature,
-  featureType: Type
+  featureType: FeatureType
 ): AllFeatures {
   const { type, automationType, ...other } = automationFeature;
   switch (featureType) {
-    case Type.Automation:
+    case FeatureType.Automation:
       return automationFeature;
-    case Type.Guarantee:
-      return { ...other, type: Type.Guarantee, docUrl: "" };
-    case Type.Integration:
+    case FeatureType.Guarantee:
+      return { ...other, type: FeatureType.Guarantee, docUrl: "" };
+    case FeatureType.Integration:
       return {
         ...other,
-        type: Type.Integration,
+        type: FeatureType.Integration,
         integrationType: IntegrationType.API,
       };
-    case Type.Domain:
-    case Type.Information:
-    case Type.Management:
-    case Type.Support:
+    case FeatureType.Domain:
+    case FeatureType.Information:
+    case FeatureType.Management:
+    case FeatureType.Support:
       return { ...other, type: featureType };
-    case Type.Payment:
+    case FeatureType.Payment:
       return {
         ...other,
-        type: Type.Payment,
+        type: FeatureType.Payment,
         valueType: ValueType.Text,
         defaultValue: [PaymentType.Ach],
       };
@@ -79,34 +79,34 @@ function fromAutomationToOtherFeature(
 
 function fromGuaranteeToOtherFeature(
   guaranteeFeature: GuaranteeFeature,
-  featureType: Type
+  featureType: FeatureType
 ): AllFeatures {
   const { type, docUrl, ...other } = guaranteeFeature;
   switch (featureType) {
-    case Type.Domain:
-    case Type.Information:
-    case Type.Management:
-    case Type.Support:
+    case FeatureType.Domain:
+    case FeatureType.Information:
+    case FeatureType.Management:
+    case FeatureType.Support:
       return { ...other, type: featureType };
-    case Type.Automation:
+    case FeatureType.Automation:
       return {
         ...other,
-        type: Type.Automation,
+        type: FeatureType.Automation,
         automationType: AutomationType.Bot,
       };
-    case Type.Guarantee:
+    case FeatureType.Guarantee:
       return guaranteeFeature;
-    case Type.Integration:
+    case FeatureType.Integration:
       return {
         ...other,
-        type: Type.Integration,
+        type: FeatureType.Integration,
         integrationType: IntegrationType.API,
       };
 
-    case Type.Payment:
+    case FeatureType.Payment:
       return {
         ...other,
-        type: Type.Payment,
+        type: FeatureType.Payment,
         valueType: ValueType.Text,
         defaultValue: [PaymentType.Ach],
       };
@@ -115,30 +115,30 @@ function fromGuaranteeToOtherFeature(
 
 function fromIntegrationToOtherFeature(
   integrationFeature: IntegrationFeature,
-  featureType: Type
+  featureType: FeatureType
 ): AllFeatures {
   const { type, integrationType, ...rest } = integrationFeature;
   switch (featureType) {
-    case Type.Domain:
-    case Type.Information:
-    case Type.Management:
-    case Type.Support:
+    case FeatureType.Domain:
+    case FeatureType.Information:
+    case FeatureType.Management:
+    case FeatureType.Support:
       return { ...rest, type: featureType };
-    case Type.Automation:
+    case FeatureType.Automation:
       return {
         ...rest,
-        type: Type.Automation,
+        type: FeatureType.Automation,
         automationType: AutomationType.Bot,
       };
-    case Type.Guarantee:
-      return { ...rest, type: Type.Guarantee, docUrl: "" };
-    case Type.Integration:
+    case FeatureType.Guarantee:
+      return { ...rest, type: FeatureType.Guarantee, docUrl: "" };
+    case FeatureType.Integration:
       return integrationFeature;
 
-    case Type.Payment:
+    case FeatureType.Payment:
       return {
         ...rest,
-        type: Type.Payment,
+        type: FeatureType.Payment,
         valueType: ValueType.Text,
         defaultValue: [PaymentType.Ach],
       };
@@ -147,15 +147,15 @@ function fromIntegrationToOtherFeature(
 
 function fromPaymentToOtherFeature(
   paymentFeature: PaymentFeature,
-  featureType: Type
+  featureType: FeatureType
 ): AllFeatures {
   const { name, description } = paymentFeature;
 
   switch (featureType) {
-    case Type.Domain:
-    case Type.Information:
-    case Type.Management:
-    case Type.Support:
+    case FeatureType.Domain:
+    case FeatureType.Information:
+    case FeatureType.Management:
+    case FeatureType.Support:
       return {
         name,
         description,
@@ -165,33 +165,33 @@ function fromPaymentToOtherFeature(
         expression: "",
         serverExpression: "",
       };
-    case Type.Automation:
+    case FeatureType.Automation:
       return {
         name,
         description,
-        type: Type.Automation,
+        type: FeatureType.Automation,
         automationType: AutomationType.Bot,
         valueType: ValueType.Boolean,
         defaultValue: false,
         expression: "",
         serverExpression: "",
       };
-    case Type.Guarantee:
+    case FeatureType.Guarantee:
       return {
         name,
         description,
-        type: Type.Guarantee,
+        type: FeatureType.Guarantee,
         docUrl: "",
         valueType: ValueType.Boolean,
         defaultValue: false,
         expression: "",
         serverExpression: "",
       };
-    case Type.Integration:
+    case FeatureType.Integration:
       return {
         name,
         description,
-        type: Type.Integration,
+        type: FeatureType.Integration,
         integrationType: IntegrationType.API,
         valueType: ValueType.Boolean,
         defaultValue: false,
@@ -199,7 +199,7 @@ function fromPaymentToOtherFeature(
         serverExpression: "",
       };
 
-    case Type.Payment:
+    case FeatureType.Payment:
       return paymentFeature;
   }
 }
@@ -209,37 +209,37 @@ function fromDomainInformationManagementAndSupportToOtherFeature(
     AllFeatures,
     DomainFeature | InformationFeature | ManagementFeature | SupportFeature
   >,
-  featureType: Type
+  featureType: FeatureType
 ): AllFeatures {
   const { type, ...rest } = feature;
   switch (featureType) {
-    case Type.Domain:
-    case Type.Information:
-    case Type.Management:
-    case Type.Support:
+    case FeatureType.Domain:
+    case FeatureType.Information:
+    case FeatureType.Management:
+    case FeatureType.Support:
       return { ...feature, type: featureType };
-    case Type.Automation:
+    case FeatureType.Automation:
       return {
         ...rest,
-        type: Type.Automation,
+        type: FeatureType.Automation,
         automationType: AutomationType.Bot,
       };
-    case Type.Guarantee:
+    case FeatureType.Guarantee:
       return {
         ...rest,
-        type: Type.Guarantee,
+        type: FeatureType.Guarantee,
         docUrl: "",
       };
-    case Type.Integration:
+    case FeatureType.Integration:
       return {
         ...rest,
-        type: Type.Integration,
+        type: FeatureType.Integration,
         integrationType: IntegrationType.API,
       };
-    case Type.Payment:
+    case FeatureType.Payment:
       return {
         ...rest,
-        type: Type.Payment,
+        type: FeatureType.Payment,
         valueType: ValueType.Text,
         defaultValue: [PaymentType.Ach],
       };

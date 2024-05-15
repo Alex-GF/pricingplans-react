@@ -1,4 +1,4 @@
-import { StrNumBool, Value } from "../types";
+import { Evaluable, StrNumBool, Value } from "../types";
 
 export type UsageLimits = {
   [key: string]: UsageLimit;
@@ -8,14 +8,12 @@ export type UsageLimit = Renewable | NonRenewable | ResponseDriven | TimeDriven;
 
 type UsageLimitProperties = Omit<UsageLimitBaseProperties, "name">;
 
-export interface UsageLimitBaseProperties extends Value<StrNumBool> {
+export interface UsageLimitBaseProperties extends Value<StrNumBool>, Evaluable {
   name: string;
-  description: string;
+  description?: string | null;
   type: UsageLimitType;
   unit: string;
   linkedFeatures: string[] | null;
-  expression: string;
-  serverExpression: string;
 }
 
 export enum UsageLimitType {
@@ -41,26 +39,33 @@ export interface ResponseDriven extends UsageLimitProperties {
   type: UsageLimitType.ResponseDriven;
 }
 
-export type ParsedUsageLimits = UsageLimitBase[];
-
 export type UsageLimitBase =
   | RenewableUL
   | NonRenewableUL
   | TimeDrivenUL
   | ResponseDrivenUL;
 
-export interface RenewableUL extends UsageLimitBaseProperties {
+export type ParsedUsageLimits = UsageLimitBase[];
+
+export type UsageLimitWithDescription = Omit<
+  UsageLimitBaseProperties,
+  "description"
+> & {
+  description: string;
+};
+
+export interface RenewableUL extends UsageLimitWithDescription {
   type: UsageLimitType.Renewable;
 }
 
-export interface NonRenewableUL extends UsageLimitBaseProperties {
+export interface NonRenewableUL extends UsageLimitWithDescription {
   type: UsageLimitType.NonRenewable;
 }
 
-export interface TimeDrivenUL extends UsageLimitBaseProperties {
+export interface TimeDrivenUL extends UsageLimitWithDescription {
   type: UsageLimitType.TimeDriven;
 }
 
-export interface ResponseDrivenUL extends UsageLimitBaseProperties {
+export interface ResponseDrivenUL extends UsageLimitWithDescription {
   type: UsageLimitType.ResponseDriven;
 }

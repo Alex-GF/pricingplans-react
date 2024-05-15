@@ -21,6 +21,12 @@ export default function parsePricingManager(
     pricingManager.usageLimits
   );
 
+  const month = `${pricingManager.month <= 9 ? "0" : ""}${
+    pricingManager.month
+  }`;
+  const day = `${pricingManager.day <= 9 ? "0" : ""}${pricingManager.day}`;
+  const date = `${pricingManager.year}-${month}-${day}`;
+
   if (!pricingManager.plans && !pricingManager.addOns) {
     throw Error(
       "Neither plans or addOns were defined. Please define plans or addOns or both."
@@ -32,6 +38,7 @@ export default function parsePricingManager(
 
   return {
     ...pricingManager,
+    date,
     features,
     usageLimits,
     plans,

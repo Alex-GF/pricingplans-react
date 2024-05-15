@@ -8,12 +8,11 @@ import {
   Features,
   Guarantee,
   Information,
-  Integration,
   IntegrationType,
   Management,
   Payment,
   Support,
-  Type,
+  FeatureType,
 } from "../types/features";
 
 export default class FeatureSerializer {
@@ -64,7 +63,7 @@ export default class FeatureSerializer {
     };
 
     switch (feature.type) {
-      case Type.Automation: {
+      case FeatureType.Automation: {
         const automation: Automation = {
           ...commonFeatures,
           ...this._serializeValueType(feature),
@@ -74,7 +73,7 @@ export default class FeatureSerializer {
         return automation;
       }
 
-      case Type.Domain: {
+      case FeatureType.Domain: {
         const domain: Domain = {
           ...commonFeatures,
           ...this._serializeValueType(feature),
@@ -83,7 +82,7 @@ export default class FeatureSerializer {
         return domain;
       }
 
-      case Type.Guarantee: {
+      case FeatureType.Guarantee: {
         const guarantee: Guarantee = {
           ...commonFeatures,
           ...this._serializeValueType(feature),
@@ -92,7 +91,7 @@ export default class FeatureSerializer {
         };
         return guarantee;
       }
-      case Type.Information: {
+      case FeatureType.Information: {
         const information: Information = {
           ...commonFeatures,
           ...this._serializeValueType(feature),
@@ -100,7 +99,7 @@ export default class FeatureSerializer {
         };
         return information;
       }
-      case Type.Integration: {
+      case FeatureType.Integration: {
         const commonProperties = {
           ...commonFeatures,
           ...this._serializeValueType(feature),
@@ -119,7 +118,7 @@ export default class FeatureSerializer {
           integrationType: feature.integrationType,
         };
       }
-      case Type.Management: {
+      case FeatureType.Management: {
         const management: Management = {
           ...commonFeatures,
           ...this._serializeValueType(feature),
@@ -127,7 +126,7 @@ export default class FeatureSerializer {
         };
         return management;
       }
-      case Type.Payment: {
+      case FeatureType.Payment: {
         const payment: Payment = {
           ...commonFeatures,
           valueType: feature.valueType,
@@ -136,7 +135,7 @@ export default class FeatureSerializer {
         };
         return payment;
       }
-      case Type.Support: {
+      case FeatureType.Support: {
         if (feature.valueType === ValueType.Boolean) {
           feature.defaultValue;
         }

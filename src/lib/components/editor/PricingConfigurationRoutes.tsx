@@ -1,6 +1,6 @@
 import { Routes, Route, Outlet } from "react-router-dom";
 import { PricingPlansEditor } from "./PricingPlansEditor";
-import { FeaturesPage } from "./pages/Attributes";
+import { FeaturesPage } from "./pages/Features";
 import { UserContextPage } from "./pages/UserContext";
 import { EvaluationPage } from "./pages/EvaluationContext";
 import { Plan, Plans } from "./pages/Plans";

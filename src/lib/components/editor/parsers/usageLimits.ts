@@ -1,8 +1,8 @@
 import { StrNumBool } from "../types";
-import { UsageLimitBaseProperties, UsageLimits } from "../types/usageLimits";
+import { UsageLimitWithDescription, UsageLimits } from "../types/usageLimits";
 
 interface ParsedUsageLimitsResult {
-  parsedUsageLimits: UsageLimitBaseProperties[];
+  parsedUsageLimits: UsageLimitWithDescription[];
   defaultValues: {
     name: string;
     value: StrNumBool;
@@ -17,7 +17,11 @@ export default function parseUsageLimits(
   }
 
   const parsedUsageLimits = Object.entries(usageLimits).map(
-    ([usageLimitName, usageLimit]) => ({ ...usageLimit, name: usageLimitName })
+    ([usageLimitName, usageLimit]) => ({
+      ...usageLimit,
+      description: usageLimit.description || "",
+      name: usageLimitName,
+    })
   );
 
   const defaultValues = parsedUsageLimits.map((usageLimit) => ({

@@ -9,7 +9,7 @@ import {
   ParsedFeatures,
   PaymentType,
   PaymentTypes,
-  Type,
+  FeatureType,
 } from "../../types/features";
 
 interface FeatureListProps {
@@ -33,7 +33,7 @@ export function FeatureList({ values, onFeatureChange }: FeatureListProps) {
   return (
     <>
       {attributes.map((feature, index) => {
-        if (feature.type === Type.Payment) {
+        if (feature.type === FeatureType.Payment) {
           return (
             <div className="pp-form__group">
               <label htmlFor={feature.name} className="pp-form__label">

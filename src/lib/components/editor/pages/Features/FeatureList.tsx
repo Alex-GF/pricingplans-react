@@ -5,7 +5,7 @@ import { Button } from "../../components/Button";
 import { Pencil, Trash } from "../../components/Icons";
 import { Modal } from "../../components/Modal";
 import { FeatureForm } from "./FeatureForm";
-import { AllFeatures, PaymentTypes, Type } from "../../types";
+import { AllFeatures, PaymentTypes, FeatureType } from "../../types";
 
 interface FeatureListProps {
   command: Command;
@@ -90,10 +90,10 @@ export function FeatureList({
             {attribute.valueType}
           </td>
           <td>
-            {attribute.type === Type.Payment && (
+            {attribute.type === FeatureType.Payment && (
               <PaymentTypes paymentTypes={attribute.defaultValue} />
             )}
-            {attribute.type !== Type.Payment &&
+            {attribute.type !== FeatureType.Payment &&
               displayDefaulValueText(attribute.defaultValue)}
           </td>
           <td className="pp-table-actions">

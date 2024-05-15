@@ -4,7 +4,7 @@ import {
   PaymentFeature,
   PaymentType,
   PaymentTypes,
-  Type,
+  FeatureType,
   ValueType,
 } from "../../types";
 
@@ -27,7 +27,7 @@ export function DefaultValue({ id, name, form, setForm }: DefaultValueProps) {
     } as PaymentFeature);
   };
 
-  if (form.type === Type.Payment) {
+  if (form.type === FeatureType.Payment) {
     return (
       <select
         className="pp-form__field"
