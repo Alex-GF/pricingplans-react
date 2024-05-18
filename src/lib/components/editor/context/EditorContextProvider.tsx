@@ -4,8 +4,10 @@ import { parseAttributeExpressionToUserAttributes } from "../parsers/expression"
 import { AllFeatures, ParsedFeatures } from "../types/features";
 import {
   AddOnsState,
+  ParsedUsageLimits,
   PricingManager,
   PricingManagerState,
+  UsageLimitsState,
 } from "../types/index";
 import { PlansState } from "../types/plans";
 import parsePricingManager from "../parsers";
@@ -16,6 +18,8 @@ interface EditorContextProps {
   attributes: AllFeatures[];
   setAttributes: Dispatch<SetStateAction<AllFeatures[]>>;
   userContextAttributes: UserContextAttributes;
+  usageLimits: ParsedUsageLimits;
+  setUsageLimits: Dispatch<SetStateAction<ParsedUsageLimits>>;
   setUserContextAttributes: Dispatch<SetStateAction<UserContextAttributes>>;
   plans: PlansState;
   setPlans: Dispatch<SetStateAction<PlansState>>;
@@ -26,15 +30,17 @@ interface EditorContextProps {
 }
 
 export const EditorContext = createContext<EditorContextProps>({
-  pricing: null as PricingManagerState,
+  pricing: null,
   setPricing: () => null,
   attributes: [] as ParsedFeatures,
   setAttributes: () => null,
+  usageLimits: [] as ParsedUsageLimits,
+  setUsageLimits: () => null,
   userContextAttributes: [] as UserContextAttributes,
   setUserContextAttributes: () => null,
-  plans: null as PlansState,
+  plans: null,
   setPlans: () => null,
-  addOns: null as AddOnsState,
+  addOns: null,
   setAddOns: () => null,
   theme: "blue",
   returnTo: "/",
@@ -76,6 +82,9 @@ export function EditorContextProvider({
   const [attributes, setAttributes] = useState<ParsedFeatures>(
     pricingManager.features
   );
+  const [usageLimits, setUsageLimits] = useState<ParsedUsageLimits>(
+    pricingManager.usageLimits || []
+  );
   const [plans, setPlans] = useState<PlansState>(pricingManager.plans);
   const [addOns, setAddOns] = useState<AddOnsState>(pricingManager.addOns);
 
@@ -86,6 +95,8 @@ export function EditorContextProvider({
         setPricing,
         attributes,
         setAttributes,
+        usageLimits,
+        setUsageLimits,
         userContextAttributes,
         setUserContextAttributes,
         plans,

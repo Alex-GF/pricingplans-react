@@ -27,6 +27,16 @@ export function DefaultValue({ id, name, form, setForm }: DefaultValueProps) {
     } as PaymentFeature);
   };
 
+  const handleNumericChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (form.valueType === ValueType.Numeric) {
+      if (e.target.value === "") {
+        setForm({ ...form, defaultValue: 0 });
+      } else {
+        setForm({ ...form, defaultValue: e.target.valueAsNumber });
+      }
+    }
+  };
+
   if (form.type === FeatureType.Payment) {
     return (
       <select
@@ -64,9 +74,7 @@ export function DefaultValue({ id, name, form, setForm }: DefaultValueProps) {
             type="number"
             min={0}
             value={form.defaultValue}
-            onChange={(e) =>
-              setForm({ ...form, defaultValue: e.target.valueAsNumber })
-            }
+            onChange={handleNumericChange}
           />
         );
       case ValueType.Boolean:

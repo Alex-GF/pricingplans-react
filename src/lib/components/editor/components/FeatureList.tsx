@@ -1,16 +1,11 @@
 import { ChangeEvent, useContext } from "react";
-import { EditorContext } from "../../context/EditorContextProvider";
+import { EditorContext } from "../context/EditorContextProvider";
 import {
   ParsedOverwrittenFeatures,
   StrNumBool,
   ValueType,
-} from "../../types/index";
-import {
-  ParsedFeatures,
-  PaymentType,
-  PaymentTypes,
-  FeatureType,
-} from "../../types/features";
+} from "../types/index";
+import { PaymentType, PaymentTypes, FeatureType } from "..//types/features";
 
 interface FeatureListProps {
   values: ParsedOverwrittenFeatures;

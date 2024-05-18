@@ -3,8 +3,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../../components/Button";
 import { EditorContext } from "../../context/EditorContextProvider";
 import { ArrowLeft } from "../../components/Icons";
-import { FeatureList } from "./FeatureList";
+import { FeatureList } from "../../components/FeatureList";
 import { AddOnState, PaymentTypes, StrNumBool } from "../../types";
+import { UsageLimitsValues } from "../../components/UsageLimitsValues";
 
 interface AddOnLocation {
   index: number;
@@ -19,6 +20,7 @@ export function AddOn() {
 
   const {
     attributes,
+    usageLimits,
     plans,
     addOns,
     setAddOns,
@@ -30,14 +32,19 @@ export function AddOn() {
     value: feature.defaultValue,
   }));
 
+  const defaultUsageLimits = usageLimits.map((usageLimit) => ({
+    name: usageLimit.name,
+    value: usageLimit.defaultValue,
+  }));
+
   const newPlan: AddOnState = {
     name: "",
     description: null,
     availableFor: [""],
     unit: "user/month",
     features: defaultFeatureValues,
-    usageLimits: [],
-    usageLimitsExtensions: [],
+    usageLimits: defaultUsageLimits,
+    usageLimitsExtensions: defaultUsageLimits,
   };
 
   const initialAddOn = isPlanIncluded && addOns ? addOns[index] : newPlan;
@@ -57,6 +64,18 @@ export function AddOn() {
         : feature
     );
     setAddOn({ ...addOn, features: feat });
+  };
+
+  const handleUsageLimitChange = (
+    usageLimitName: string,
+    currentValue: StrNumBool
+  ) => {
+    const newUsageLimits = addOn.usageLimits.map((usageLimit) =>
+      usageLimit.name === usageLimitName
+        ? { ...usageLimit, value: currentValue }
+        : usageLimit
+    );
+    setAddOn({ ...addOn, usageLimits: newUsageLimits });
   };
 
   const isPlanNameEmpty = addOn.name === "";
@@ -181,6 +200,19 @@ export function AddOn() {
           values={addOn.features}
           onFeatureChange={handleFeatureChange}
         />
+
+        <h2>Usage Limits</h2>
+        <UsageLimitsValues
+          values={addOn.usageLimits}
+          onUsageLimitChange={handleUsageLimitChange}
+        />
+
+        <h2>Usage Limits Extensions</h2>
+        <UsageLimitsValues
+          values={addOn.usageLimitsExtensions}
+          onUsageLimitChange={handleUsageLimitChange}
+        />
+
         <div className="pp-plan-actions">
           {isPlanIncluded && (
             <Button
@@ -192,6 +224,7 @@ export function AddOn() {
               Delete plan
             </Button>
           )}
+
           <Button className="pp-btn">
             {isPlanIncluded ? "Save changes" : "Add plan"}
           </Button>

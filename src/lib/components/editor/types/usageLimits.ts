@@ -1,4 +1,4 @@
-import { Evaluable, StrNumBool, Value } from "../types";
+import { Evaluable, StrNumBool, Value, ValueType } from "../types";
 
 export type UsageLimits = {
   [key: string]: UsageLimit;
@@ -53,6 +53,8 @@ export type UsageLimitWithDescription = Omit<
 > & {
   description: string;
 };
+
+export type UsageLimitsState = ParsedUsageLimits | null;
 
 export interface RenewableUL extends UsageLimitWithDescription {
   type: UsageLimitType.Renewable;

@@ -151,7 +151,7 @@ export function FeatureForm({
           id="description"
           name="description"
           className="pp-form__field"
-          value={attribute.description}
+          value={attribute.description || ""}
           onChange={handleDescriptionChange}
         />
       </div>

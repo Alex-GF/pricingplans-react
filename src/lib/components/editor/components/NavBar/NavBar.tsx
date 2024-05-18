@@ -2,8 +2,8 @@ import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { Button } from "../Button";
 import { EditorContext } from "../../context/EditorContextProvider";
-import "./NavBar.css";
 import { PricingManager } from "../../types";
+import "./NavBar.css";
 
 interface NavBarProps {
   hidden: boolean;
@@ -46,6 +46,11 @@ export function NavBar({ hidden, onSave }: NavBarProps) {
         <li>
           <NavLink className={computeNavLinkStatus} to="features">
             Features
+          </NavLink>
+        </li>
+        <li>
+          <NavLink className={computeNavLinkStatus} to="usage-limits">
+            Usage Limits
           </NavLink>
         </li>
         <li>

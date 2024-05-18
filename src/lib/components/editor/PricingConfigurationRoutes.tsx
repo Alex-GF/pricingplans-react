@@ -7,6 +7,7 @@ import { Plan, Plans } from "./pages/Plans";
 import { PricingManager } from "./types/index";
 import { AddOn, AddOnsPage } from "./pages/AddOns";
 import { PricingConfig } from "./pages/PricingConfig";
+import { UsageLimitsPage } from "./pages/UsageLimits";
 
 interface PricingConfigurationRoutesProps {
   pricingContext: PricingManager;
@@ -50,6 +51,7 @@ export function PricingConfigurationRoutes({
         <Route path="/" element={<h1>Pricingplans-react</h1>} />
         <Route path="pricing" element={<PricingConfig />} />
         <Route path="features" element={<FeaturesPage />} />
+        <Route path="usage-limits" element={<UsageLimitsPage />} />
         <Route path="user-context" element={<UserContextPage />} />
         <Route path="plans" element={<Outlet />}>
           <Route index element={<Plans />} />

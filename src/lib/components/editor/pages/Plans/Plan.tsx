@@ -1,11 +1,12 @@
 import { ChangeEvent, FormEvent, useContext, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Button } from "../../components/Button";
 import { EditorContext } from "../../context/EditorContextProvider";
 import { ArrowLeft } from "../../components/Icons";
-import { FeatureList } from "./FeatureList";
-import { PlanState } from "../../types/plans";
+import { FeatureList } from "../../components/FeatureList";
+import { Button } from "../../components/Button";
 import { PaymentTypes, StrNumBool } from "../../types";
+import { PlanState } from "../../types/plans";
+import { UsageLimitsValues } from "../../components/UsageLimitsValues";
 
 interface PlanLocation {
   index: number;
@@ -18,7 +19,8 @@ export function Plan() {
   const navigate = useNavigate();
   const goBack = () => navigate("..");
 
-  const { pricing, attributes, plans, setPlans } = useContext(EditorContext);
+  const { pricing, attributes, usageLimits, plans, setPlans } =
+    useContext(EditorContext);
 
   if (!pricing) {
     throw new Error("You are not consuming the context correctly");
@@ -29,6 +31,11 @@ export function Plan() {
     value: feature.defaultValue,
   }));
 
+  const defaultUsageLimits = usageLimits.map((usageLimit) => ({
+    name: usageLimit.name,
+    value: usageLimit.defaultValue,
+  }));
+
   const newPlan = {
     name: "",
     description: "",
@@ -36,7 +43,7 @@ export function Plan() {
     annualPrice: 0,
     monthlyPrice: 0,
     features: defaultFeatureValues,
-    usageLimits: [],
+    usageLimits: defaultUsageLimits,
   };
 
   const initialPlan = isPlanIncluded && plans ? plans[index] : newPlan;
@@ -53,6 +60,18 @@ export function Plan() {
         : feature
     );
     setPlan({ ...plan, features: feat });
+  };
+
+  const handleUsageLimitChange = (
+    usageLimitName: string,
+    currentValue: StrNumBool
+  ) => {
+    const newUsageLimits = plan.usageLimits.map((usageLimit) =>
+      usageLimit.name === usageLimitName
+        ? { ...usageLimit, value: currentValue }
+        : usageLimit
+    );
+    setPlan({ ...plan, usageLimits: newUsageLimits });
   };
 
   const isPlanNameEmpty = plan.name === "";
@@ -205,6 +224,14 @@ export function Plan() {
           values={plan.features}
           onFeatureChange={handleFeatureChange}
         />
+
+        <h2>Usage Limits</h2>
+
+        <UsageLimitsValues
+          values={plan.usageLimits}
+          onUsageLimitChange={handleUsageLimitChange}
+        />
+
         <div className="pp-plan-actions">
           {isPlanIncluded && (
             <Button
