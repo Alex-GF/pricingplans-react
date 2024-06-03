@@ -2,8 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { PricingConfigurationRoutes } from "./PricingConfigurationRoutes";
-import { petClinic } from "./tests/parsers/petclinic";
-import { overleaf } from "./tests/parsers/overleaf";
+import { petClinic } from "./pricings/petclinic";
+import { overleaf } from "./pricings/overleaf";
 
 import { PricingManager } from "./types";
 
@@ -17,7 +17,7 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <PricingConfigurationRoutes
-        pricingContext={overleaf}
+        pricingContext={petClinic}
         returnTo="/"
         onSave={onSave}
       />

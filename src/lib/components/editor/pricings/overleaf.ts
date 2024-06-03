@@ -4,7 +4,7 @@ import {
   FeatureType,
   UsageLimitType,
   ValueType,
-} from "../../types";
+} from "../types";
 
 export const overleaf: PricingManager = {
   saasName: "Overleaf",
@@ -14,13 +14,21 @@ export const overleaf: PricingManager = {
   currency: "USD",
   hasAnnualPayment: true,
   features: {
+    collaborators: {
+      valueType: ValueType.Boolean,
+      defaultValue: true,
+      type: FeatureType.Domain,
+      expression:
+        "userContext['collaborators'] < planContext['usageLimits']['maxCollaboratorsPerProject']",
+    },
     compileServers: {
       description:
         "Compiles for users on premium plans always run on a dedicated pool of the fastest available servers.",
       valueType: ValueType.Text,
       defaultValue: "FAST",
       type: FeatureType.Domain,
-      expression: "",
+      expression:
+        "userContext['compilation'] == planContext['features']['compileServers']",
       serverExpression: "",
     },
     realTimeTrackChanges: {
@@ -29,7 +37,7 @@ export const overleaf: PricingManager = {
       valueType: ValueType.Boolean,
       defaultValue: false,
       type: FeatureType.Domain,
-      expression: "",
+      expression: "planContext['realTimeTrackChanges']",
       serverExpression: "",
     },
     fullDocumentHistory: {
@@ -38,7 +46,7 @@ export const overleaf: PricingManager = {
       valueType: ValueType.Boolean,
       defaultValue: false,
       type: FeatureType.Information,
-      expression: "",
+      expression: "planContext['fullDocumentHistory']",
       serverExpression: "",
     },
     advancedReferenceSearch: {
@@ -47,7 +55,7 @@ export const overleaf: PricingManager = {
       valueType: ValueType.Boolean,
       defaultValue: false,
       type: FeatureType.Domain,
-      expression: "",
+      expression: "planContext['advancedReferenceSearch']",
       serverExpression: "",
     },
     gitIntegration: {
@@ -57,7 +65,7 @@ export const overleaf: PricingManager = {
       defaultValue: false,
       type: FeatureType.Integration,
       integrationType: IntegrationType.API,
-      expression: "",
+      expression: "planContext['gitIntegration']",
       serverExpression: "",
     },
     latexEditorAndRealTimeCollaboration: {

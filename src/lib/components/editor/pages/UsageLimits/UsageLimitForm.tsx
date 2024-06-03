@@ -89,7 +89,11 @@ export function UsageLimitForm({
   };
 
   return (
-    <form className="pp-form" onSubmit={handleSubmit}>
+    <form
+      className="pp-form"
+      onSubmit={handleSubmit}
+      style={{ height: "100%", overflow: "scroll", overflowX: "hidden" }}
+    >
       <div className="pp-form__group">
         {errors.nameIsEmpty ||
           (errors.duplicatedAttribute && (
@@ -128,14 +132,14 @@ export function UsageLimitForm({
           value={linkedTo}
           onChange={handleLinkedToChange}
         >
-          <option value="plan">PLAN</option>
+          <option value="plan">SUBSCRIPTION</option>
           <option value="features">FEATURES</option>
         </select>
       </div>
 
       {usageLimit.linkedFeatures ? (
         <div className="pp-form__group">
-          <label htmlFor="linkedFeatures">Linked features</label>
+          <label htmlFor="linkedFeatures">Select features to link</label>
           <select
             id="linkedFeatures"
             name="linkedFeatures"
@@ -152,7 +156,7 @@ export function UsageLimitForm({
           </select>
         </div>
       ) : (
-        <p>Usage limit is currently linked to Plans or AddOns</p>
+        <p>Usage limit is currently linked to users' subscriptions</p>
       )}
 
       <div className="pp-form__group">

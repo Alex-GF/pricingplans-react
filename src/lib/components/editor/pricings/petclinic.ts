@@ -1,5 +1,5 @@
-import { IntegrationType, FeatureType } from "../../types/features";
-import { PricingManager, UsageLimitType, ValueType } from "../../types/index";
+import { IntegrationType, FeatureType } from "../types/features";
+import { PricingManager, UsageLimitType, ValueType } from "../types/index";
 
 export const petClinic: PricingManager = {
   saasName: "petclinic",

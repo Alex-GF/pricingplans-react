@@ -1,8 +1,6 @@
 import { Table } from "../../components/Table";
-
-import "./EvaluationPage.css";
-
 import { EvaluationList } from "./EvaluationList";
+import "./EvaluationPage.css";
 
 export function EvaluationPage() {
   return (
@@ -13,7 +11,7 @@ export function EvaluationPage() {
 
       <Table
         className="pp-table"
-        labels={["Name", "Type", "Expression", "Actions"]}
+        labels={["Feature Name", "Value Type", "Expression", "Actions"]}
       >
         <EvaluationList />
       </Table>

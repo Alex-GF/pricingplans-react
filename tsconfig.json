@@ -13,5 +13,6 @@
     "strict": true,
     "skipLibCheck": true
   },
+  "exclude": ["src/**/__tests__"],
   "include": ["src/**/*", "custom.d.ts"]
 }

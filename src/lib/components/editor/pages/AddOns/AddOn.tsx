@@ -131,16 +131,16 @@ export function AddOn() {
         <Button onClick={goBack}>
           <ArrowLeft />
         </Button>
-        <h1>{isPlanIncluded && plans ? plans[index].name : "New Plan"}</h1>
+        <h1>{isPlanIncluded && plans ? plans[index].name : "New AddOn"}</h1>
       </header>
       <form className="pp-form" onSubmit={handleSubmit}>
         <div className="pp-form__group">
           {isPlanNameEmpty && (
-            <small className="pp-form__errors">Plan name is required</small>
+            <small className="pp-form__errors">Name is required</small>
           )}
 
           <label htmlFor="name" className="pp-form__label">
-            Plan name
+            Name
           </label>
           <input
             id="name"
@@ -221,12 +221,12 @@ export function AddOn() {
               type="button"
               onClick={deletePlan}
             >
-              Delete plan
+              Delete
             </Button>
           )}
 
           <Button className="pp-btn">
-            {isPlanIncluded ? "Save changes" : "Add plan"}
+            {isPlanIncluded ? "Save changes" : "Add"}
           </Button>
         </div>
       </form>

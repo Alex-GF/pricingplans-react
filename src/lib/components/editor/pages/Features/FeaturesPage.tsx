@@ -29,7 +29,17 @@ export function FeaturesPage() {
   const { visible, on: openModal, off: closeModal } = useToggle();
 
   const addAttribute = (attribute: AllFeatures) => {
-    setAttributes([...attributes, attribute]);
+    const defaultExpression =
+      attribute.valueType === ValueType.Boolean
+        ? `planContext['features'][${attribute.name}]`
+        : "";
+    setAttributes([
+      ...attributes,
+      {
+        ...attribute,
+        expression: defaultExpression,
+      },
+    ]);
 
     if (plans) {
       const updatedPlans = plans.map((plan) => ({

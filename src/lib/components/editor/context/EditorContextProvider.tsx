@@ -1,6 +1,5 @@
 import { Dispatch, SetStateAction, createContext, useState } from "react";
 import { UserContextAttributes } from "../parsers/expression";
-import { parseAttributeExpressionToUserAttributes } from "../parsers/expression";
 import { AllFeatures, ParsedFeatures } from "../types/features";
 import {
   AddOnsState,
@@ -18,9 +17,9 @@ interface EditorContextProps {
   attributes: AllFeatures[];
   setAttributes: Dispatch<SetStateAction<AllFeatures[]>>;
   userContextAttributes: UserContextAttributes;
+  setUserContextAttributes: Dispatch<SetStateAction<UserContextAttributes>>;
   usageLimits: ParsedUsageLimits;
   setUsageLimits: Dispatch<SetStateAction<ParsedUsageLimits>>;
-  setUserContextAttributes: Dispatch<SetStateAction<UserContextAttributes>>;
   plans: PlansState;
   setPlans: Dispatch<SetStateAction<PlansState>>;
   addOns: AddOnsState;
@@ -63,12 +62,8 @@ export function EditorContextProvider({
   const retTo = returnTo ? returnTo : "/";
   const pricingManager = parsePricingManager(pricingContext);
 
-  const initialUserAttributes = parseAttributeExpressionToUserAttributes(
-    pricingManager.features
-  ).filter((userAttribute) => userAttribute.name !== "");
-
   const [userContextAttributes, setUserContextAttributes] = useState(
-    initialUserAttributes
+    [] as UserContextAttributes
   );
 
   const initialPricing = {
