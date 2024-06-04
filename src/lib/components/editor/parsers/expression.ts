@@ -41,14 +41,6 @@ export interface UserContextAttribute {
   valueType: ValueType;
 }
 
-enum Tokenss {
-  BinaryOperator,
-  Literal,
-  Number,
-  OpenParen,
-  CloseParen,
-}
-
 export type Tokens =
   | NoopToken
   | OperatorToken
