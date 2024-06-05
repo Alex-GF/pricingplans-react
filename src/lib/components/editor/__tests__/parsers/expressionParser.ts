@@ -1,12 +1,13 @@
 import { Tokens, TokenType, tokenize } from "../../parsers/expressionParser";
 
 describe("Expression parser test suite", () => {
-  it("Given a literal should create", () => {
+  it("Given word surrounded by single quotes should produce a String", () => {
     const expectedResult: Tokens = [
-      { type: TokenType.Literal, value: "Test", start: 0, end: 3 },
+      { type: TokenType.String, value: "'String'", start: 0, end: 7 },
     ];
-    expect(tokenize("Test")).toStrictEqual(expectedResult);
+    expect(tokenize("'String'")).toStrictEqual(expectedResult);
   });
+
   it("Given digits should create a number", () => {
     const expectedResult: Tokens = [
       { type: TokenType.Number, value: "1234", start: 0, end: 3 },
@@ -50,56 +51,26 @@ describe("Expression parser test suite", () => {
   });
 
   it("Given mix of tokens should parse correctly", () => {
-    const expression = "This (is a test) <= > 123";
+    const expression = "'This' 1 <= userContext";
     const expectedResult: Tokens = [
-      { type: TokenType.Literal, value: "This", start: 0, end: 3 },
+      { type: TokenType.String, value: "'This'", start: 0, end: 5 },
       {
-        type: TokenType.OpenParen,
-        value: "(",
-        start: 5,
-        end: 5,
-      },
-      {
-        type: TokenType.Literal,
-        value: "is",
-        start: 6,
+        type: TokenType.Number,
+        value: "1",
+        start: 7,
         end: 7,
-      },
-      {
-        type: TokenType.Literal,
-        value: "a",
-        start: 9,
-        end: 9,
-      },
-      {
-        type: TokenType.Literal,
-        value: "test",
-        start: 11,
-        end: 14,
-      },
-      {
-        type: TokenType.ClosedParen,
-        value: ")",
-        start: 15,
-        end: 15,
       },
       {
         type: TokenType.BinaryOperator,
         value: "<=",
-        start: 17,
-        end: 18,
+        start: 9,
+        end: 10,
       },
       {
-        type: TokenType.BinaryOperator,
-        value: ">",
-        start: 20,
-        end: 20,
-      },
-      {
-        type: TokenType.Number,
-        value: "123",
-        start: 22,
-        end: 24,
+        type: TokenType.Reserved,
+        value: "userContext",
+        start: 12,
+        end: 22,
       },
     ];
     expect(tokenize(expression)).toStrictEqual(expectedResult);
@@ -116,21 +87,9 @@ describe("Expression parser test suite", () => {
         end: 11,
       },
       {
-        type: TokenType.SingleQuote,
-        value: "'",
+        type: TokenType.String,
+        value: "'features'",
         start: 12,
-        end: 12,
-      },
-      {
-        type: TokenType.Reserved,
-        value: "features",
-        start: 13,
-        end: 20,
-      },
-      {
-        type: TokenType.SingleQuote,
-        value: "'",
-        start: 21,
         end: 21,
       },
       {
@@ -146,23 +105,12 @@ describe("Expression parser test suite", () => {
         end: 23,
       },
       {
-        type: TokenType.SingleQuote,
-        value: "'",
+        type: TokenType.String,
+        value: "'test'",
         start: 24,
-        end: 24,
-      },
-      {
-        type: TokenType.Literal,
-        value: "test",
-        start: 25,
-        end: 28,
-      },
-      {
-        type: TokenType.SingleQuote,
-        value: "'",
-        start: 29,
         end: 29,
       },
+
       {
         type: TokenType.ClosedBracket,
         value: "]",
@@ -184,24 +132,14 @@ describe("Expression parser test suite", () => {
         start: 11,
         end: 11,
       },
+
       {
-        type: TokenType.SingleQuote,
-        value: "'",
+        type: TokenType.String,
+        value: "'usageLimits'",
         start: 12,
-        end: 12,
-      },
-      {
-        type: TokenType.Reserved,
-        value: "usageLimits",
-        start: 13,
-        end: 23,
-      },
-      {
-        type: TokenType.SingleQuote,
-        value: "'",
-        start: 24,
         end: 24,
       },
+
       {
         type: TokenType.ClosedBracket,
         value: "]",
@@ -214,22 +152,11 @@ describe("Expression parser test suite", () => {
         start: 26,
         end: 26,
       },
+
       {
-        type: TokenType.SingleQuote,
-        value: "'",
+        type: TokenType.String,
+        value: "'maxPets'",
         start: 27,
-        end: 27,
-      },
-      {
-        type: TokenType.Literal,
-        value: "maxPets",
-        start: 28,
-        end: 34,
-      },
-      {
-        type: TokenType.SingleQuote,
-        value: "'",
-        start: 35,
         end: 35,
       },
       {
@@ -257,23 +184,12 @@ describe("Expression parser test suite", () => {
         end: 51,
       },
       {
-        type: TokenType.SingleQuote,
-        value: "'",
+        type: TokenType.String,
+        value: "'pets'",
         start: 52,
-        end: 52,
-      },
-      {
-        type: TokenType.Literal,
-        value: "pets",
-        start: 53,
-        end: 56,
-      },
-      {
-        type: TokenType.SingleQuote,
-        value: "'",
-        start: 57,
         end: 57,
       },
+
       {
         type: TokenType.ClosedBracket,
         value: "]",

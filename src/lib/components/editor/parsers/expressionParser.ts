@@ -1,12 +1,11 @@
 export enum TokenType {
   Number = "NUMBER",
-  Literal = "LITERAL",
+  String = "STRING",
   OpenParen = "OPEN_PARENTHESIS",
   ClosedParen = "CLOSED_PARENTHESIS",
   OpenBracket = "OPEN_BRACKET",
   ClosedBracket = "CLOSED_BRACKET",
   BinaryOperator = "BINARY_OPERATOR",
-  SingleQuote = "SINGLE_QUOTE",
   Reserved = "RESERVED",
 }
 
@@ -84,8 +83,24 @@ export function tokenize(expression: string): Tokens {
       tokens.push(token(TokenType.ClosedBracket, character, cursor, cursor));
       cursor++;
     } else if (character === "'") {
-      tokens.push(token(TokenType.SingleQuote, character, cursor, cursor));
-      cursor++;
+      const start = cursor;
+      const quotes = [expression[cursor]];
+      while (cursor < expression.length && quotes.length === 1) {
+        buffer += expression[cursor];
+        if (cursor !== start && expression[cursor] === "'") {
+          quotes.pop();
+        }
+        cursor++;
+      }
+
+      if (quotes.length !== 0) {
+        throw Error("Syntax error unmatched quotes when lexing string token");
+      }
+
+      tokens.push(
+        token(TokenType.String, buffer, start, start + buffer.length - 1)
+      );
+      buffer = "";
     } else if (
       expression[cursor + 1] &&
       isComposedOperator(expression[cursor] + expression[cursor + 1])
@@ -127,12 +142,95 @@ export function tokenize(expression: string): Tokens {
 
       if (RESERVERD_WORDS.includes(buffer)) {
         tokens.push(token(TokenType.Reserved, buffer, start, cursor - 1));
-      } else {
-        tokens.push(token(TokenType.Literal, buffer, start, cursor - 1));
       }
       buffer = "";
     }
   }
 
   return tokens;
+}
+
+export function parser(tokens: Tokens) {
+  let cursor = 0;
+  const brackets = [];
+  const body = [];
+  while (cursor < tokens.length) {
+    if (tokens[cursor].type === TokenType.BinaryOperator) {
+      switch (tokens[cursor].value) {
+        case "<":
+        case "<=":
+        case ">":
+        case ">=":
+        case "&&":
+        case "||": {
+          return {
+            left: parseTerminal(tokens.slice(0, cursor)),
+            rigth: parseTerminal(tokens.slice(cursor)),
+          };
+        }
+      }
+    }
+  }
+}
+
+export function parseTerminal(tokens: Tokens) {
+  let cursor = 0;
+  if (tokens.length === 1) {
+    const token = tokens[0];
+
+    if (token.type === TokenType.Reserved) {
+      throw Error("Syntax error only one argument found");
+    } else if (token.type === TokenType.Number) {
+      return { type: TokenType.Number, value: Number(token.value) };
+    } else {
+      return { type: TokenType.String, value: token.value };
+    }
+  } else {
+    const brackets = [];
+    let isFeatures = true;
+    let literal = "";
+    let isPlanContext = false;
+    while (cursor < tokens.length) {
+      const token = tokens[0];
+      if (token.type === TokenType.OpenBracket) {
+        brackets.push(token);
+      } else if (token.type === TokenType.ClosedBracket) {
+        brackets.pop();
+      } else if (token.type === TokenType.Reserved) {
+        if (token.value === "features") {
+          isFeatures = true;
+        } else if (token.value === "usageLimits") {
+          isFeatures = false;
+        } else if (token.value === "planContext") {
+          isPlanContext = true;
+        }
+      } else {
+        literal = token.value;
+      }
+      cursor++;
+    }
+
+    if (brackets.length !== 0) {
+      throw Error("Incorrect number of parenthesis");
+    }
+
+    if (isPlanContext && isFeatures) {
+      return {
+        type: "FEATURES",
+        key: literal,
+      };
+    }
+
+    if (isPlanContext && !isFeatures) {
+      return {
+        type: "USAGE_LIMITS",
+        key: literal,
+      };
+    }
+
+    return {
+      type: literal,
+      feature: 0,
+    };
+  }
 }
