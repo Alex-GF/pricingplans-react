@@ -1,6 +1,6 @@
-import { Tokens, TokenType, tokenize } from "../../parsers/expressionParser";
+import { Tokens, TokenType, tokenize } from "../../parsers/tokenizer";
 
-describe("Expression parser test suite", () => {
+describe("Expression Tokenizer test suite", () => {
   it("Given word surrounded by single quotes should produce a String", () => {
     const expectedResult: Tokens = [
       { type: TokenType.String, value: "'String'", start: 0, end: 7 },

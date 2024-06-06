@@ -1,236 +1,261 @@
-export enum TokenType {
-  Number = "NUMBER",
-  String = "STRING",
-  OpenParen = "OPEN_PARENTHESIS",
-  ClosedParen = "CLOSED_PARENTHESIS",
-  OpenBracket = "OPEN_BRACKET",
-  ClosedBracket = "CLOSED_BRACKET",
-  BinaryOperator = "BINARY_OPERATOR",
-  Reserved = "RESERVED",
+import { TokenType, Tokens, tokenize } from "./tokenizer";
+
+export interface Expression {
+  left: TerminalNode;
+  right: TerminalNode;
+  operator: string;
 }
 
-export interface Token {
-  type: TokenType;
+export enum TerminalNodeType {
+  Number = "number",
+  String = "string",
+  PlanContext = "planContext",
+  UserContext = "userContext",
+}
+
+interface NumberNode {
+  type: TerminalNodeType.Number;
+  value: number;
+}
+
+interface StringNode {
+  type: TerminalNodeType.String;
   value: string;
-  start: number;
-  end: number;
 }
 
-export type Tokens = Token[];
-
-function isSkippable(source: string) {
-  return source === " " || source === "\t";
+interface PlanContextNode {
+  type: TerminalNodeType.PlanContext;
+  root: "features" | "usageLimits";
+  value: string;
 }
 
-function isComposedOperator(source: string) {
-  return ["<=", ">=", "==", "!="].includes(source);
+interface UserContextNode {
+  type: TerminalNodeType.UserContext;
+  value: string;
 }
 
-function isSingleOperator(source: string) {
-  return ["+", "-", "*", "/", "<", ">", "!"].includes(source);
-}
+type TerminalNode = StringNode | NumberNode | PlanContextNode | UserContextNode;
 
-function isNumber(source: string) {
-  return (
-    source.charCodeAt(0) >= "0".charCodeAt(0) &&
-    source.charCodeAt(0) <= "9".charCodeAt(0)
-  );
-}
+export function parseExpression(expression: string): Expression {
+  const tokens = tokenize(expression);
 
-function isAlpha(source: string) {
-  return (
-    (source.charCodeAt(0) >= "A".charCodeAt(0) &&
-      source.charCodeAt(0) <= "Z".charCodeAt(0)) ||
-    (source.charCodeAt(0) >= "a".charCodeAt(0) &&
-      source.charCodeAt(0) <= "z".charCodeAt(0))
-  );
-}
-
-function token(
-  type: TokenType,
-  value: string,
-  start: number,
-  end: number
-): Token {
-  return { type, value, start, end };
-}
-
-const RESERVERD_WORDS = [
-  "planContext",
-  "userContext",
-  "features",
-  "usageLimits",
-];
-
-export function tokenize(expression: string): Tokens {
-  const tokens = [];
-  let buffer = "";
   let cursor = 0;
-  while (cursor < expression.length) {
-    const character = expression[cursor];
-    if (isSkippable(character)) {
-      cursor++;
-    } else if (character === "(") {
-      tokens.push(token(TokenType.OpenParen, character, cursor, cursor));
-      cursor++;
-    } else if (character === ")") {
-      tokens.push(token(TokenType.ClosedParen, character, cursor, cursor));
-      cursor++;
-    } else if (character === "[") {
-      tokens.push(token(TokenType.OpenBracket, character, cursor, cursor));
-      cursor++;
-    } else if (character === "]") {
-      tokens.push(token(TokenType.ClosedBracket, character, cursor, cursor));
-      cursor++;
-    } else if (character === "'") {
-      const start = cursor;
-      const quotes = [expression[cursor]];
-      while (cursor < expression.length && quotes.length === 1) {
-        buffer += expression[cursor];
-        if (cursor !== start && expression[cursor] === "'") {
-          quotes.pop();
-        }
-        cursor++;
-      }
-
-      if (quotes.length !== 0) {
-        throw Error("Syntax error unmatched quotes when lexing string token");
-      }
-
-      tokens.push(
-        token(TokenType.String, buffer, start, start + buffer.length - 1)
-      );
-      buffer = "";
-    } else if (
-      expression[cursor + 1] &&
-      isComposedOperator(expression[cursor] + expression[cursor + 1])
-    ) {
-      tokens.push(
-        token(
-          TokenType.BinaryOperator,
-          expression[cursor] + expression[cursor + 1],
-          cursor,
-          cursor + 1
-        )
-      );
-      cursor += 2;
-    } else if (isSingleOperator(expression[cursor])) {
-      tokens.push(
-        token(TokenType.BinaryOperator, expression[cursor], cursor, cursor)
-      );
-      cursor++;
-    } else if (isNumber(expression[cursor])) {
-      const start = cursor;
-      while (cursor < expression.length && isNumber(expression[cursor])) {
-        buffer += expression[cursor];
-        cursor++;
-      }
-      tokens.push(token(TokenType.Number, buffer, start, cursor - 1));
-      buffer = "";
-    } else {
-      if (!isAlpha(expression[cursor])) {
-        throw Error(
-          `Illegal token Unicode ${expression[cursor].charCodeAt(0)}`
-        );
-      }
-      const start = cursor;
-
-      while (cursor < expression.length && isAlpha(expression[cursor])) {
-        buffer += expression[cursor];
-        cursor++;
-      }
-
-      if (RESERVERD_WORDS.includes(buffer)) {
-        tokens.push(token(TokenType.Reserved, buffer, start, cursor - 1));
-      }
-      buffer = "";
-    }
-  }
-
-  return tokens;
-}
-
-export function parser(tokens: Tokens) {
-  let cursor = 0;
-  const brackets = [];
-  const body = [];
   while (cursor < tokens.length) {
     if (tokens[cursor].type === TokenType.BinaryOperator) {
-      switch (tokens[cursor].value) {
+      const operator = tokens[cursor].value;
+      switch (operator) {
+        case "==":
+        case "!=":
+          return {
+            left: parseTerminalNode(tokens.slice(0, cursor)),
+            right: parseTerminalNode(tokens.slice(cursor + 1)),
+            operator,
+          };
         case "<":
         case "<=":
         case ">":
-        case ">=":
+        case ">=": {
+          const left = parseTerminalNode(tokens.slice(0, cursor));
+          const right = parseTerminalNode(tokens.slice(cursor + 1));
+          if (left.type === TerminalNodeType.String) {
+            throw Error(
+              `Left side has a string. You cannot compare a string like < <= >= >`
+            );
+          }
+
+          if (right.type === TerminalNodeType.String) {
+            throw Error(
+              `Rigth side has a string. You cannot compare a string like < <= >= >`
+            );
+          }
+          return { left, right, operator };
+        }
+
         case "&&":
         case "||": {
+          const left = parseTerminalNode(tokens.slice(0, cursor));
+          const right = parseTerminalNode(tokens.slice(cursor + 1));
+          if (left.type === TerminalNodeType.String) {
+            throw Error(
+              `Left side has a string. You cannot compare a string like < <= >= >`
+            );
+          }
+
+          if (right.type === TerminalNodeType.String) {
+            throw Error(
+              `Rigth side has a string. You cannot compare a string like < <= >= >`
+            );
+          }
+
+          if (left.type === TerminalNodeType.Number) {
+            throw Error(
+              `Left side has a number. You cannot compare a number like && ||`
+            );
+          }
+
+          if (right.type === TerminalNodeType.Number) {
+            throw Error(
+              `Rigth side has a number. You cannot compare a string like && ||`
+            );
+          }
+
           return {
-            left: parseTerminal(tokens.slice(0, cursor)),
-            rigth: parseTerminal(tokens.slice(cursor)),
+            left,
+            right,
+            operator,
           };
         }
+        default:
+          throw Error("Unsuported operator " + operator);
       }
+    }
+    cursor++;
+  }
+
+  throw Error("Invalid expression " + expression);
+}
+
+function parseTerminalNode(tokens: Tokens): TerminalNode {
+  if (tokens.length === 1) {
+    if (tokens[0].type === TokenType.Number) {
+      return { type: TerminalNodeType.Number, value: Number(tokens[0].value) };
+    } else if (tokens[0].type === TokenType.String) {
+      return {
+        type: TerminalNodeType.String,
+        value: tokens[0].value.slice(1, -1),
+      };
+    } else {
+      throw Error(
+        "Unexpected token:\n" +
+          `Type: ${tokens[0].type}\n` +
+          `Value: ${tokens[0].value}\n`
+      );
+    }
+  } else {
+    if (
+      tokens[0].type === TokenType.Reserved &&
+      tokens[0].value === "userContext"
+    ) {
+      return parseUserConntextNode(tokens);
+    } else if (
+      tokens[0].type === TokenType.Reserved &&
+      tokens[0].value === "planContext"
+    ) {
+      return parsePlanContextNode(tokens);
+    } else {
+      throw Error(
+        "Unable to handle this stream of tokens:\n" +
+          `${JSON.stringify(tokens, null, 2)}`
+      );
     }
   }
 }
 
-export function parseTerminal(tokens: Tokens) {
-  let cursor = 0;
-  if (tokens.length === 1) {
-    const token = tokens[0];
-
-    if (token.type === TokenType.Reserved) {
-      throw Error("Syntax error only one argument found");
-    } else if (token.type === TokenType.Number) {
-      return { type: TokenType.Number, value: Number(token.value) };
-    } else {
-      return { type: TokenType.String, value: token.value };
-    }
-  } else {
-    const brackets = [];
-    let isFeatures = true;
-    let literal = "";
-    let isPlanContext = false;
-    while (cursor < tokens.length) {
-      const token = tokens[0];
-      if (token.type === TokenType.OpenBracket) {
-        brackets.push(token);
-      } else if (token.type === TokenType.ClosedBracket) {
-        brackets.pop();
-      } else if (token.type === TokenType.Reserved) {
-        if (token.value === "features") {
-          isFeatures = true;
-        } else if (token.value === "usageLimits") {
-          isFeatures = false;
-        } else if (token.value === "planContext") {
-          isPlanContext = true;
-        }
-      } else {
-        literal = token.value;
-      }
-      cursor++;
-    }
-
-    if (brackets.length !== 0) {
-      throw Error("Incorrect number of parenthesis");
-    }
-
-    if (isPlanContext && isFeatures) {
-      return {
-        type: "FEATURES",
-        key: literal,
-      };
-    }
-
-    if (isPlanContext && !isFeatures) {
-      return {
-        type: "USAGE_LIMITS",
-        key: literal,
-      };
-    }
-
-    return {
-      type: literal,
-      feature: 0,
-    };
+function parsePlanContextNode(tokens: Tokens): PlanContextNode {
+  if (tokens.length !== 7) {
+    throw Error(
+      "Invalid syntax when accesing planContext. Valid syntax is userContext['<features | usageLimits>']['<string>']"
+    );
   }
+
+  if (tokens[1].type !== TokenType.OpenBracket) {
+    throw Error(
+      "Expected OPENING_BRACKETS '[' after planContext but found\n" +
+        `TokenType: ${tokens[1].type}\n` +
+        `Value: "${tokens[1].value}"\n`
+    );
+  }
+
+  if (tokens[2].type !== TokenType.String) {
+    throw Error(
+      "Expected a <string> to access the userContext map but found:\n" +
+        `Type: ${tokens[2].type}\n` +
+        `Value: ${tokens[2].value}\n`
+    );
+  }
+
+  const root = tokens[2].value.slice(1, -1);
+
+  if (!["usageLimits", "features"].includes(root)) {
+    throw Error(
+      "Expected  to access features or usageLimits map but found:\n" +
+        `Type: ${tokens[2].type}\n` +
+        `Value: ${tokens[2].value}\n`
+    );
+  }
+
+  if (tokens[3].type !== TokenType.ClosedBracket) {
+    throw Error(
+      "Expected to close Map accessing expression with closing bracket ']'  but found:\n" +
+        `Type: ${tokens[3].type}\n` +
+        `Value: ${tokens[3].value}\n`
+    );
+  }
+
+  if (tokens[4].type !== TokenType.OpenBracket) {
+    throw Error(
+      "Expected OPENING_BRACKETS '[' to access a feature but found\n" +
+        `TokenType: ${tokens[4].type}\n` +
+        `Value: "${tokens[4].value}"\n`
+    );
+  }
+
+  if (tokens[5].type !== TokenType.String) {
+    throw Error(
+      "Expected a <string> to access a concrete feature but found:\n" +
+        `Type: ${tokens[5].type}\n` +
+        `Value: ${tokens[5].value}\n`
+    );
+  }
+
+  if (tokens[6].type !== TokenType.ClosedBracket) {
+    throw Error(
+      "Expected to close Map accessing expression with closing bracket ']'  but found:\n" +
+        `Type: ${tokens[6].type}\n` +
+        `Value: ${tokens[6].value}\n`
+    );
+  }
+
+  return {
+    type: TerminalNodeType.PlanContext,
+    root: root === "features" ? "features" : "usageLimits",
+    value: tokens[5].value.slice(1, -1),
+  };
+}
+
+function parseUserConntextNode(tokens: Tokens): UserContextNode {
+  if (tokens.length !== 4) {
+    throw Error(
+      "Invalid syntax when accesing userContext. Valid syntax is userContext['<string>']"
+    );
+  }
+
+  if (tokens[1].type !== TokenType.OpenBracket) {
+    throw Error(
+      "Expected OPENING_BRACKETS '[' after userContext but found\n" +
+        `TokenType: ${tokens[1].type}\n` +
+        `Value: "${tokens[1].value}"\n`
+    );
+  }
+
+  if (tokens[2].type !== TokenType.String) {
+    throw Error(
+      "Expected a <string> to access the userContext map but found:\n" +
+        `Type: ${tokens[2].type}\n` +
+        `Value: ${tokens[2].value}\n`
+    );
+  }
+
+  if (tokens[3].type !== TokenType.ClosedBracket) {
+    throw Error(
+      "Expected to close Map accessing expression with closing bracket ']'  but found:\n" +
+        `Type: ${tokens[3].type}\n` +
+        `Value: ${tokens[3].value}\n`
+    );
+  }
+
+  return {
+    type: TerminalNodeType.UserContext,
+    value: tokens[2].value.slice(1, -1),
+  };
 }
