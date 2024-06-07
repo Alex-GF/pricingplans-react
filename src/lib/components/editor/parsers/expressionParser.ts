@@ -1,10 +1,13 @@
+import { Value, ValueType } from "../types";
 import { TokenType, Tokens, tokenize } from "./tokenizer";
 
-export interface Expression {
-  left: TerminalNode;
-  right: TerminalNode;
-  operator: string;
-}
+export type Expression =
+  | {
+      left: TerminalNode;
+      right: TerminalNode;
+      operator: string;
+    }
+  | PlanContextNode;
 
 export enum TerminalNodeType {
   Number = "number",
@@ -59,13 +62,13 @@ export function parseExpression(expression: string): Expression {
           const right = parseTerminalNode(tokens.slice(cursor + 1));
           if (left.type === TerminalNodeType.String) {
             throw Error(
-              `Left side has a string. You cannot compare a string like < <= >= >`
+              `Left side has a string. You cannot compare a string with these operators < <= >= >`
             );
           }
 
           if (right.type === TerminalNodeType.String) {
             throw Error(
-              `Rigth side has a string. You cannot compare a string like < <= >= >`
+              `Rigth side has a string. You cannot compare a string with these operators < <= >= >`
             );
           }
           return { left, right, operator };
@@ -77,25 +80,25 @@ export function parseExpression(expression: string): Expression {
           const right = parseTerminalNode(tokens.slice(cursor + 1));
           if (left.type === TerminalNodeType.String) {
             throw Error(
-              `Left side has a string. You cannot compare a string like < <= >= >`
+              `Left side has a string. You cannot do logical operations with && or ||`
             );
           }
 
           if (right.type === TerminalNodeType.String) {
             throw Error(
-              `Rigth side has a string. You cannot compare a string like < <= >= >`
+              `Rigth side has a string. You cannot do logical operations with && or ||`
             );
           }
 
           if (left.type === TerminalNodeType.Number) {
             throw Error(
-              `Left side has a number. You cannot compare a number like && ||`
+              `Left side has a number. You cannot do logical operations with && or ||`
             );
           }
 
           if (right.type === TerminalNodeType.Number) {
             throw Error(
-              `Rigth side has a number. You cannot compare a string like && ||`
+              `Rigth side has a number. You cannot do logical operations with && or ||`
             );
           }
 
@@ -112,7 +115,17 @@ export function parseExpression(expression: string): Expression {
     cursor++;
   }
 
-  throw Error("Invalid expression " + expression);
+  if (
+    tokens[0].type === TokenType.Reserved &&
+    tokens[0].value === "planContext"
+  ) {
+    return parsePlanContextNode(tokens);
+  }
+  throw Error(
+    "Invalid expression " +
+      expression +
+      `\n Identified tokens are ${JSON.stringify(tokens, null, 2)}\n`
+  );
 }
 
 function parseTerminalNode(tokens: Tokens): TerminalNode {

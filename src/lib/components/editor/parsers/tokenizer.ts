@@ -23,7 +23,7 @@ function isSkippable(source: string) {
 }
 
 function isComposedOperator(source: string) {
-  return ["<=", ">=", "==", "!="].includes(source);
+  return ["<=", ">=", "==", "!=", "&&", "||"].includes(source);
 }
 
 function isSingleOperator(source: string) {
