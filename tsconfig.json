@@ -11,7 +11,8 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "resolveJsonModule": true, // Habilita la importación de archivos JSON   
   },
   "include": ["src/**/*", "custom.d.ts"]
 }

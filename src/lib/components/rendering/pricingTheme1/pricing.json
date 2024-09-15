@@ -1,0 +1,205 @@
+{
+  "name": "petclinic",
+  "createdAt": "2024-01-15",
+  "currency": "€",
+  "hasAnnualPayment": false,
+  "features": [
+    {
+      "name": "pets",
+      "description": "Pets description",
+      "valueType": "BOOLEAN",
+      "defaultValue": true,
+      "expression": "userContext['pets'] < planContext['usageLimits']['maxPets']",
+      "serverExpression": "userContext['pets'] <= planContext['usageLimits']['maxPets']",
+      "type": "DOMAIN"
+    },
+    {
+      "name": "visits",
+      "description": "visits description",
+      "valueType": "BOOLEAN",
+      "defaultValue": true,
+      "expression": "userContext['visits'] < planContext['usageLimits']['maxVisitsPerMonthAndPet']",
+      "type": "DOMAIN"
+    },
+    {
+      "name": "supportPriority",
+      "description": "supportPriority description",
+      "valueType": "TEXT",
+      "defaultValue": "LOW",
+      "expression": "",
+      "type": "SUPPORT"
+    },
+    {
+      "name": "haveCalendar",
+      "description": "haveCalendar description",
+      "valueType": "BOOLEAN",
+      "defaultValue": false,
+      "expression": "planContext['features']['haveCalendar']",
+      "type": "DOMAIN"
+    },
+    {
+      "name": "havePetsDashboard",
+      "description": "havePetsDashboard description",
+      "valueType": "BOOLEAN",
+      "defaultValue": false,
+      "expression": "planContext['features']['havePetsDashboard']",
+      "type": "DOMAIN"
+    },
+    {
+      "name": "haveVetSelection",
+      "description": "haveVetSelection description",
+      "valueType": "BOOLEAN",
+      "defaultValue": false,
+      "expression": "planContext['features']['haveVetSelection']",
+      "type": "DOMAIN"
+    },
+    {
+      "name": "consultations",
+      "description": "consultations description",
+      "valueType": "BOOLEAN",
+      "defaultValue": false,
+      "expression": "planContext['features']['consultations']",
+      "type": "DOMAIN"
+    }
+  ],
+  "usageLimits": [
+    {
+      "name": "maxPets",
+      "description": "",
+      "valueType": "NUMERIC",
+      "defaultValue": 2,
+      "unit": "pet",
+      "type": "NON_RENEWABLE",
+      "linkedFeatures": ["pets"]
+    },
+    {
+      "name": "maxVisitsPerMonthAndPet",
+      "description": "",
+      "valueType": "NUMERIC",
+      "defaultValue": 1,
+      "unit": "visit",
+      "type": "RENEWABLE",
+      "linkedFeatures": ["visits"]
+    }
+  ],
+  "plans": [
+    {
+      "name": "BASIC",
+      "description": "Basic plan",
+      "monthlyPrice": 0.0,
+      "annualPrice": 0.0,
+      "unit": "user/month",
+      "features": [
+        {
+          "name": "supportPriority",
+          "value": "LOW"
+        },
+        {
+          "name": "haveCalendar",
+          "value": false
+        },
+        {
+          "name": "havePetsDashboard",
+          "value": false
+        },
+        {
+          "name": "haveVetSelection",
+          "value": true
+        },
+        {
+          "name": "consultations",
+          "value": false
+        }
+      ],
+      "usageLimits": [
+        {
+          "name": "maxPets",
+          "value": 3
+        },
+        {
+          "name": "maxVisitsPerMonthAndPet",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "name": "GOLD",
+      "description": "Advanced plan",
+      "monthlyPrice": 5.0,
+      "annualPrice": 5.0,
+      "unit": "user/month",
+      "features": [
+        {
+          "name": "supportPriority",
+          "value": "MEDIUM"
+        },
+        {
+          "name": "haveCalendar",
+          "value": true
+        },
+        {
+          "name": "havePetsDashboard",
+          "value": false
+        },
+        {
+          "name": "haveVetSelection",
+          "value": true
+        },
+        {
+          "name": "consultations",
+          "value": false
+        }
+      ],
+      "usageLimits": [
+        {
+          "name": "maxPets",
+          "value": 4
+        },
+        {
+          "name": "maxVisitsPerMonthAndPet",
+          "value": 3
+        }
+      ]
+    },
+    {
+      "name": "PLATINUM",
+      "description": "Pro plan",
+      "monthlyPrice": 10.0,
+      "annualPrice": 10.0,
+      "unit": "user/month",
+      "features": [
+        {
+          "name": "supportPriority",
+          "value": "HIGH"
+        },
+        {
+          "name": "haveCalendar",
+          "value": true
+        },
+        {
+          "name": "havePetsDashboard",
+          "value": true
+        },
+        {
+          "name": "haveVetSelection",
+          "value": true
+        },
+        {
+          "name": "consultations",
+          "value": true
+        }
+      ],
+      "usageLimits": [
+        {
+          "name": "maxPets",
+          "value": 7
+        },
+        {
+          "name": "maxVisitsPerMonthAndPet",
+          "value": 6
+        }
+      ]
+    }
+  ],
+  "addOns": []
+}

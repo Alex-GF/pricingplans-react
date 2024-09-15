@@ -20,3 +20,7 @@ export {
   fetchWithPricingInterceptor,
   searchNewTokenAndUpdate,
 } from "./services/api.service";
+
+export { PricingTheme1 } from "./lib/components/rendering/pricingTheme1";
+
+export { RenderingService } from "./services/render.service";
