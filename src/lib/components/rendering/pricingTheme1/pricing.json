@@ -2,7 +2,7 @@
   "name": "petclinic",
   "createdAt": "2024-01-15",
   "currency": "€",
-  "hasAnnualPayment": false,
+  "hasAnnualPayment": true,
   "features": [
     {
       "name": "pets",
@@ -22,12 +22,12 @@
       "type": "DOMAIN"
     },
     {
-      "name": "supportPriority",
-      "description": "supportPriority description",
-      "valueType": "TEXT",
-      "defaultValue": "LOW",
-      "expression": "",
-      "type": "SUPPORT"
+      "name": "haveVetSelection",
+      "description": "haveVetSelection description",
+      "valueType": "BOOLEAN",
+      "defaultValue": false,
+      "expression": "planContext['features']['haveVetSelection']",
+      "type": "DOMAIN"
     },
     {
       "name": "haveCalendar",
@@ -46,20 +46,20 @@
       "type": "DOMAIN"
     },
     {
-      "name": "haveVetSelection",
-      "description": "haveVetSelection description",
-      "valueType": "BOOLEAN",
-      "defaultValue": false,
-      "expression": "planContext['features']['haveVetSelection']",
-      "type": "DOMAIN"
-    },
-    {
       "name": "consultations",
       "description": "consultations description",
       "valueType": "BOOLEAN",
       "defaultValue": false,
       "expression": "planContext['features']['consultations']",
       "type": "DOMAIN"
+    },
+    {
+      "name": "supportPriority",
+      "description": "supportPriority description",
+      "valueType": "TEXT",
+      "defaultValue": "LOW",
+      "expression": "",
+      "type": "SUPPORT"
     }
   ],
   "usageLimits": [
@@ -126,7 +126,7 @@
       "name": "GOLD",
       "description": "Advanced plan",
       "monthlyPrice": 5.0,
-      "annualPrice": 5.0,
+      "annualPrice": 4.0,
       "unit": "user/month",
       "features": [
         {
@@ -165,7 +165,7 @@
       "name": "PLATINUM",
       "description": "Pro plan",
       "monthlyPrice": 10.0,
-      "annualPrice": 10.0,
+      "annualPrice": 8.0,
       "unit": "user/month",
       "features": [
         {

@@ -1,0 +1,356 @@
+{
+  "name": "CCSIM",
+  "createdAt": "2024-09-16",
+  "currency": "€",
+  "hasAnnualPayment": true,
+  "features": [
+    {
+      "name": "IoTEnvironmentSimulation",
+      "description": "IoT Environment Simulation",
+      "valueType": "BOOLEAN",
+      "defaultValue": true,
+      "type": "DOMAIN"
+    },
+    {
+      "name": "stressTesting",
+      "description": "Stress Testing",
+      "valueType": "BOOLEAN",
+      "defaultValue": true,
+      "type": "DOMAIN"
+    },
+    {
+      "name": "rawLogs",
+      "description": "Raw Logs",
+      "valueType": "BOOLEAN",
+      "defaultValue": true,
+      "expression": "",
+      "type": "DOMAIN"
+    },
+    {
+      "name": "mobileSimulation",
+      "description": "Mobile Simulation",
+      "valueType": "BOOLEAN",
+      "defaultValue": false,
+      "expression": "",
+      "type": "DOMAIN"
+    },
+    {
+      "name": "uiTesting",
+      "description": "UI Testing",
+      "valueType": "BOOLEAN",
+      "defaultValue": false,
+      "type": "DOMAIN"
+    },
+    {
+      "name": "ciIntegrations",
+      "description": "CI Integrations",
+      "valueType": "BOOLEAN",
+      "defaultValue": false,
+      "type": "INTEGRATION"
+    },
+    {
+      "name": "logFilteringByKeywords",
+      "description": "Log filtering by keywords",
+      "valueType": "BOOLEAN",
+      "defaultValue": false,
+      "type": "DOMAIN"
+    },
+    {
+      "name": "logProcessing",
+      "description": "Log processing",
+      "valueType": "BOOLEAN",
+      "defaultValue": false,
+      "type": "DOMAIN"
+    },
+    {
+      "name": "slaUptime",
+      "description": "SLA Uptime",
+      "valueType": "TEXT",
+      "defaultValue": "99%",
+      "type": "GUARANTEE"
+    },
+    {
+      "name": "emailSupport",
+      "description": "Email Support",
+      "valueType": "BOOLEAN",
+      "defaultValue": true,
+      "type": "SUPPORT"
+    }
+  ],
+  "usageLimits": [
+    {
+      "name": "monthlySimulationsLimit",
+      "description": "",
+      "valueType": "NUMERIC",
+      "defaultValue": 15,
+      "unit": "simulation/month",
+      "type": "RENEWABLE",
+      "linkedFeatures": ["IoTEnvironmentSimulation"]
+    },
+    {
+      "name": "projects",
+      "description": "",
+      "valueType": "NUMERIC",
+      "defaultValue": 10,
+      "unit": "project",
+      "type": "NON_RENEWABLE",
+      "linkedFeatures": ["IoTEnvironmentSimulation"]
+    },
+    {
+      "name": "parallelSimulations",
+      "description": "",
+      "valueType": "NUMERIC",
+      "defaultValue": 1,
+      "unit": "simulation",
+      "type": "RENEWABLE",
+      "linkedFeatures": ["IoTEnvironmentSimulation"]
+    },
+    {
+      "name": "bestCpuPerInstance",
+      "description": "",
+      "valueType": "NUMERIC",
+      "defaultValue": 96,
+      "unit": "vCPU/instance",
+      "type": "NON_RENEWABLE",
+      "linkedFeatures": ["IoTEnvironmentSimulation"]
+    },
+    {
+      "name": "maxRamPerInstance",
+      "description": "",
+      "valueType": "NUMERIC",
+      "defaultValue": 1,
+      "unit": "GB/instance",
+      "type": "NON_RENEWABLE",
+      "linkedFeatures": ["IoTEnvironmentSimulation"]
+    },
+    {
+      "name": "maxStoragePerInstance",
+      "description": "",
+      "valueType": "NUMERIC",
+      "defaultValue": 500,
+      "unit": "GB/instance",
+      "type": "NON_RENEWABLE",
+      "linkedFeatures": ["IoTEnvironmentSimulation"]
+    },
+    {
+      "name": "mobileAppsPerProject",
+      "description": "",
+      "valueType": "NUMERIC",
+      "defaultValue": 1,
+      "unit": "app/project",
+      "type": "NON_RENEWABLE",
+      "linkedFeatures": ["IoTEnvironmentSimulation", "mobileSimulation"]
+    }
+  ],
+  "plans": [
+    {
+      "name": "BASIC",
+      "description": "Basic plan",
+      "monthlyPrice": 100.0,
+      "annualPrice": 85,
+      "unit": "user/month",
+      "features": [
+        {
+          "name": "IoTEnvironmentSimulation",
+          "value": true
+        },
+        {
+          "name": "stressTesting",
+          "value": true
+        },
+        {
+          "name": "rawLogs",
+          "value": true
+        },
+        {
+          "name": "mobileSimulation",
+          "value": false
+        },
+        {
+          "name": "uiTesting",
+          "value": false
+        },
+        {
+          "name": "ciIntegrations",
+          "value": false
+        },
+        {
+          "name": "logFilteringByKeywords",
+          "value": false
+        },
+        {
+          "name": "logProcessing",
+          "value": false
+        },
+        {
+          "name": "slaUptime",
+          "value": "99%"
+        },
+        {
+          "name": "emailSupport",
+          "value": true
+        }
+      ],
+      "usageLimits": []
+    },
+    {
+      "name": "PRO",
+      "description": "Advanced plan",
+      "monthlyPrice": 240.0,
+      "annualPrice": 200.0,
+      "unit": "user/month",
+      "features": [
+        {
+          "name": "IoTEnvironmentSimulation",
+          "value": true
+        },
+        {
+          "name": "stressTesting",
+          "value": true
+        },
+        {
+          "name": "rawLogs",
+          "value": true
+        },
+        {
+          "name": "mobileSimulation",
+          "value": false
+        },
+        {
+          "name": "uiTesting",
+          "value": false
+        },
+        {
+          "name": "ciIntegrations",
+          "value": true
+        },
+        {
+          "name": "logFilteringByKeywords",
+          "value": true
+        },
+        {
+          "name": "logProcessing",
+          "value": false
+        },
+        {
+          "name": "slaUptime",
+          "value": "99.5%"
+        },
+        {
+          "name": "emailSupport",
+          "value": true
+        }
+      ],
+      "usageLimits": [
+        {
+          "name": "monthlySimulationsLimit",
+          "value": 0
+        },
+        {
+          "name": "projects",
+          "value": 0
+        },
+        {
+          "name": "parallelSimulations",
+          "value": 1
+        },
+        {
+          "name": "bestCpuPerInstance",
+          "value": ""
+        },
+        {
+          "name": "maxRamPerInstance",
+          "value": 512
+        },
+        {
+          "name": "maxStoragePerInstance",
+          "value": 2000
+        },
+        {
+          "name": "mobileAppsPerProject",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "name": "ENTERPRISE",
+      "description": "Pro plan",
+      "monthlyPrice": 470.0,
+      "annualPrice": 390.0,
+      "unit": "user/month",
+      "features": [
+        {
+          "name": "IoTEnvironmentSimulation",
+          "value": true
+        },
+        {
+          "name": "stressTesting",
+          "value": true
+        },
+        {
+          "name": "rawLogs",
+          "value": true
+        },
+        {
+          "name": "mobileSimulation",
+          "value": false
+        },
+        {
+          "name": "uiTesting",
+          "value": false
+        },
+        {
+          "name": "ciIntegrations",
+          "value": true
+        },
+        {
+          "name": "logFilteringByKeywords",
+          "value": true
+        },
+        {
+          "name": "logProcessing",
+          "value": true
+        },
+        {
+          "name": "slaUptime",
+          "value": "99.9%"
+        },
+        {
+          "name": "emailSupport",
+          "value": true
+        }
+      ],
+      "usageLimits": [
+        {
+          "name": "monthlySimulationsLimit",
+          "value": 0
+        },
+        {
+          "name": "projects",
+          "value": 0
+        },
+        {
+          "name": "parallelSimulations",
+          "value": 3
+        },
+        {
+          "name": "bestCpuPerInstance",
+          "value": ""
+        },
+        {
+          "name": "maxRamPerInstance",
+          "value": 1
+        },
+        {
+          "name": "maxStoragePerInstance",
+          "value": 2700
+        },
+        {
+          "name": "mobileAppsPerProject",
+          "value": 0
+        }
+      ]
+    }
+  ],
+  "addOns": []
+}

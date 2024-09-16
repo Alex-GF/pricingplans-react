@@ -77,5 +77,5 @@ type CuiCuiPlan = {
 // ------------ PRICING DATA ------------ //
 
 type PricingData = {
-    [key: string]: (string | number | boolean)[];
+    [key: string]: {value: (string | number | boolean), unit: string}[];
   };

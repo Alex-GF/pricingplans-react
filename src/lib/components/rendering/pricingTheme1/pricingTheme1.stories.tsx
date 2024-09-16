@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { PricingTheme1 } from '.';
-import pricing from './pricing.json';
+import pricing from './CCSIM.json';
+import { Pricing } from '../../../../types';
 
 const meta = {
   component: PricingTheme1,
@@ -14,6 +15,21 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    pricing: pricing
-  }
+    pricing: pricing as unknown as Pricing,
+    style: {
+      plansColor: "#000000",
+      priceColor: "#000000",
+      periodColor: "#000000",
+      headerColor: "#000000",
+      namesColor: "#000000",
+      valuesColor: "#000000",
+      checkColor: "#76B703",
+      crossColor: "#9ca3af",
+      backgroundColor: "#f3f4f6",
+      dividerColor: "#9e9e9e",
+      billingSelectionColor: "#ffffff",
+      billingSelectionBackgroundColor: "#EEE",
+      billingSelectionTextColor: "#334155",
+    }
+  },
 };
