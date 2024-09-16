@@ -1,5 +1,5 @@
 import { Plan, Pricing, PricingData } from "../../../../types";
-import { getPricingData } from "../../../../services/pricing.service";
+import { getPricingData, pluralizeUnit } from "../../../../services/pricing.service";
 import { useState } from "react";
 
 import "./styles.css";
@@ -239,7 +239,7 @@ function PricingElement({
               >
                 {(() => {
                   if (typeof value === "number") {
-                    return value === 0 ? "-" : `${value} ${unit ?? ""}`;
+                    return value === 0 ? "-" : `${value} ${value > 1 ? pluralizeUnit(unit ?? "") : unit}`;
                   }
                   return value;
                 })()}
@@ -311,7 +311,7 @@ export function PricingTheme1({
           <tbody className="pricing-body">
             {Object.entries(pricingData).map(
               (
-                [name, values]: [string, {value: (string | number | boolean), unit: string}[]],
+                [name, values]: [string, {value: (string | number | boolean), unit?: string}[]],
                 key: number
               ) => (
                 <PricingElement

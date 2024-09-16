@@ -118,7 +118,7 @@
       "name": "maxRamPerInstance",
       "description": "",
       "valueType": "NUMERIC",
-      "defaultValue": 1,
+      "defaultValue": 192,
       "unit": "GB/instance",
       "type": "NON_RENEWABLE",
       "linkedFeatures": ["IoTEnvironmentSimulation"]
@@ -149,48 +149,7 @@
       "monthlyPrice": 100.0,
       "annualPrice": 85,
       "unit": "user/month",
-      "features": [
-        {
-          "name": "IoTEnvironmentSimulation",
-          "value": true
-        },
-        {
-          "name": "stressTesting",
-          "value": true
-        },
-        {
-          "name": "rawLogs",
-          "value": true
-        },
-        {
-          "name": "mobileSimulation",
-          "value": false
-        },
-        {
-          "name": "uiTesting",
-          "value": false
-        },
-        {
-          "name": "ciIntegrations",
-          "value": false
-        },
-        {
-          "name": "logFilteringByKeywords",
-          "value": false
-        },
-        {
-          "name": "logProcessing",
-          "value": false
-        },
-        {
-          "name": "slaUptime",
-          "value": "99%"
-        },
-        {
-          "name": "emailSupport",
-          "value": true
-        }
-      ],
+      "features": [],
       "usageLimits": []
     },
     {
@@ -201,26 +160,6 @@
       "unit": "user/month",
       "features": [
         {
-          "name": "IoTEnvironmentSimulation",
-          "value": true
-        },
-        {
-          "name": "stressTesting",
-          "value": true
-        },
-        {
-          "name": "rawLogs",
-          "value": true
-        },
-        {
-          "name": "mobileSimulation",
-          "value": false
-        },
-        {
-          "name": "uiTesting",
-          "value": false
-        },
-        {
           "name": "ciIntegrations",
           "value": true
         },
@@ -229,34 +168,22 @@
           "value": true
         },
         {
-          "name": "logProcessing",
-          "value": false
-        },
-        {
           "name": "slaUptime",
           "value": "99.5%"
-        },
-        {
-          "name": "emailSupport",
-          "value": true
         }
       ],
       "usageLimits": [
         {
           "name": "monthlySimulationsLimit",
-          "value": 0
+          "value": 25
         },
         {
           "name": "projects",
-          "value": 0
-        },
-        {
-          "name": "parallelSimulations",
-          "value": 1
+          "value": 30
         },
         {
           "name": "bestCpuPerInstance",
-          "value": ""
+          "value": 128
         },
         {
           "name": "maxRamPerInstance",
@@ -265,10 +192,6 @@
         {
           "name": "maxStoragePerInstance",
           "value": 2000
-        },
-        {
-          "name": "mobileAppsPerProject",
-          "value": 0
         }
       ]
     },
@@ -279,26 +202,6 @@
       "annualPrice": 390.0,
       "unit": "user/month",
       "features": [
-        {
-          "name": "IoTEnvironmentSimulation",
-          "value": true
-        },
-        {
-          "name": "stressTesting",
-          "value": true
-        },
-        {
-          "name": "rawLogs",
-          "value": true
-        },
-        {
-          "name": "mobileSimulation",
-          "value": false
-        },
-        {
-          "name": "uiTesting",
-          "value": false
-        },
         {
           "name": "ciIntegrations",
           "value": true
@@ -314,20 +217,16 @@
         {
           "name": "slaUptime",
           "value": "99.9%"
-        },
-        {
-          "name": "emailSupport",
-          "value": true
         }
       ],
       "usageLimits": [
         {
           "name": "monthlySimulationsLimit",
-          "value": 0
+          "value": 40
         },
         {
           "name": "projects",
-          "value": 0
+          "value": 50
         },
         {
           "name": "parallelSimulations",
@@ -335,19 +234,15 @@
         },
         {
           "name": "bestCpuPerInstance",
-          "value": ""
+          "value": 192
         },
         {
           "name": "maxRamPerInstance",
-          "value": 1
+          "value": 768
         },
         {
           "name": "maxStoragePerInstance",
           "value": 2700
-        },
-        {
-          "name": "mobileAppsPerProject",
-          "value": 0
         }
       ]
     }
