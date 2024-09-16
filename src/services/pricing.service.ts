@@ -10,7 +10,7 @@ interface FormattedNamesProp {
   [key: string]: string;
 }
 
-function formatPricingComponentName(name: string) {
+export function formatPricingComponentName(name: string) {
   return name
     .replace(/([a-z])([A-Z])/g, "$1 $2")
     .replace(/^./, (str) => str.toUpperCase());

@@ -27,9 +27,11 @@ export const Default: Story = {
       crossColor: "#9ca3af",
       backgroundColor: "#f3f4f6",
       dividerColor: "#9e9e9e",
-      billingSelectionColor: "#ffffff",
+      billingSelectionColor: "#76B703",
       billingSelectionBackgroundColor: "#EEE",
       billingSelectionTextColor: "#334155",
+      addonBackgroundColor: "#ffffff",
+      addonTextColor: "#334155",
     }
   },
 };

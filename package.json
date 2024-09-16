@@ -20,11 +20,13 @@
     "react",
     "component"
   ],
-  "author": "ISA Group, University of Seville, Spain",
+  "author": {
+    "name": "ISA Group, University of Seville, Spain"
+  },
   "homepage": "https://github.com/isa-group/Pricing4React#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/isa-group/Pricing4React"
+    "url": "git+https://github.com/isa-group/Pricing4React.git"
   },
   "license": "MIT",
   "peerDependencies": {
@@ -57,6 +59,7 @@
     "@types/react-dom": "^18.2.7",
     "axios": "^0.25.0",
     "buffer": "^6.0.3",
+    "chromatic": "^11.10.2",
     "cssnano": "^6.0.2",
     "dts-bundle-generator": "^9.2.1",
     "long": "^4.0.0",
@@ -75,5 +78,8 @@
   },
   "files": [
     "dist"
-  ]
+  ],
+  "bugs": {
+    "url": "https://github.com/isa-group/Pricing4React/issues"
+  }
 }

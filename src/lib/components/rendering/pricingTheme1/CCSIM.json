@@ -266,7 +266,7 @@
       "name": "mobileSimulationAddOn",
       "availableFor": ["BASIC", "PRO", "ENTERPRISE"],
       "price": 50.0,
-      "unit": "/month",
+      "unit": "month",
       "features": [
         {
           "name": "mobileSimulation",
@@ -289,7 +289,7 @@
       "name": "additionalMobileApp",
       "availableFor": ["mobileSimulationAddOn"],
       "price": 5.0,
-      "unit": "/project&month",
+      "unit": "project&month",
       "features": [],
       "usageLimits": [],
       "usageLimitsExtensions": [
@@ -303,7 +303,7 @@
       "name": "extraProject",
       "availableFor": ["project"],
       "price": 2.0,
-      "unit": "/project&month",
+      "unit": "project&month",
       "features": [],
       "usageLimits": [],
       "usageLimitsExtensions": [

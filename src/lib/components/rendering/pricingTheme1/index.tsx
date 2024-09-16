@@ -1,12 +1,16 @@
-import { Plan, Pricing, PricingData } from "../../../../types";
-import { getPricingData, pluralizeUnit } from "../../../../services/pricing.service";
+import { AddOn, Plan, Pricing, PricingData } from "../../../../types";
+import {
+  formatPricingComponentName,
+  getPricingData,
+  pluralizeUnit,
+} from "../../../../services/pricing.service";
 import { useState } from "react";
 
 import "./styles.css";
 
 type BilledType = "monthly" | "annually";
 
-interface RederingStyles {
+interface RenderingStyles {
   plansColor?: string;
   priceColor?: string;
   periodColor?: string;
@@ -20,14 +24,16 @@ interface RederingStyles {
   billingSelectionColor?: string;
   billingSelectionBackgroundColor?: string;
   billingSelectionTextColor?: string;
+  addonBackgroundColor?: string;
+  addonTextColor?: string;
 }
 
 interface PricingProps {
   pricing: Pricing;
-  style: RederingStyles;
+  style: RenderingStyles;
 }
 
-const DEFAULT_STYLES: RederingStyles = {
+const DEFAULT_STYLES: RenderingStyles = {
   plansColor: "#000000",
   priceColor: "#000000",
   periodColor: "#000000",
@@ -41,6 +47,8 @@ const DEFAULT_STYLES: RederingStyles = {
   billingSelectionColor: "#ffffff",
   billingSelectionBackgroundColor: "#EEE",
   billingSelectionTextColor: "#000000",
+  addonBackgroundColor: "#ffffff",
+  addonTextColor: "#000000",
 };
 
 function SelectOfferTab({
@@ -50,7 +58,7 @@ function SelectOfferTab({
 }: Readonly<{
   selectedBilledType: BilledType;
   handleSwitchTab: (tab: BilledType) => void;
-  style: RederingStyles;
+  style: RenderingStyles;
 }>): JSX.Element {
   return (
     <div
@@ -120,7 +128,7 @@ function PlanHeader({
   plan: Plan;
   currency: string;
   selectedBilledType: BilledType;
-  style: RederingStyles;
+  style: RenderingStyles;
 }>): JSX.Element {
   return (
     <th scope="col" className="plan-col">
@@ -157,8 +165,8 @@ function PricingElement({
   style,
 }: Readonly<{
   name: string;
-  values: {value: (string | number | boolean), unit?: string}[];
-  style: RederingStyles;
+  values: { value: string | number | boolean; unit?: string }[];
+  style: RenderingStyles;
 }>): JSX.Element {
   return (
     <tr>
@@ -173,7 +181,7 @@ function PricingElement({
           {name}
         </h3>
       </th>
-      {values.map(({value, unit}, key) => {
+      {values.map(({ value, unit }, key) => {
         if (typeof value === "boolean") {
           return (
             <td
@@ -239,7 +247,11 @@ function PricingElement({
               >
                 {(() => {
                   if (typeof value === "number") {
-                    return value === 0 ? "-" : `${value} ${value > 1 ? pluralizeUnit(unit ?? "") : unit}`;
+                    return value === 0
+                      ? "-"
+                      : `${value} ${
+                          value > 1 ? pluralizeUnit(unit ?? "") : unit
+                        }`;
                   }
                   return value;
                 })()}
@@ -249,6 +261,46 @@ function PricingElement({
         }
       })}
     </tr>
+  );
+}
+
+function AddOnElement({
+  addOn,
+  currency,
+  selectedBilledType,
+  style,
+}: Readonly<{
+  addOn: AddOn;
+  currency: string;
+  selectedBilledType: BilledType;
+  style: RenderingStyles;
+}>): JSX.Element {
+  return (
+    <div className="add-on-element-container">
+      <span className="add-on-title" style={{color: style.addonTextColor ?? DEFAULT_STYLES.addonTextColor}}>{formatPricingComponentName(addOn.name)}</span>
+      <p className="plan-price-container" style={{backgroundColor: style.addonBackgroundColor ?? DEFAULT_STYLES.addonBackgroundColor}}>
+        <span
+          className="plan-price"
+          style={{ color: style.priceColor ?? DEFAULT_STYLES.priceColor }}
+        >
+          {addOn.monthlyPrice ?
+            selectedBilledType === "monthly"
+              ? addOn.monthlyPrice
+              : addOn.annualPrice
+            :
+            addOn.price
+            
+          }
+          {currency}
+        </span>
+        <span
+          className="plan-period"
+          style={{ color: style.periodColor ?? DEFAULT_STYLES.periodColor }}
+        >
+          /{addOn.unit}
+        </span>
+      </p>
+    </div>
   );
 }
 
@@ -276,14 +328,14 @@ export function PricingTheme1({
       }}
     >
       <div className="container">
-        <div className="pricing-page-title">
+        {/* <div className="pricing-page-title">
           <h1
             style={{ color: style.headerColor ?? DEFAULT_STYLES.headerColor }}
           >
             {pricing.name.charAt(0).toUpperCase() + pricing.name.slice(1)}{" "}
             Pricing
           </h1>
-        </div>
+        </div> */}
         {pricing.hasAnnualPayment && (
           <div className="pricing-page-title">
             <SelectOfferTab
@@ -311,7 +363,10 @@ export function PricingTheme1({
           <tbody className="pricing-body">
             {Object.entries(pricingData).map(
               (
-                [name, values]: [string, {value: (string | number | boolean), unit?: string}[]],
+                [name, values]: [
+                  string,
+                  { value: string | number | boolean; unit?: string }[]
+                ],
                 key: number
               ) => (
                 <PricingElement
@@ -324,6 +379,18 @@ export function PricingTheme1({
             )}
           </tbody>
         </table>
+        {pricing.addOns && (
+          <>
+            <div className="pricing-page-title" style={{color: style.headerColor ?? DEFAULT_STYLES.headerColor}}>
+              <h1>Add-Ons</h1>
+            </div>
+            <div className="add-ons-container">
+              {pricing.addOns.map((addOn) => {
+                return <AddOnElement addOn={addOn} currency={pricing.currency} selectedBilledType={selectedBilledType} style={style}/>;
+              })}
+            </div>
+          </>
+        )}
       </div>
     </section>
   );
