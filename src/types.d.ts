@@ -3,6 +3,7 @@
 export type ValueType = "NUMERIC" | "BOOLEAN" | "TEXT";
 export type FeatureType = "INFORMATION" | "INTEGRATION" | "DOMAIN" | "AUTOMATION" | "MANAGEMENT" | "GUARANTEE" | "SUPPORT" | "PAYMENT";
 export type UsageLimitType = "RENEWABLE" | "NON_RENEWABLE" | "TIME_DRIVEN" | "RESPONSE_DRIVEN";
+export type RenderMode = "auto" | "enabled" | "disabled";
 
 export interface Pricing {
     name: string;
@@ -24,6 +25,7 @@ export interface Feature {
     expression?: string;
     serverExpression?: string;
     type: FeatureType;
+    render: RenderMode;
 }
 
 export interface UsageLimit {
@@ -34,7 +36,8 @@ export interface UsageLimit {
     value?: string | number | boolean;
     unit: string;
     type: UsageLimitType;
-    linkedFeatures?: Feature[];
+    linkedFeatures?: string[];
+    render: RenderMode;
 }
 
 export interface Plan {
@@ -77,5 +80,5 @@ type CuiCuiPlan = {
 // ------------ PRICING DATA ------------ //
 
 type PricingData = {
-    [key: string]: {value: (string | number | boolean), unit?: string}[];
+    [key: string]: {value: (string | number | boolean), unit?: string, render: RenderMode}[];
   };

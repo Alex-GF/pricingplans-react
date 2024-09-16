@@ -5,8 +5,15 @@
   "hasAnnualPayment": true,
   "features": [
     {
-      "name": "IoTEnvironmentSimulation",
+      "name": "IotEnvironmentSimulation",
       "description": "IoT Environment Simulation",
+      "valueType": "BOOLEAN",
+      "defaultValue": true,
+      "type": "DOMAIN"
+    },
+    {
+      "name": "projects",
+      "description": "Upload projects to CCSIM",
       "valueType": "BOOLEAN",
       "defaultValue": true,
       "type": "DOMAIN"
@@ -32,14 +39,16 @@
       "valueType": "BOOLEAN",
       "defaultValue": false,
       "expression": "",
-      "type": "DOMAIN"
+      "type": "DOMAIN",
+      "render": "disabled"
     },
     {
       "name": "uiTesting",
       "description": "UI Testing",
       "valueType": "BOOLEAN",
       "defaultValue": false,
-      "type": "DOMAIN"
+      "type": "DOMAIN",
+      "render": "disabled"
     },
     {
       "name": "ciIntegrations",
@@ -85,16 +94,16 @@
       "defaultValue": 15,
       "unit": "simulation/month",
       "type": "RENEWABLE",
-      "linkedFeatures": ["IoTEnvironmentSimulation"]
+      "linkedFeatures": ["IotEnvironmentSimulation"]
     },
     {
-      "name": "projects",
+      "name": "maxProjects",
       "description": "",
       "valueType": "NUMERIC",
       "defaultValue": 10,
       "unit": "project",
       "type": "NON_RENEWABLE",
-      "linkedFeatures": ["IoTEnvironmentSimulation"]
+      "linkedFeatures": ["projects"]
     },
     {
       "name": "parallelSimulations",
@@ -103,7 +112,8 @@
       "defaultValue": 1,
       "unit": "simulation",
       "type": "RENEWABLE",
-      "linkedFeatures": ["IoTEnvironmentSimulation"]
+      "linkedFeatures": ["IotEnvironmentSimulation"],
+      "render": "enabled"
     },
     {
       "name": "bestCpuPerInstance",
@@ -112,7 +122,8 @@
       "defaultValue": 96,
       "unit": "vCPU/instance",
       "type": "NON_RENEWABLE",
-      "linkedFeatures": ["IoTEnvironmentSimulation"]
+      "linkedFeatures": ["IotEnvironmentSimulation"],
+      "render": "enabled"
     },
     {
       "name": "maxRamPerInstance",
@@ -121,7 +132,8 @@
       "defaultValue": 192,
       "unit": "GB/instance",
       "type": "NON_RENEWABLE",
-      "linkedFeatures": ["IoTEnvironmentSimulation"]
+      "linkedFeatures": ["IotEnvironmentSimulation"],
+      "render": "enabled"
     },
     {
       "name": "maxStoragePerInstance",
@@ -130,16 +142,18 @@
       "defaultValue": 500,
       "unit": "GB/instance",
       "type": "NON_RENEWABLE",
-      "linkedFeatures": ["IoTEnvironmentSimulation"]
+      "linkedFeatures": ["IotEnvironmentSimulation"],
+      "render": "enabled"
     },
     {
       "name": "mobileAppsPerProject",
       "description": "",
       "valueType": "NUMERIC",
-      "defaultValue": 1,
+      "defaultValue": 0,
       "unit": "app/project",
       "type": "NON_RENEWABLE",
-      "linkedFeatures": ["IoTEnvironmentSimulation", "mobileSimulation"]
+      "linkedFeatures": ["mobileSimulation"],
+      "render": "disabled"
     }
   ],
   "plans": [
@@ -178,7 +192,7 @@
           "value": 25
         },
         {
-          "name": "projects",
+          "name": "maxProjects",
           "value": 30
         },
         {
@@ -225,7 +239,7 @@
           "value": 40
         },
         {
-          "name": "projects",
+          "name": "maxProjects",
           "value": 50
         },
         {
@@ -247,5 +261,57 @@
       ]
     }
   ],
-  "addOns": []
+  "addOns": [
+    {
+      "name": "mobileSimulationAddOn",
+      "availableFor": ["BASIC", "PRO", "ENTERPRISE"],
+      "price": 50.0,
+      "unit": "/month",
+      "features": [
+        {
+          "name": "mobileSimulation",
+          "value": true
+        },
+        {
+          "name": "uiTesting",
+          "value": true
+        }
+      ],
+      "usageLimits": [
+        {
+          "name": "mobileAppsPerProject",
+          "value": 1
+        }
+      ],
+      "usageLimitsExtensions": []
+    },
+    {
+      "name": "additionalMobileApp",
+      "availableFor": ["mobileSimulationAddOn"],
+      "price": 5.0,
+      "unit": "/project&month",
+      "features": [],
+      "usageLimits": [],
+      "usageLimitsExtensions": [
+        {
+          "name": "mobileAppsPerProject",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "name": "extraProject",
+      "availableFor": ["project"],
+      "price": 2.0,
+      "unit": "/project&month",
+      "features": [],
+      "usageLimits": [],
+      "usageLimitsExtensions": [
+        {
+          "name": "maxProjects",
+          "value": 1
+        }
+      ]
+    }
+  ]
 }
