@@ -304,6 +304,26 @@ function AddOnElement({
   );
 }
 
+const CopyButton = ({pricing}: {pricing: Pricing}) => {
+  // Función para copiar el texto al portapapeles
+  const copyToClipboard = () => {
+    const textToCopy = JSON.stringify(pricing, null, 2);
+    navigator.clipboard.writeText(textToCopy)
+      .then(() => {
+        alert('Pricing copied to clipboard');
+      })
+      .catch((err) => {
+        console.error('Error copying the texto to clipboard ', err);
+      });
+  };
+
+  return (
+    <button onClick={copyToClipboard} className="export-button">
+      Export Pricing
+    </button>
+  );
+};
+
 export function PricingTheme1({
   pricing,
   style,
@@ -327,6 +347,9 @@ export function PricingTheme1({
           style.backgroundColor ?? DEFAULT_STYLES.backgroundColor,
       }}
     >
+      <div style={{display: "flex", justifyContent: "center", width: "100%", marginBottom: "30px", paddingTop: "50px"}}>
+        <CopyButton pricing={pricing} />
+      </div>
       <div className="container">
         {/* <div className="pricing-page-title">
           <h1

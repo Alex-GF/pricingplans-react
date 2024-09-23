@@ -1,0 +1,101 @@
+{
+  "name": "SampleSaaS",
+  "createdAt": "2024-09-26",
+  "currency": "$",
+  "hasAnnualPayment": true,
+  "features": [
+    {
+      "name": "Feature 1",
+      "description": "This is the feature 1. It's an essential feature, but has an usage limit linked to it",
+      "valueType": "BOOLEAN",
+      "defaultValue": true,
+      "type": "DOMAIN"
+    },
+    {
+      "name": "Feature 2",
+      "description": "This is the feature 2. It's a common feature, i.e. available for all plans, and don't have any usage limits imposed",
+      "valueType": "BOOLEAN",
+      "defaultValue": true,
+      "type": "DOMAIN"
+    },
+    {
+      "name": "Feature 3",
+      "description": "This is the feature 3. It's available from the PRO plan",
+      "valueType": "BOOLEAN",
+      "defaultValue": false,
+      "type": "DOMAIN"
+    },
+    {
+      "name": "Feature 4",
+      "description": "This is the feature 4. It's available only in the ENTERPRISE plan",
+      "valueType": "BOOLEAN",
+      "defaultValue": false,
+      "type": "DOMAIN"
+    }
+  ],
+  "usageLimits": [
+    {
+      "name": "usageLimit1",
+      "description": "",
+      "valueType": "NUMERIC",
+      "defaultValue": 1,
+      "unit": "unit/month",
+      "type": "RENEWABLE",
+      "linkedFeatures": ["Feature 1"]
+    }
+  ],
+  "plans": [
+    {
+      "name": "BASIC",
+      "description": "Basic plan",
+      "monthlyPrice": 100.0,
+      "annualPrice": 85,
+      "unit": "user/month",
+      "features": [],
+      "usageLimits": []
+    },
+    {
+      "name": "PRO",
+      "description": "Advanced plan",
+      "monthlyPrice": 240.0,
+      "annualPrice": 200.0,
+      "unit": "user/month",
+      "features": [
+        {
+          "name": "Feature 3",
+          "value": true
+        }
+      ],
+      "usageLimits": [
+        {
+          "name": "feature1",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "name": "ENTERPRISE",
+      "description": "Pro plan",
+      "monthlyPrice": 470.0,
+      "annualPrice": 390.0,
+      "unit": "user/month",
+      "features": [
+        {
+          "name": "Feature 3",
+          "value": true
+        },
+        {
+          "name": "Feature 4",
+          "value": true
+        }
+      ],
+      "usageLimits": [
+        {
+          "name": "feature1",
+          "value": 2
+        }
+      ]
+    }
+  ],
+  "addOns": null
+}
