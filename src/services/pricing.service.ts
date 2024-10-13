@@ -123,7 +123,7 @@ export function getPricingData(pricing: Pricing) {
   for (let i = 0; i < pricing.plans.length; i++) {
     let plan = pricing.plans[i];
     populateData(plan.usageLimits ?? [], i, plan.name, pricingData, formattedNames);
-    populateData(plan.features, i, plan.name, pricingData, formattedNames);
+    populateData(plan.features ?? [], i, plan.name, pricingData, formattedNames);
   }
 
   return pricingData;

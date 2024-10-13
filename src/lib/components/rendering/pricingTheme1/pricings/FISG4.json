@@ -1,0 +1,148 @@
+{
+    "name": "FIS-G4",
+    "createdAt": "2021-10-13",
+    "currency": "€",
+    "hasAnnualPayment": false,
+    "features": [
+        {
+            "name": "accessToFreeCourses",
+            "description": "Access to free courses",
+            "valueType": "BOOLEAN",
+            "defaultValue": true,
+            "type": "DOMAIN"
+        },
+        {
+            "name": "sendMessagesToOtherUsers",
+            "description": "Send messages to other users",
+            "valueType": "BOOLEAN",
+            "defaultValue": true,
+            "type": "DOMAIN"
+        },
+        {
+            "name": "coinsCashback",
+            "description": "Coins cashback",
+            "valueType": "TEXT",
+            "defaultValue": "10%",
+            "type": "DOMAIN"
+        },
+        {
+            "name": "useCoinsToBuyCourses",
+            "description": "Use coins to buy courses",
+            "valueType": "BOOLEAN",
+            "defaultValue": false,
+            "type": "DOMAIN"
+        },
+        {
+            "name": "publishSilverCourses",
+            "description": "Publish silver courses",
+            "valueType": "BOOLEAN",
+            "defaultValue": true,
+            "type": "DOMAIN"
+        },
+        {
+            "name": "publishGoldCourses",
+            "description": "Publish silver courses",
+            "valueType": "BOOLEAN",
+            "defaultValue": true,
+            "type": "DOMAIN"
+        },
+        {
+            "name": "uptimeSLA",
+            "description": "Uptime SLA",
+            "valueType": "TEXT",
+            "defaultValue": "99%",
+            "type": "GUARANTEE"
+        }
+    ],
+    "usageLimits": [
+        {
+            "name": "silverCoursesLimit",
+            "description": "",
+            "valueType": "NUMERIC",
+            "defaultValue": 0,
+            "unit": "course",
+            "type": "NON_RENEWABLE",
+            "linkedFeatures": [
+                "publishSilverCourses"
+            ]
+        },
+        {
+            "name": "goldCoursesLimit",
+            "description": "",
+            "valueType": "NUMERIC",
+            "defaultValue": 0,
+            "unit": "course",
+            "type": "NON_RENEWABLE",
+            "linkedFeatures": [
+                "publishGoldCourses"
+            ]
+        }
+    ],
+    "plans": [
+        {
+            "name": "BASIC",
+            "description": "Basic plan",
+            "monthlyPrice": 0,
+            "unit": "user/month",
+            "features": null,
+            "usageLimits": null
+        },
+        {
+            "name": "ADVANCED",
+            "description": "Advanced plan",
+            "monthlyPrice": 9.99,
+            "unit": "user/month",
+            "features": [
+                {
+                    "name": "coinsCashback",
+                    "value": "15%"
+                },
+                {
+                    "name": "useCoinsToBuyCourses",
+                    "value": true
+                },
+                {
+                    "name": "uptimeSLA",
+                    "value": "99.5%"
+                }
+            ],
+            "usageLimits": [
+                {
+                    "name": "silverCoursesLimit",
+                    "value": 1
+                }
+            ]
+        },
+        {
+            "name": "PRO",
+            "description": "Pro plan",
+            "monthlyPrice": 19.99,
+            "unit": "user/month",
+            "features": [
+                {
+                    "name": "coinsCashback",
+                    "value": "20%"
+                },
+                {
+                    "name": "useCoinsToBuyCourses",
+                    "value": true
+                },
+                {
+                    "name": "uptimeSLA",
+                    "value": "99.9%"
+                }
+            ],
+            "usageLimits": [
+                {
+                    "name": "silverCoursesLimit",
+                    "value": 2
+                },
+                {
+                    "name": "goldCoursesLimit",
+                    "value": 1
+                }
+            ]
+        }
+    ],
+    "addOns": null
+}

@@ -143,16 +143,31 @@ function PlanHeader({
           className="plan-price"
           style={{ color: style.priceColor ?? DEFAULT_STYLES.priceColor }}
         >
-          {selectedBilledType === "monthly"
-            ? plan.monthlyPrice
-            : plan.annualPrice}
-          {currency}
+          {(() => {
+            if (selectedBilledType === "monthly") {
+              return plan.monthlyPrice === 0 ? "FREE" : plan.monthlyPrice;
+            } else {
+              return plan.annualPrice === 0 ? "FREE" : plan.annualPrice;
+            }
+          })()}
+          {(() => {
+            const price = selectedBilledType === "monthly" ? plan.monthlyPrice : plan.annualPrice;
+            return price === 0 ? "" : currency;
+          })()}
         </span>
         <span
           className="plan-period"
           style={{ color: style.periodColor ?? DEFAULT_STYLES.periodColor }}
         >
-          /month
+          {(() => {
+            let period = "";
+            if (selectedBilledType === "monthly") {
+              period = plan.monthlyPrice === 0 ? "" : "/month";
+            } else {
+              period = plan.annualPrice === 0 ? "" : "/month";
+            }
+            return period;
+          })()}
         </span>
       </p>
     </th>
