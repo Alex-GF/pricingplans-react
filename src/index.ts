@@ -20,3 +20,5 @@ export {
   fetchWithPricingInterceptor,
   searchNewTokenAndUpdate,
 } from "./services/api.service";
+
+export { evaluateFeatureInPricing, evaluatePricing } from "./services/evaluation.service";

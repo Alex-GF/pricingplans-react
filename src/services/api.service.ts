@@ -1,4 +1,3 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, Method } from "axios";
 import TokenService from "./token.service";
 
 export function fetchWithPricingInterceptor(url: string, options: RequestInit) {
