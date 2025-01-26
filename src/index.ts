@@ -1,4 +1,4 @@
-export * from "./lib/components/editor";
+// export * from "./lib/components/editor";
 export { useGenericFeature } from "./lib/components/feature/useGenericFeature";
 export { feature } from "./lib/logic/model/Feature";
 export {
@@ -20,3 +20,5 @@ export {
   fetchWithPricingInterceptor,
   searchNewTokenAndUpdate,
 } from "./services/api.service";
+
+export { evaluateFeatureInPricing, evaluatePricing } from "./services/evaluation.service";
