@@ -50,11 +50,10 @@ The `eval` field can also be a string that contains an expression that must be e
 
 As we said, you don't have to worry about the recreation of the JWT, since [Pricing4Java](https://github.com/isa-group/Pricing4Java) will do it for you on backend. However, if you want to create your own JWT, as long as it follows the structure above, the package will be able to perform the toggling.
 
-## Usage
+## The `Feature` Component
 
-The package provides a single component that contains the whole logic: 
+This is a react component that allows to show or hide its children depending on the evaluation of a pricing feature. Depending on the context, it can have up to four children:
 
-- `Feature`: This component allows to show or hide its children depending on the evaluation of a pricing feature. Depending on the context, it can have up to four children:
     - `On`: This component will be shown if the feature is evaluated to `true`. It has the prop `expression`, which reads from the JWT the evaluation of the feature. You can use the `feature` function to locate features by their key. **REQUIRED**
     - `Default`: This component will render its children if the evaluation of the feature performed in `On` component is `false`.
     - `Loading`: This component will render its children while the evaluation of the feature is being performed.
@@ -79,6 +78,8 @@ The package provides a single component that contains the whole logic:
     </Feature>
     ```
 
+## The `useGenericFeature` hook
+
 Also a hook is provided to get the evaluation of a feature. Its name is `useGenericFeature`, and it could be used to get the evaluation of a feature and save the result on a variable. It has the following signature:
 
 ```javascript
@@ -95,7 +96,7 @@ const myComponent = useGenericFeature({
   });
 ```
 
-## Extra: binary operators
+## Binary operators
 
 The package also provides a set of binary operators that can be used to combine the evaluation of different features. The operators are:
 
@@ -140,4 +141,101 @@ The usage of the operators is as follows:
     </On>
     ...
 </Feature>
+```
+
+## OpenFeature Provider
+
+[OpenFeature](https://openfeature.dev) is an open standard that provides a vendor-agnostic, community-driven API for feature flagging that works with DevCycle.
+
+In the case that you prefer to use the OpenFeature API to interface with Pricing4React, we provide a TypeScript implementation of the OpenFeature Web Provider interface.
+
+To use the offered OpenFeature provider, follow this steps:
+
+### 1. Install the Open Feature SDK for react:
+
+```bash
+npm i @openfeature/react-sdk
+```
+
+### 2. Configure OpenFeature with the ReactPricingDrivenFeaturesProvider
+
+Next, OpenFeature can be configured with a **provider**, which is the engine that will process all underlying logic of the feature toggling. It can be set with the *setProvider* method:
+
+```javascript
+OpenFeature.setProvider(new YourProviderOfChoice(), evaluationContext);
+```
+
+As can be noted, OpenFeature can be initialized with a custom evaluationContext that is aimed to contain all the necessary information to perform the evaluation.
+
+So, in order to use OpenFeature with the **ReactPricingDrivenFeaturesProvider**, it should be configured like this:
+
+```javascript
+OpenFeature.setProvider(new ReactPricingDrivenFeaturesProvider(), {
+      pricingUrl: 'http://sphere.score.us.es/static/pricings/uploadedDataset/Pricing-driven%20Feature%20Toggling%20Demo/2025-1-8.yml',
+      subscription: ["FREE"],
+      userContext: {
+        user: "test",
+        // Extra fields needed from the user context to perform the evaluation of features...
+      },
+    });
+```
+
+As can be seen, the **ReactPricingDrivenFeaturesProvider** relies on a specific structure of the evaluationContext to work as expected:
+
+- To populate the **pricingUrl** field, we highly recommend uploading your pricing data to [SPHERE](http://sphere.score.us.es). This will give you a direct URL to the uploaded file. If you prefer not to share the **Pricing2Yaml** model publicly, you can host the file elsewhere. The only requirement is that when you send a GET request to the URL specified in **pricingUrl**, the service must return the YAML file’s text.
+- The **subscription** field contains a list of strings that specify the plan (if any in the pricing) and add-ons (if any is selected) that will conform the subscription of the user for which the evaluation will be performed.
+- The **userContext** is a `Record<string, any>` that must contain a *user* field with the username (or unique identifier) of the user under evaluation. In addition, it should hold all other information required to perform the evaluation --- such as the user's current usage of a feature that has an usage limit.
+
+### 3. Use OpenFeature
+
+Once completed all previous steps, you should see in the console of your app a message indicating that the *Provider* has been initialized successfully.
+
+```
+PricingDrivenFeaturesProvider initialized with context: 
+  > Object
+
+    > pricingUrl:       "http://sphere.score.us.es/static/pricings/uploadedDataset/Pricing-driven%20Feature%20Toggling%20Demo/2025-1-8.yml"
+
+    > subscription: ["FREE"]
+
+    > userContext: {user: "test", createdExpenses: 2}
+```
+
+After that, you can use the OpenFeature client to perform the evaluation of features:
+
+```typescript
+// Evaluate a feature
+const result = await client.getBooleanValue('featureName', false);
+```
+- **NOTE 1:** The last parameter denotes the default value of the evaluator, which is the one that is going to be used if an Error is thrown during evaluation.
+
+- **NOTE 2:** We strongly recommend to only use getBooleanValue or useBooleanValue, since the evaluation of pricing features always return a boolean, i.e. the feature is enabled/disabled for the user, no matter what the initial feature type was: BOOLEAN, NUMERIC or TEXT
+
+### Extra tip
+
+In our [demo app](https://github.com/Alex-GF/unleash4pricing) we have created a custom FeatureFlag component that manage the render of its children based on the evaluation of a specific feature. This would be its implementation, considering that the ReactPricingDrivenFeaturesProvided has been configured.
+
+```tsx
+import { useBooleanFlagValue } from '@openfeature/react-sdk';
+
+export default function FeatureFlag({
+  featureName,
+  children,
+}: {
+  featureName: string;
+  children: React.ReactNode;
+}) {
+
+  const isEnabled = useBooleanFlagValue(featureName);
+
+  return isEnabled ? <>{children}</> : <></>;
+}
+```
+
+And it would be used as follows:
+
+```tsx
+<FeatureFlag featureName="testFeature">
+  <ChildComponent/>
+</FeatureFlag>
 ```
