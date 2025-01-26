@@ -1,4 +1,4 @@
-export * from "./lib/components/editor";
+// export * from "./lib/components/editor";
 export { useGenericFeature } from "./lib/components/feature/useGenericFeature";
 export { feature } from "./lib/logic/model/Feature";
 export {

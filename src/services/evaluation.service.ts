@@ -13,6 +13,7 @@ import {
 type Subscription = {
   features: Record<string, Feature>;
   usageLimits: Record<string, UsageLimit>;
+  error: string | null;
 };
 
 type ContextToEval = Record<
@@ -27,6 +28,9 @@ export function evaluatePricing(
 ): Record<string, ExtendedFeatureStatus> {
   const pricing: Pricing = retrievePricingFromYaml(stringifiedPricing);
   const subscription: Subscription = _buildSubscription(pricing, userSubscription);
+  if (subscription.error) {
+    throw new Error(subscription.error);
+  }
   const planContext: ContextToEval =
     _extractContextToEvalFromSubscription(subscription);
 
@@ -49,14 +53,13 @@ export function evaluateFeatureInPricing(
   const feature: Feature | undefined = pricing.features[featureName];
 
   if (!feature) {
-    console.warn(`[WARNING] Feature ${feature} not found!`);
     return {
       eval: false,
       used: null,
       limit: null,
       error: {
         code: "FLAG_NOT_FOUND",
-        message: `Feature ${feature} is not present in the pricing`,
+        message: `Feature ${featureName} is not present in the pricing`,
       },
     };
   }
@@ -168,16 +171,12 @@ function _buildSubscription(
       pricingAddOns &&
       !pricingAddOns[pricingContainer]
     ) {
-      console.error(
-        `[ERROR] Plan/Add-on ${pricingContainer} not found in the pricing`
-      );
-      return _errorFallback();
+
+      return _errorFallback(`[ERROR] Plan/Add-on ${pricingContainer} not found in the pricing`);
     } else if (pricingPlans && pricingPlans[pricingContainer]) {
       if (planAlreadyFound) {
-        console.error(
-          `[ERROR] You cannot have 2 plans in the same subscription`
-        );
-        return _errorFallback();
+  
+        return _errorFallback(`[ERROR] You cannot have multiple plans in the same subscription`);
       } else {
         // Step 1.2: Identify the plan of the subscription
         const plan: Plan = pricingPlans[pricingContainer];
@@ -219,10 +218,8 @@ function _buildSubscription(
     // Step 2.2.1: Substitute all feature values with the corresponding of the add-ons
     for (const featureName in addOnFeatures) {
       if (!features[featureName]) {
-        console.error(
-          `[ERROR] Feature ${featureName} of the add-on ${addOn.name} not found in the pricing`
-        );
-        return _errorFallback();
+  
+        return _errorFallback(`[ERROR] Feature ${featureName} of the add-on ${addOn.name} not found in the pricing`);
       } else {
         features[featureName].value = addOnFeatures[featureName].value;
       }
@@ -231,10 +228,8 @@ function _buildSubscription(
     // Step 2.2.2: Substitute all usage limits values with the corresponding of the add-ons
     for (const usageLimitName in addOnUsageLimits) {
       if (!usageLimits[usageLimitName]) {
-        console.error(
-          `[ERROR] Usage limit ${usageLimitName} of the add-on ${addOn.name} not found in the pricing`
-        );
-        return _errorFallback();
+  
+        return _errorFallback(`[ERROR] Usage limit ${usageLimitName} of the add-on ${addOn.name} not found in the pricing`);
       } else {
         usageLimits[usageLimitName].value =
           addOnUsageLimits[usageLimitName].value;
@@ -244,25 +239,19 @@ function _buildSubscription(
     // Step 2.2.3: Extends usage limits with add-ons' usage limits extension values
     for (const extensionName in addOnUsageLimitsExtensions) {
       if (!usageLimits[extensionName]) {
-        console.error(
-          `[ERROR] Trying to extend usage limit ${extensionName} with add-on ${addOn.name}, but it is not found in the pricing`
-        );
-        return _errorFallback();
+  
+        return _errorFallback(`[ERROR] Trying to extend usage limit ${extensionName} with add-on ${addOn.name}, but it is not found in the pricing`);
       } else {
         if (
           typeof addOnUsageLimitsExtensions[extensionName].value !== "number"
         ) {
-          console.error(
-            `[ERROR] Usage limits extensions are expected to be numbers, but ${extensionName} of the add-on ${addOn.name} is not`
-          );
-          return _errorFallback();
+    
+          return _errorFallback(`[ERROR] Usage limits extensions are expected to be numbers, but ${extensionName} of the add-on ${addOn.name} is not`);
         } else if (
           typeof usageLimits[extensionName].defaultValue !== "number"
         ) {
-          console.error(
-            `[ERROR] Usage limits extensions can only extend numeric usage limits, but ${extensionName} is not`
-          );
-          return _errorFallback();
+    
+          return _errorFallback(`[ERROR] Usage limits extensions can only extend numeric usage limits, but ${extensionName} is not`);
         } else {
           usageLimits[extensionName].value =
             ((usageLimits[extensionName].value as number | undefined) ??
@@ -273,10 +262,15 @@ function _buildSubscription(
     }
   }
 
+  if(!planAlreadyFound && Object.values(pricing.plans ?? []).length > 0){
+    return _errorFallback(`[ERROR] Since the pricing have plans, you are forced to contract one on your subscription.`);
+  }
+
   // Step 3: Return the subscription
   return {
     features: features,
     usageLimits: usageLimits,
+    error: null,
   };
 }
 
@@ -307,9 +301,10 @@ function _extractContextToEvalFromSubscription(
   return contextToEval;
 }
 
-function _errorFallback(): Subscription {
+function _errorFallback(errorMsg: string): Subscription {
   return {
     features: {},
     usageLimits: {},
+    error: errorMsg
   };
 }
