@@ -21,4 +21,9 @@ export {
   searchNewTokenAndUpdate,
 } from "./services/api.service";
 
-export { evaluateFeatureInPricing, evaluatePricing } from "./services/evaluation.service";
+export {
+  evaluateFeatureInPricing,
+  evaluatePricing,
+} from "./services/evaluation.service";
+
+export { ReactPricingDrivenFeaturesProvider } from "./provider/OpenFeatureProvider";
